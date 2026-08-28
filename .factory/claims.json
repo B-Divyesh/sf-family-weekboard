@@ -16,23 +16,65 @@
   {
     "id": "local-privacy",
     "claim": "The free planner stores the schedule on-device and sends no schedule, analytics, or tracking request away.",
-    "where": "first screen, privacy page, README",
+    "where": "first screen, about dialog, privacy page, README",
     "test": "npx playwright test --project=chromium --grep '@claim:local-privacy'",
-    "sandbox": "fresh /demo context with full request capture; add and reload a plan; assert persistence and zero cross-origin requests"
+    "sandbox": "fresh /demo context with full request capture; add and reload a plan; assert persistence, no account UI, and zero cross-origin requests"
   },
   {
     "id": "ics-export",
-    "claim": "Exports every plan as a standard ICS calendar.",
+    "claim": "Exports every plan as a standard ICS calendar with UTC times and supported recurrence rules.",
     "where": "handoff dialog, README",
     "test": "npx playwright test --project=chromium --grep '@claim:ics-export'",
-    "sandbox": "fresh /demo context; download ICS and assert VCALENDAR plus one VEVENT for each of four sample plans"
+    "sandbox": "fresh /demo context; download ICS and assert VCALENDAR, UTC DTSTART, daily and weekly RRULE, and four sample VEVENTs"
+  },
+  {
+    "id": "ics-import",
+    "claim": "Imports a standard ICS calendar into the board.",
+    "where": "empty state, handoff dialog, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:ics-import'",
+    "sandbox": "fresh /demo context at a fixed date; upload a standard ICS fixture and assert its plan and import result"
   },
   {
     "id": "encrypted-handoff",
-    "claim": "Creates an AES-GCM encrypted file and QR board snapshot in the browser.",
-    "where": "handoff dialog, privacy page, README",
+    "claim": "Creates an AES-GCM encrypted file and QR board snapshot in the browser; opening it replaces the named board after confirmation.",
+    "where": "handoff dialog, privacy page, terms, README",
     "test": "npx playwright test --project=chromium --grep '@claim:encrypted-handoff'",
-    "sandbox": "fresh /demo context; assert file ciphertext excludes plan and person text, then render the encrypted QR"
+    "sandbox": "fresh /demo context; observe AES-GCM use, assert ciphertext excludes names, render QR, mutate board, confirm named restore, and assert the snapshot replaced the mutation"
+  },
+  {
+    "id": "calendar-options",
+    "claim": "Supports all-day plans and daily, weekly, and monthly repeats.",
+    "where": "plan editor, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:calendar-options'",
+    "sandbox": "fresh fixed-date /demo context; create each plan type and assert visible all-day, daily, next-week, and next-month occurrences"
+  },
+  {
+    "id": "person-lanes",
+    "claim": "Shows each person's name and lane colour on their plans.",
+    "where": "board, people dialog, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:person-lanes'",
+    "sandbox": "fresh /demo context; assert sample plans expose names and at least three distinct lane colours"
+  },
+  {
+    "id": "responsive-agenda",
+    "claim": "Shows a seven-day board on desktop and a one-day agenda at 390px.",
+    "where": "how it works, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:responsive-agenda'",
+    "sandbox": "fresh /demo context; resize from 1440px to 390px and assert seven then one visible day with no overflow"
+  },
+  {
+    "id": "print-board",
+    "claim": "Prints the weekly board with all seven days.",
+    "where": "board toolbar, how it works, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:print-board'",
+    "sandbox": "fresh /demo context; assert Print invokes the browser and print media lays out seven days while hiding site chrome"
+  },
+  {
+    "id": "themes",
+    "claim": "Provides system, light, and dark themes and remembers the choice.",
+    "where": "theme action, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:themes'",
+    "sandbox": "fresh /demo context; cycle all three theme states and assert the dark choice persists across reload"
   },
   {
     "id": "installable-pwa",
@@ -43,10 +85,10 @@
   },
   {
     "id": "paid-checkout",
-    "claim": "The supporter pack costs ₹499 once and starts a hosted Sociobot checkout.",
+    "claim": "Weekboard displays the supporter pack as ₹499 once and starts a hosted Sociobot checkout.",
     "where": "supporter section, supporter dialog, terms, README",
     "test": "npx playwright test --project=chromium --grep '@claim:paid-checkout'",
-    "sandbox": "request production checkout without following redirects; assert 303 to checkout.dodopayments.com"
+    "sandbox": "fresh context; assert ₹499, one-time and no-subscription copy, then assert the production endpoint redirects to the hosted checkout"
   },
   {
     "id": "license-restore",
@@ -54,5 +96,19 @@
     "where": "supporter dialog",
     "test": "npx playwright test --project=chromium --grep '@claim:license-restore'",
     "sandbox": "fresh context; simulate hosted return with a valid verifier response and assert supporter state"
+  },
+  {
+    "id": "supporter-entitlements",
+    "claim": "The supporter pack adds a custom board name, extra lane colours, and more than four people.",
+    "where": "supporter section, supporter dialog, terms, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:supporter-entitlements'",
+    "sandbox": "fresh real-board context with a fixture-valid license; save a custom name, choose a fifth colour, and add a fifth person"
+  },
+  {
+    "id": "license-revocation",
+    "claim": "A revoked supporter license stops unlocking paid extras without affecting the free board.",
+    "where": "supporter dialog, terms",
+    "test": "npx playwright test --project=chromium --grep '@claim:license-revocation'",
+    "sandbox": "fresh context with an expired cached-valid verdict; return a revoked verifier response and assert paid settings lock"
   }
 ]

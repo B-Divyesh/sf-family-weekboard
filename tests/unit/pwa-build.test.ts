@@ -29,8 +29,14 @@ describe('production PWA build', () => {
     };
     expect(config.navigationFallback).toBeUndefined();
     expect(config.responseOverrides?.['404']).toEqual({ rewrite: '/404.html', statusCode: 404 });
-    const html = readFileSync('index.html', 'utf8');
-    for (const marker of ['rel="canonical"', 'property="og:image"', 'name="twitter:card"', 'rel="apple-touch-icon"']) expect(html).toContain(marker);
+    for (const path of ['index.html', 'demo/index.html', 'privacy/index.html', 'terms/index.html', '404.html']) {
+      const html = readFileSync(path, 'utf8');
+      for (const marker of ['name="description"', 'rel="canonical"', 'property="og:image"', 'name="twitter:card"', 'rel="apple-touch-icon"']) expect(html, path).toContain(marker);
+    }
+    const notFound = readFileSync('404.html', 'utf8');
+    expect(notFound).toContain('<header class="topbar">');
+    expect(notFound).toContain('<footer>');
+    expect(readFileSync('README.md', 'utf8')).toContain('unknown paths must serve `/404.html`\nwith HTTP 404, not an SPA fallback');
     expect(readFileSync('public/robots.txt', 'utf8')).toContain('Sitemap: https://family-weekboard.sociobot.in/sitemap.xml');
     expect(readFileSync('public/sitemap.xml', 'utf8')).toContain('<loc>https://family-weekboard.sociobot.in/privacy/</loc>');
   });

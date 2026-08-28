@@ -52,11 +52,19 @@ export function occurrencesInRange(events: BoardEvent[], from: Date, until: Date
   for (const event of events) {
     let start = new Date(event.start);
     const anchorDay = start.getDate();
-    const duration = Math.max(0, new Date(event.end).getTime() - start.getTime());
-    const recurrenceLimit = event.recurrenceUntil ? new Date(`${event.recurrenceUntil}T23:59:59`) : null;
+    const sourceEnd = new Date(event.end);
+    const duration = Math.max(0, sourceEnd.getTime() - start.getTime());
+    // All-day values describe civil dates, not elapsed 24-hour periods. The
+    // number of occupied dates must survive 23/25-hour daylight-saving days.
+    const allDaySpan = event.allDay
+      ? Math.max(1, Math.round((Date.UTC(sourceEnd.getFullYear(), sourceEnd.getMonth(), sourceEnd.getDate()) - Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())) / DAY_MS))
+      : 0;
+    const recurrenceLimit = event.recurrenceUntil
+      ? new Date(/^\d{4}-\d{2}-\d{2}$/.test(event.recurrenceUntil) ? `${event.recurrenceUntil}T23:59:59.999` : event.recurrenceUntil)
+      : null;
     let guard = 0;
     while (start < until && guard++ < 50_000) {
-      const end = new Date(start.getTime() + duration);
+      const end = event.allDay ? addDays(start, allDaySpan) : new Date(start.getTime() + duration);
       if (end > from && start < until && (!recurrenceLimit || start <= recurrenceLimit)) {
         output.push({ ...event, sourceId: event.id, occurrenceStart: new Date(start), occurrenceEnd: end });
       }

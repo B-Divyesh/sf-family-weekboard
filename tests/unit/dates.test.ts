@@ -50,4 +50,34 @@ describe('week and recurrence calculations', () => {
     );
     expect(events.map((item) => item.occurrenceStart.toISOString().slice(0, 10))).toEqual(['2027-01-31', '2027-02-28', '2027-03-31']);
   });
+
+  it('keeps a recurring all-day plan to one civil day across autumn DST', () => {
+    const originalTimeZone = process.env.TZ;
+    process.env.TZ = 'America/New_York';
+    try {
+      const start = new Date(2027, 10, 7);
+      const end = new Date(2027, 10, 8);
+      const events = occurrencesInRange(
+        [plan({ start: start.toISOString(), end: end.toISOString(), allDay: true, recurrence: 'weekly', recurrenceUntil: '2027-11-21' })],
+        new Date(2027, 10, 15), new Date(2027, 10, 22)
+      );
+      expect(events).toHaveLength(1);
+      expect(eventDays(events[0])).toEqual(['2027-11-21']);
+    } finally {
+      process.env.TZ = originalTimeZone;
+    }
+  });
+
+  it('honours an exact timed recurrence limit', () => {
+    const events = occurrencesInRange(
+      [plan({
+        start: '2026-08-24T18:00:00.000Z', end: '2026-08-24T18:30:00.000Z',
+        recurrence: 'daily', recurrenceUntil: '2026-08-26T12:00:00.000Z'
+      })],
+      new Date('2026-08-24T00:00:00.000Z'), new Date('2026-08-28T00:00:00.000Z')
+    );
+    expect(events.map((item) => item.occurrenceStart.toISOString())).toEqual([
+      '2026-08-24T18:00:00.000Z', '2026-08-25T18:00:00.000Z'
+    ]);
+  });
 });

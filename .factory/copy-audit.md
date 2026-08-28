@@ -76,6 +76,7 @@ behavior, and price posture in one breath-sized group.
 | It stores data in IndexedDB on this device and sends nothing unless you choose an export. | 15 |
 | The first-run pixel illustration is original AI-generated artwork made for Weekboard with the factory image model. | 16 |
 | Interface marks are hand-authored. | 4 |
+| Give this person a name, not only spaces. | 8 |
 
 ## Terminology
 

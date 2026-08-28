@@ -49,7 +49,9 @@ export function exportIcs(events: BoardEvent[], people: Person[], boardName: str
     if (description) lines.push(`DESCRIPTION:${escapeIcs(description)}`);
     if (event.recurrence !== 'none') {
       const frequency = event.recurrence.toUpperCase();
-      const until = event.recurrenceUntil ? `;UNTIL=${event.recurrenceUntil.replace(/-/g, '')}T235959Z` : '';
+      const until = event.recurrenceUntil
+        ? `;UNTIL=${/^\d{4}-\d{2}-\d{2}$/.test(event.recurrenceUntil) ? `${event.recurrenceUntil.replace(/-/g, '')}T235959Z` : stamp(new Date(event.recurrenceUntil))}`
+        : '';
       lines.push(`RRULE:FREQ=${frequency}${until}`);
     }
     lines.push('END:VEVENT');
@@ -109,11 +111,16 @@ export function importIcs(source: string, defaultPersonId: string): BoardEvent[]
     const allDay = startRaw.params.includes('VALUE=DATE');
     const start = parseDate(startRaw.value, allDay, startRaw.params);
     const endRaw = values.get('DTEND');
-    const end = endRaw ? parseDate(endRaw.value, allDay, endRaw.params) : new Date(start.getTime() + (allDay ? 86_400_000 : 3_600_000));
+    const end = endRaw ? parseDate(endRaw.value, allDay, endRaw.params) : allDay
+      ? new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1)
+      : new Date(start.getTime() + 3_600_000);
     const rule = values.get('RRULE')?.value ?? '';
     const simpleRule = rule.split(';').filter(Boolean).every((part) => /^(FREQ=(DAILY|WEEKLY|MONTHLY)|UNTIL=\d{8}(T\d{6}Z)?)$/.test(part));
     const frequency = simpleRule ? (rule.match(/FREQ=(DAILY|WEEKLY|MONTHLY)/)?.[1]?.toLowerCase() ?? 'none') : 'none';
-    const untilRaw = rule.match(/UNTIL=(\d{8})/)?.[1];
+    const untilRaw = rule.match(/UNTIL=(\d{8}(?:T\d{6}Z)?)/)?.[1];
+    const recurrenceUntil = untilRaw?.includes('T')
+      ? parseDate(untilRaw, false).toISOString()
+      : untilRaw ? `${untilRaw.slice(0, 4)}-${untilRaw.slice(4, 6)}-${untilRaw.slice(6, 8)}` : undefined;
     const importedNotes = unescapeIcs(values.get('DESCRIPTION')?.value || '');
     const recurrenceNote = rule && !simpleRule ? `Imported recurrence rule (not expanded): ${rule}` : '';
     return {
@@ -124,7 +131,7 @@ export function importIcs(source: string, defaultPersonId: string): BoardEvent[]
       location: unescapeIcs(values.get('LOCATION')?.value || ''),
       notes: [importedNotes, recurrenceNote].filter(Boolean).join('\n'),
       recurrence: frequency as BoardEvent['recurrence'],
-      recurrenceUntil: simpleRule && untilRaw ? `${untilRaw.slice(0, 4)}-${untilRaw.slice(4, 6)}-${untilRaw.slice(6, 8)}` : undefined,
+      recurrenceUntil: simpleRule ? recurrenceUntil : undefined,
       updatedAt: now
     };
   });

@@ -47,14 +47,15 @@ Sociobot billing API.
 ## Data ownership and deployment
 
 IndexedDB holds the board. ICS is the interoperable backup; `.weekboard` files
-are encrypted snapshots. A passphrase cannot be recovered. Importing an
-encrypted snapshot replaces the receiving board after a named confirmation.
+are encrypted snapshots. Importing an encrypted snapshot replaces the receiving
+board after a named confirmation.
 
-Deploy the contents of `dist/` as a static site with `index.html` at its root
-and SPA fallback to `/index.html` for unknown navigation requests. `/privacy/`
-and `/terms/` are emitted as real static routes. `staticwebapp.config.json`
-ships the CSP, frame/permission policy, no-cache worker rule, and immutable
-caching for Vite’s content-hashed assets. Do not add runtime CDN assets.
+Deploy the contents of `dist/` as a static site with `index.html` at its root.
+Keep the shipped 404 response override: unknown paths must serve `/404.html`
+with HTTP 404, not an SPA fallback. `/privacy/` and `/terms/` are real static
+routes. `staticwebapp.config.json` ships the 404 policy, CSP, frame/permission
+policy, no-cache worker rule, and immutable caching for Vite’s content-hashed
+assets. Do not add runtime CDN assets.
 
 The visual system and generated-art provenance are in
 [`.factory/design.md`](.factory/design.md). Build handoff and measured gates are

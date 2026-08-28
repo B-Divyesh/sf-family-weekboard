@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { exportIcs, importIcs } from '../../src/ics';
+import { eventDays, occurrencesInRange } from '../../src/dates';
 import type { BoardEvent, Person } from '../../src/models';
 
 const person: Person = { id: 'person-1', name: 'Mum, Dad & kids', color: '#087d96', createdAt: '2026-08-20T00:00:00.000Z' };
@@ -11,6 +12,8 @@ const event: BoardEvent = {
 };
 
 describe('ICS interoperability', () => {
+  const originalTimeZone = process.env.TZ;
+  afterEach(() => { process.env.TZ = originalTimeZone; });
   it('exports valid UTC dates, escaped text, lane metadata, and RRULE', () => {
     const ics = exportIcs([event], [person], 'Our week');
     expect(ics).toContain('BEGIN:VCALENDAR\r\n');
@@ -25,7 +28,7 @@ describe('ICS interoperability', () => {
     const imported = importIcs(exportIcs([event], [person], 'Our week'), person.id);
     expect(imported).toHaveLength(1);
     expect(imported[0]).toMatchObject({
-      title: event.title, location: event.location, recurrence: 'weekly', recurrenceUntil: '2026-12-14'
+      title: event.title, location: event.location, recurrence: 'weekly', recurrenceUntil: '2026-12-14T23:59:59.000Z'
     });
     expect(imported[0].start).toBe(event.start);
   });
@@ -47,5 +50,25 @@ describe('ICS interoperability', () => {
     expect(imported.recurrence).toBe('none');
     expect(imported.notes).toContain('not expanded');
     expect(imported.notes).toContain('BYDAY=MO,WE');
+  });
+
+  it('uses the next local midnight when an all-day DTEND is omitted', () => {
+    process.env.TZ = 'America/New_York';
+    const ics = 'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:Spring holiday\r\nDTSTART;VALUE=DATE:20270314\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n';
+    const imported = importIcs(ics, person.id)[0];
+    const occurrence = occurrencesInRange([imported], new Date(2027, 2, 14), new Date(2027, 2, 16))[0];
+    expect(eventDays(occurrence)).toEqual(['2027-03-14']);
+    expect(new Date(imported.end).getHours()).toBe(0);
+  });
+
+  it('preserves a UTC timestamp UNTIL and excludes starts after it', () => {
+    process.env.TZ = 'UTC';
+    const ics = 'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:Evening task\r\nDTSTART:20260824T180000Z\r\nDTEND:20260824T183000Z\r\nRRULE:FREQ=DAILY;UNTIL=20260826T120000Z\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n';
+    const imported = importIcs(ics, person.id)[0];
+    expect(imported.recurrenceUntil).toBe('2026-08-26T12:00:00.000Z');
+    expect(occurrencesInRange([imported], new Date('2026-08-24T00:00:00Z'), new Date('2026-08-28T00:00:00Z')).map((item) => item.occurrenceStart.toISOString())).toEqual([
+      '2026-08-24T18:00:00.000Z', '2026-08-25T18:00:00.000Z'
+    ]);
+    expect(exportIcs([imported], [person], 'Our week')).toContain('UNTIL=20260826T120000Z');
   });
 });

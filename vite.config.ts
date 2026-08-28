@@ -37,7 +37,7 @@ function serviceWorkerBuildPlugin() {
 
 export default defineConfig({
   define: {
-    __BUILD_ID__: JSON.stringify(process.env.VITE_BUILD_ID ?? '1.0.0-r3')
+    __BUILD_ID__: JSON.stringify(process.env.VITE_BUILD_ID ?? '1.0.0-r4')
   },
   build: {
     target: 'es2022',

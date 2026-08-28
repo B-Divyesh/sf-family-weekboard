@@ -13,7 +13,8 @@ async function start(): Promise<void> {
     await new WeekboardApp(root, store, demo).init();
   } catch (error) {
     console.error(error);
-    root.innerHTML = `<main id="main" class="fatal"><h1>Weekboard could not open</h1><p>Your browser blocked local storage, so no plans can be safely saved.</p><p>Allow site data for this page, or open it in a regular (not private) window, then reload.</p><button onclick="location.reload()">Try again</button></main>`;
+    root.innerHTML = `<main id="main" class="fatal"><h1>Weekboard could not open</h1><p>Your browser blocked local storage, so no plans can be safely saved.</p><p>Allow site data for this page, or open it in a regular (not private) window, then reload.</p><button id="retryOpen" type="button">Try again</button></main>`;
+    root.querySelector('#retryOpen')?.addEventListener('click', () => location.reload());
   }
 }
 

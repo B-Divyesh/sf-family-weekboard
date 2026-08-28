@@ -351,7 +351,7 @@ export class WeekboardApp {
     (dialog.querySelector('#eventEndDate') as HTMLInputElement).value = inputDate(end);
     (dialog.querySelector('#eventEndTime') as HTMLInputElement).value = inputTime(end);
     (dialog.querySelector('#eventRepeat') as HTMLSelectElement).value = event?.recurrence ?? 'none';
-    (dialog.querySelector('#eventRepeatUntil') as HTMLInputElement).value = event?.recurrenceUntil ?? '';
+    (dialog.querySelector('#eventRepeatUntil') as HTMLInputElement).value = event?.recurrenceUntil?.slice(0, 10) ?? '';
     (dialog.querySelector('#eventLocation') as HTMLInputElement).value = event?.location ?? '';
     (dialog.querySelector('#eventNotes') as HTMLTextAreaElement).value = event?.notes ?? '';
     (dialog.querySelector('#deleteEvent') as HTMLButtonElement).hidden = !event;
@@ -378,7 +378,7 @@ export class WeekboardApp {
     const startDate = String(data.get('startDate'));
     const endDate = String(data.get('endDate'));
     const recurrence = String(data.get('recurrence')) as BoardEvent['recurrence'];
-    const recurrenceUntil = String(data.get('recurrenceUntil') || '') || undefined;
+    const recurrenceUntilDate = String(data.get('recurrenceUntil') || '') || undefined;
     const title = String(data.get('title')).trim();
     const start = new Date(`${startDate}T${allDay ? '00:00' : data.get('startTime')}:00`);
     let end = new Date(`${endDate}T${allDay ? '00:00' : data.get('endTime')}:00`);
@@ -386,11 +386,16 @@ export class WeekboardApp {
     const error = this.root.querySelector<HTMLElement>('#eventError')!;
     if (!title) { error.textContent = 'Give this plan a name, not only spaces.'; return; }
     if (end <= start) { error.textContent = 'The end must be after the start.'; return; }
-    if (recurrence !== 'none' && recurrenceUntil && recurrenceUntil < startDate) {
+    if (recurrence !== 'none' && recurrenceUntilDate && recurrenceUntilDate < startDate) {
       error.textContent = 'Repeat until must be the start date or a later date.';
       return;
     }
     const existing = this.events.find((item) => item.id === this.editingId);
+    // Preserve a timed ICS UNTIL when its date was not changed in the editor.
+    // A date input cannot display the original time component.
+    const recurrenceUntil = recurrenceUntilDate && existing?.recurrenceUntil?.includes('T') && existing.recurrenceUntil.slice(0, 10) === recurrenceUntilDate
+      ? existing.recurrenceUntil
+      : recurrenceUntilDate;
     const event: BoardEvent = {
       id: existing?.id ?? crypto.randomUUID(), title, personId: String(data.get('personId')),
       start: start.toISOString(), end: end.toISOString(), allDay,
@@ -415,7 +420,7 @@ export class WeekboardApp {
     const data = new FormData(form); const error = this.root.querySelector<HTMLElement>('#peopleError')!;
     if (!this.supporter && this.people.length >= 4) { error.textContent = 'The free board includes four people. The supporter pack removes that limit.'; return; }
     const name = String(data.get('personName')).trim();
-    if (!name) return;
+    if (!name) { error.textContent = 'Give this person a name, not only spaces.'; return; }
     await this.store.savePerson({ id: crypto.randomUUID(), name, color: String(data.get('personColor')), createdAt: new Date().toISOString() });
     await this.refresh(); this.render(); this.announce(`${name} added.`);
   }
