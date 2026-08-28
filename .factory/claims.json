@@ -22,24 +22,24 @@
   },
   {
     "id": "free-core",
-    "claim": "Adding plans, printing, ICS export, and encrypted export are free.",
+    "claim": "Adding plans, printing, calendar export, and a password-protected copy are free.",
     "where": "first screen, supporter section, supporter dialog, terms",
     "test": "npx playwright test --project=chromium --grep '@claim:free-core'",
-    "sandbox": "fresh unlicensed board; add a plan, invoke print, and download both ICS and encrypted exports"
+    "sandbox": "fresh unlicensed board; add a plan, invoke print, and download a calendar file and encrypted copy"
   },
   {
     "id": "ics-export",
-    "claim": "Exports every plan as a standard ICS calendar with UTC times and supported recurrence rules.",
+    "claim": "Exports tested daily and weekly repeats as UTC calendar times.",
     "where": "handoff dialog, README",
     "test": "npx playwright test --project=chromium --grep '@claim:ics-export'",
-    "sandbox": "fresh /demo context; download ICS and assert VCALENDAR, UTC DTSTART, daily and weekly RRULE, and four sample VEVENTs"
+    "sandbox": "fresh /demo context; download a calendar file and assert VCALENDAR, UTC DTSTART, daily and weekly RRULE, and four sample VEVENTs"
   },
   {
     "id": "ics-import",
-    "claim": "Imports a standard ICS calendar into the board.",
+    "claim": "Imports a standard calendar file into the board.",
     "where": "empty state, handoff dialog, README",
     "test": "npx playwright test --project=chromium --grep '@claim:ics-import'",
-    "sandbox": "fresh /demo context at a fixed date; upload a standard ICS fixture and assert its plan and import result"
+    "sandbox": "fresh /demo context at a fixed date; upload a standard calendar-file fixture and assert its plan and import result"
   },
   {
     "id": "encrypted-handoff",
@@ -56,8 +56,15 @@
     "sandbox": "fresh fixed-date /demo context; create each plan type and assert visible all-day, daily, next-week, and next-month occurrences"
   },
   {
+    "id": "copy-not-sync",
+    "claim": "File and QR copies do not sync after they are opened.",
+    "where": "limits section, sharing dialog, terms, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:copy-not-sync'",
+    "sandbox": "two fresh browser contexts; open an encrypted copy on the receiver, change the sender, reload the receiver, and assert the receiver remains unchanged"
+  },
+  {
     "id": "person-lanes",
-    "claim": "Shows each person's name and lane colour on their plans.",
+    "claim": "Shows each person's name and colour on their plans.",
     "where": "board, people dialog, README",
     "test": "npx playwright test --project=chromium --grep '@claim:person-lanes'",
     "sandbox": "fresh /demo context; assert sample plans expose names and at least three distinct lane colours"
@@ -92,10 +99,10 @@
   },
   {
     "id": "paid-checkout",
-    "claim": "Weekboard displays the supporter pack as ₹499 once and starts a hosted Sociobot checkout.",
+    "claim": "Weekboard displays the supporter pack as a ₹499 one-time purchase and starts a hosted Sociobot checkout.",
     "where": "supporter section, supporter dialog, terms, README",
     "test": "npx playwright test --project=chromium --grep '@claim:paid-checkout'",
-    "sandbox": "fresh context; assert ₹499, one-time and no-subscription copy, then assert the production endpoint redirects to the hosted checkout"
+    "sandbox": "fresh context; assert ₹499 and one-time copy, then inspect the hosted checkout session for INR 499, non-recurring billing, and a hosted destination"
   },
   {
     "id": "license-restore",
@@ -106,7 +113,7 @@
   },
   {
     "id": "supporter-entitlements",
-    "claim": "The supporter pack adds a custom board name, extra lane colours, and more than four people.",
+    "claim": "The supporter pack adds a custom board name, extra colours, and more than four people.",
     "where": "supporter section, supporter dialog, terms, README",
     "test": "npx playwright test --project=chromium --grep '@claim:supporter-entitlements'",
     "sandbox": "fresh real-board context with a fixture-valid license; save a custom name, choose a fifth colour, and add a fifth person"

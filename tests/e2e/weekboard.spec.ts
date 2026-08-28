@@ -64,7 +64,7 @@ test('@claim:license-restore @regression:checkout-contract accepts and verifies 
   }));
 
   await page.goto('/');
-  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  await page.getByRole('button', { name: 'See supporter pack' }).click();
   const buy = page.getByRole('link', { name: 'Buy supporter pack' });
   await expect(buy).toHaveAttribute('href', checkout);
   await buy.click();
@@ -76,7 +76,7 @@ test('@claim:license-restore @regression:checkout-contract accepts and verifies 
 
 test('@regression:checkout-offline-feedback keeps a failed checkout in context', async ({ page, context }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  await page.getByRole('button', { name: 'See supporter pack' }).click();
   await context.setOffline(true);
   await page.getByRole('link', { name: 'Buy supporter pack' }).click();
   await expect(page.locator('#licenseStatus')).toHaveText('Checkout needs an internet connection. Reconnect, then try again.');
@@ -115,14 +115,27 @@ test('mobile agenda shows one day without horizontal overflow', async ({ page },
   await expect(wednesday).toBeFocused();
 });
 
+test('@regression:mobile-demo-shows-a-sample-plan-before-scrolling', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'mobile layout only');
+  await page.goto('/?demo=1');
+  await expect(page.getByLabel('Demo mode')).toBeVisible();
+  const sample = page.getByRole('button', { name: /Edit (School drop-off|Football practice|Dentist|Groceries and meal prep)/ }).first();
+  await expect(sample).toBeVisible();
+  const box = await sample.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeLessThan(844);
+  expect(box!.y + box!.height).toBeGreaterThan(0);
+  await page.screenshot({ path: '.factory/evidence/polish-2/demo-390.png' });
+});
+
 test('@regression:license-network-failure never trusts an unverified token', async ({ page }) => {
   await page.route('**/products/family-weekboard/verify?license=never-validated-token', (route) => route.abort('failed'));
   await page.goto('/');
-  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  await page.getByRole('button', { name: 'See supporter pack' }).click();
   await page.getByLabel('Have a license? Paste it here').fill('never-validated-token');
   await page.getByRole('button', { name: 'Verify license' }).click();
   await expect(page.locator('#licenseStatus')).toContainText('not active');
-  await expect(page.getByRole('button', { name: 'Support Weekboard' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'See supporter pack' })).toBeVisible();
   await expect(page.getByLabel(/Board name/)).toBeDisabled();
   expect(await page.evaluate(() => localStorage.getItem('sb_license_verdict:family-weekboard'))).toBeNull();
 });
@@ -226,20 +239,36 @@ test('@regression:csp-retry reloads the storage error page without an inline han
 });
 
 test('@regression:route-metadata gives every route complete sharing metadata and the standard shell', async ({ page }) => {
-  for (const route of ['/demo/', '/privacy/', '/terms/', '/404.html']) {
+  for (const route of ['/demo/', '/?demo=1', '/privacy/', '/terms/', '/404.html']) {
     const response = await page.goto(route);
     expect(response?.status()).toBe(200);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /^https:\/\/family-weekboard\.sociobot\.in\//);
-    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/icon-192.png');
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/icon-180.png');
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Weekboard/);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /social-card\.webp$/);
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+    if (route === '/?demo=1') {
+      await expect(page.locator('meta[property="og:description"]')).toHaveAttribute('content', 'Try Weekboard with a separate sample family schedule.');
+      await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', 'Try Weekboard with a separate sample family schedule.');
+      await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://family-weekboard.sociobot.in/?demo=1');
+    }
     await expect(page.locator('header')).toHaveCount(1);
     await expect(page.locator('footer')).toHaveCount(1);
     const results = await new AxeBuilder({ page: page as never }).analyze();
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? '')), route).toEqual([]);
   }
+});
+
+test('@regression:apple-touch-icon-is-an-original-180px-asset', async ({ page }) => {
+  await page.goto('/');
+  const size = await page.evaluate(() => new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+    image.onerror = () => reject(new Error('Apple touch icon did not load.'));
+    image.src = '/icon-180.png';
+  }));
+  expect(size).toEqual({ width: 180, height: 180 });
 });
 
 test('@regression:person-whitespace explains why a person was not added', async ({ page }) => {
@@ -267,7 +296,7 @@ test('mobile legal pages have named links and 44px controls', async ({ page }, t
   await page.goto('/');
   for (const control of [
     page.getByRole('link', { name: 'Weekboard home' }),
-    page.getByRole('button', { name: 'Support Weekboard' }),
+    page.getByRole('button', { name: 'See supporter pack' }),
     page.getByRole('link', { name: 'Privacy' }),
     page.getByRole('link', { name: 'Terms' }),
     page.getByRole('button', { name: 'Read about Weekboard' })
@@ -285,7 +314,7 @@ test('@regression:mobile-dialog-targets gives every visible control a 44px targe
     page.getByRole('button', { name: 'Add plan' }),
     page.getByRole('button', { name: 'Edit people' }),
     page.getByRole('button', { name: 'Share or export board' }),
-    page.getByRole('button', { name: 'Support Weekboard' }),
+    page.getByRole('button', { name: 'See supporter pack' }),
     page.getByRole('button', { name: 'Read about Weekboard' })
   ];
   for (const opener of openers) {

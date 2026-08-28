@@ -88,18 +88,17 @@ export class WeekboardApp {
         <nav class="site-nav" aria-label="Main navigation"><a href="/?demo=1">Demo</a><a href="#how-it-works">How it works</a><a href="/privacy/">Privacy</a></nav>
         <div class="header-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Change colour theme" title="Change colour theme">◐</button>
-          ${this.demo ? '' : `<button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Manage supporter pack' : 'Support Weekboard'}</button>`}
+          ${this.demo ? '' : `<button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Manage supporter pack' : 'See supporter pack'}</button>`}
         </div>
       </header>
       ${this.demo ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Changes stay separate from your real board.</span><div><button class="button secondary compact" id="resetDemo" type="button">Reset demo</button><button class="button secondary compact" id="startReal" type="button">Start for real</button></div></aside>` : ''}
       <div class="offline-strip" id="networkStatus" role="status" ${navigator.onLine ? 'hidden' : ''}>OFFLINE · changes still save on this device</div>
-      <main id="main" tabindex="-1">
-        <section class="masthead" aria-labelledby="pageTitle">
+      <main id="main" class="${this.demo ? 'demo-main' : ''}" tabindex="-1">
+        <section class="masthead ${this.demo ? 'demo-masthead' : ''}" aria-labelledby="pageTitle">
           <div>
-            <p class="eyebrow">${escapeHtml(this.settings.boardName)} · LOCAL TIME</p>
-            <h1 id="pageTitle">Plan your family week together</h1>
-            <p class="lede">For families using phones, computers, and paper who need one shared weekly view without a new account.</p>
-            <ul class="hero-facts" aria-label="Key facts"><li>Works offline after the first visit.</li><li>Your schedule stays on this device.</li><li>Adding plans, printing, and both exports are free.</li></ul>
+            <p class="eyebrow">${escapeHtml(this.settings.boardName)} · ${this.demo ? 'SAMPLE WEEK' : 'LOCAL TIME'}</p>
+            <h1 id="pageTitle">${this.demo ? 'Sample family board' : 'Plan your family week together'}</h1>
+            ${this.demo ? '' : '<p class="lede">For families using phones, computers, and paper who need one shared weekly view without a new account.</p><ul class="hero-facts" aria-label="Key facts"><li>Works offline after the first visit.</li><li>Your schedule stays on this device.</li><li>Adding plans, printing, calendar export, and a password-protected copy are free.</li></ul>'}
           </div>
           <div class="primary-actions">
             <button class="button primary" id="addEvent" type="button"><span aria-hidden="true">＋</span> Add plan</button>
@@ -136,7 +135,7 @@ export class WeekboardApp {
               <div>
                 <p class="eyebrow">EMPTY BOARD</p>
                 <h2>No plans this week</h2>
-                <p>Add the first plan, or import an existing ICS calendar. Everything stays in this browser unless you explicitly export it.</p>
+                <p>Add the first plan, or import a standard calendar file (.ics). Everything stays in this browser unless you explicitly export it.</p>
                 <button class="button primary" id="emptyAdd" type="button">Add the first plan</button>
               </div>
             </div>` : ''}
@@ -144,7 +143,7 @@ export class WeekboardApp {
         <p class="status-line" id="statusLine" aria-live="polite">Saved locally · ${this.events.length} plan${this.events.length === 1 ? '' : 's'} on board</p>
         <section class="info-section" id="how-it-works" aria-labelledby="howHeading">
           <p class="eyebrow">THREE STEPS</p><h2 id="howHeading">How it works</h2>
-          <ol><li><strong>Add plans.</strong> Put each commitment on a person’s color.</li><li><strong>Check the week.</strong> Use seven columns or one phone-friendly day.</li><li><strong>Share a copy.</strong> Print, export ICS, or share an encrypted copy.</li></ol>
+          <ol><li><strong>Add plans.</strong> Put each commitment on a person’s colour.</li><li><strong>Check the week.</strong> Use seven columns or one phone-friendly day.</li><li><strong>Share a copy.</strong> Print, export a calendar file, or share an encrypted copy.</li></ol>
         </section>
         <section class="info-section limits" aria-labelledby="limitsHeading">
           <p class="eyebrow">CLEAR BOUNDARIES</p><h2 id="limitsHeading">What Weekboard does not do</h2>
@@ -152,15 +151,15 @@ export class WeekboardApp {
         </section>
         ${this.demo ? '' : `<section class="info-section supporter-section" aria-labelledby="supporterHeading">
           <p class="eyebrow">OPTIONAL SUPPORTER PACK</p><h2 id="supporterHeading">Add room for a bigger household</h2>
-          <p><strong>₹499 once.</strong> Add more than four people, extra colors, and a custom board name. Adding plans, printing, and both exports are free.</p>
-          <button class="button secondary" id="supportSectionButton" type="button">See supporter pack</button>
+          <p><strong>₹499 once.</strong> Add more than four people, extra colours, and a custom board name. Adding plans, printing, calendar export, and a password-protected copy are free.</p>
+          <button class="button secondary" id="supportSectionButton" type="button">View supporter options</button>
         </section>`}
       </main>
       <footer>
         <span>Plan a family week without a shared cloud account. · Build ${__BUILD_ID__}</span>
         <nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><button class="link-button" id="aboutButton" type="button">Read about Weekboard</button><a href="https://sociobot.in">Built by Param Factory <span class="sr-only">(external site)</span></a></nav>
       </footer>
-      <div class="toast" id="updateToast" role="status" hidden><span>A fresh Weekboard is ready.</span><button type="button" id="reloadButton">Reload</button></div>
+      <div class="toast" id="updateToast" role="status" hidden><span>A fresh Weekboard is ready.</span><button type="button" id="reloadButton">Reload Weekboard</button></div>
       ${this.dialogs()}
     `;
     this.bindUi();
@@ -195,7 +194,7 @@ export class WeekboardApp {
   private dialogs(): string {
     return `
       <dialog id="eventDialog" aria-labelledby="eventDialogTitle"><form method="dialog" id="eventForm" class="dialog-form">
-        <div class="dialog-header"><div><p class="eyebrow">PLAN SLOT</p><h2 id="eventDialogTitle">Add a plan</h2></div><button class="icon-button close-dialog" value="cancel" aria-label="Close plan editor">×</button></div>
+        <div class="dialog-header"><div><p class="eyebrow">PLAN</p><h2 id="eventDialogTitle">Add a plan</h2></div><button class="icon-button close-dialog" value="cancel" aria-label="Close plan editor">×</button></div>
         <div class="form-grid">
           <label class="full">What’s happening?<input id="eventTitle" name="title" maxlength="100" required autocomplete="off" /></label>
           <label>Who?<select id="eventPerson" name="personId" required>${this.people.map((person) => `<option value="${person.id}">${escapeHtml(person.name)}</option>`).join('')}</select></label>
@@ -210,12 +209,12 @@ export class WeekboardApp {
           <label class="full">Note <span class="hint">optional</span><textarea id="eventNotes" name="notes" rows="2" maxlength="500"></textarea></label>
         </div>
         <p class="form-error" id="eventError" role="alert"></p>
-        <div class="dialog-actions"><button class="button danger" id="deleteEvent" type="button" hidden>Delete plan</button><span></span><button class="button secondary close-dialog" value="cancel">Cancel</button><button class="button primary" value="default" id="saveEvent">Save plan</button></div>
+        <div class="dialog-actions"><button class="button danger" id="deleteEvent" type="button" hidden>Delete plan</button><span></span><button class="button secondary close-dialog" value="cancel">Discard changes</button><button class="button primary" value="default" id="saveEvent">Save plan</button></div>
       </form></dialog>
 
       <dialog id="peopleDialog" aria-labelledby="peopleTitle"><div class="dialog-form">
         <div class="dialog-header"><div><p class="eyebrow">PEOPLE</p><h2 id="peopleTitle">People on this board</h2></div><button class="icon-button close-dialog" aria-label="Close people settings">×</button></div>
-        <p class="dialog-intro">Color helps you scan. Every plan also carries the person’s name.</p>
+        <p class="dialog-intro">Colour helps you scan. Every plan also carries the person’s name.</p>
         <ul class="people-list">${this.people.map((person, index) => `<li><span class="person-chip" style="--lane:${person.color}"><i>${escapeHtml(person.name.slice(0, 1).toUpperCase())}</i>${escapeHtml(person.name)}</span>${this.people.length > 1 ? `<button class="icon-button" type="button" data-delete-person="${person.id}" aria-label="Remove ${escapeHtml(person.name)} and their plans">×</button>` : ''}${index === 0 ? '<small>default</small>' : ''}</li>`).join('')}</ul>
         <form id="personForm" class="inline-form"><label>Name<input name="personName" required maxlength="30" autocomplete="off" /></label><label>Colour<select name="personColor">${LANE_COLORS.map((color, index) => `<option value="${color}" ${!this.supporter && index > 3 ? 'disabled' : ''}>Colour ${index + 1}${!this.supporter && index > 3 ? ' · supporter' : ''}</option>`).join('')}</select></label><button class="button primary" type="submit">Add person</button></form>
         <p class="form-error" id="peopleError" role="alert"></p>
@@ -226,7 +225,7 @@ export class WeekboardApp {
       <dialog id="transferDialog" aria-labelledby="transferTitle"><div class="dialog-form transfer-dialog">
         <div class="dialog-header"><div><p class="eyebrow">SHARE A COPY</p><h2 id="transferTitle">Share or export a copy</h2></div><button class="icon-button close-dialog" aria-label="Close sharing and export">×</button></div>
         <div class="notice"><strong>Copies do not sync.</strong> Importing replaces the receiving board with the copy you send. Weekboard never uploads it.</div>
-        <section><h3>Standard calendar file</h3><p>Export a standard ICS calendar file. Person colors are included as notes.</p><div class="action-row"><button class="button primary" id="exportIcs" type="button">Export ICS</button><label class="button secondary file-button">Import ICS<input id="importIcs" type="file" accept=".ics,text/calendar" /></label></div></section>
+        <section><h3>Standard calendar file (.ics)</h3><p>Export a calendar file. Person colours are included as notes.</p><div class="action-row"><button class="button primary" id="exportIcs" type="button">Export calendar file</button><label class="button secondary file-button">Import calendar file<input id="importIcs" type="file" accept=".ics,text/calendar" /></label></div></section>
         <section><h3>Private Weekboard copy</h3><p>Encrypts people, notes, and plans in this browser. Share the passphrase separately.</p><label>Passphrase <span class="hint">at least 8 characters</span><input id="handoffPassphrase" type="password" minlength="8" autocomplete="new-password" /></label><div class="action-row"><button class="button primary" id="exportEncrypted" type="button">Download encrypted copy</button><button class="button secondary" id="makeQr" type="button">Make QR copy</button><label class="button secondary file-button">Open encrypted copy<input id="importEncrypted" type="file" accept=".weekboard,text/plain" /></label></div>
           <div id="qrOutput" class="qr-output" hidden></div>
           <label>Or paste a copy code<textarea id="handoffCode" rows="3" spellcheck="false"></textarea></label><button class="button secondary" id="importCode" type="button">Open pasted copy</button>
@@ -236,14 +235,14 @@ export class WeekboardApp {
 
       <dialog id="supportDialog" aria-labelledby="supportTitle"><div class="dialog-form">
         <div class="dialog-header"><div><p class="eyebrow">ONE-TIME SUPPORTER PACK</p><h2 id="supportTitle">Add options for a bigger household</h2></div><button class="icon-button close-dialog" aria-label="Close supporter information">×</button></div>
-        ${this.supporter ? '<div class="supporter-active"><strong>Supporter pack active</strong><span>Thanks for backing private household software.</span></div>' : '<p class="price">₹499 <small>one time</small></p><p>Adding plans, printing, and both exports are free. The supporter pack adds a custom board name, extra colors, and more than four people.</p>'}
+        ${this.supporter ? '<div class="supporter-active"><strong>Supporter pack active</strong><span>Thanks for backing private household software.</span></div>' : '<p class="price">₹499 <small>one time</small></p><p>Adding plans, printing, calendar export, and a password-protected copy are free. The supporter pack adds a custom board name, extra colours, and more than four people.</p>'}
         <ul class="feature-list"><li>No subscription</li><li>No account required</li><li>One license can be restored on your devices</li></ul>
         ${this.supporter ? '' : `<a class="button primary center" id="buySupporter" href="${CHECKOUT_URL}">Buy supporter pack</a>`}
         <form id="licenseForm"><label>Have a license? Paste it here<input name="license" value="${escapeHtml(this.demo ? '' : getLicense())}" autocomplete="off" /></label><button class="button secondary" type="submit">Verify license</button></form>
-        <p class="form-error" id="licenseStatus" role="status"></p><p class="fine-print">Checkout and refund details appear in the hosted checkout. See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
+        <p class="form-error" id="licenseStatus" role="status"></p><p class="fine-print">See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
       </div></dialog>
 
-      <dialog id="aboutDialog" aria-labelledby="aboutTitle"><div class="dialog-form"><div class="dialog-header"><div><p class="eyebrow">ABOUT</p><h2 id="aboutTitle">How Weekboard stores your schedule</h2></div><button class="icon-button close-dialog" aria-label="Close about Weekboard">×</button></div><p>Weekboard is a deliberately small, installable weekly view. It stores your board in this browser and sends nothing unless you export it.</p><p>The first-run pixel illustration was generated for Weekboard with the factory image model.</p><p>The interface marks are hand-authored.</p><button class="button secondary close-dialog" type="button">Close</button></div></dialog>
+      <dialog id="aboutDialog" aria-labelledby="aboutTitle"><div class="dialog-form"><div class="dialog-header"><div><p class="eyebrow">ABOUT</p><h2 id="aboutTitle">How Weekboard stores your schedule</h2></div><button class="icon-button close-dialog" aria-label="Close about Weekboard">×</button></div><p>Weekboard is a deliberately small, installable weekly view. It stores your board in this browser and sends nothing unless you export it.</p><p>The first-run pixel illustration was generated for Weekboard with the factory image model.</p><p>The interface marks are hand-authored.</p><button class="button secondary close-dialog" type="button">Close About</button></div></dialog>
     `;
   }
 
@@ -453,7 +452,7 @@ export class WeekboardApp {
 
   private exportIcs(): void {
     download(exportIcs(this.events, this.people, this.settings.boardName), `weekboard-${dateKey(new Date())}.ics`, 'text/calendar;charset=utf-8');
-    this.announce('ICS calendar exported.');
+    this.announce('Calendar file exported.');
   }
 
   private async importIcsFile(event: Event): Promise<void> {
@@ -462,8 +461,8 @@ export class WeekboardApp {
     try {
       const imported = importIcs(await file.text(), this.people[0].id);
       for (const item of imported) await this.store.saveEvent(item);
-      await this.refresh(); this.closeDialog(this.root.querySelector('#transferDialog')!); this.render(); this.announce(`${imported.length} plan${imported.length === 1 ? '' : 's'} imported from ICS.`);
-    } catch (reason) { error.textContent = reason instanceof Error ? reason.message : 'The ICS file could not be read.'; }
+      await this.refresh(); this.closeDialog(this.root.querySelector('#transferDialog')!); this.render(); this.announce(`${imported.length} plan${imported.length === 1 ? '' : 's'} imported from a calendar file.`);
+    } catch (reason) { error.textContent = reason instanceof Error ? reason.message : 'The calendar file could not be read.'; }
   }
 
   private passphrase(): string { return this.root.querySelector<HTMLInputElement>('#handoffPassphrase')!.value; }

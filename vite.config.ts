@@ -20,7 +20,7 @@ function serviceWorkerBuildPlugin() {
       const template = readFileSync(resolve(__dirname, 'public/sw.js'), 'utf8');
       const precache = [
         '/', '/index.html', '/demo/', '/demo/index.html', '/offline.html', '/404.html', '/manifest.json',
-        '/icon.svg', '/icon-192.png', '/icon-512.png', '/privacy/', '/privacy/index.html', '/terms/', '/terms/index.html',
+        '/icon.svg', '/icon-180.png', '/icon-192.png', '/icon-512.png', '/privacy/', '/privacy/index.html', '/terms/', '/terms/index.html',
         ...filesIn(join(dist, 'assets')).map((file) => `/${relative(dist, file).replaceAll('\\', '/')}`)
       ].sort();
       const releaseFiles = filesIn(dist).filter((file) => !file.endsWith('.map') && !file.endsWith('/sw.js')).sort();

@@ -84,7 +84,7 @@ test('@claim:ics-export downloads a standard calendar and round-trips final recu
   await page.getByRole('button', { name: 'Share or export board' }).click();
   const download = await Promise.all([
     page.waitForEvent('download'),
-    page.getByRole('button', { name: 'Export ICS' }).click()
+    page.getByRole('button', { name: 'Export calendar file' }).click()
   ]).then(([file]) => file);
   const stream = await download.createReadStream();
   let text = '';
@@ -160,6 +160,42 @@ test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ 
   expect(crossOrigin).toEqual([]);
 });
 
+test('@claim:copy-not-sync keeps an opened copy separate from later sender changes', async ({ browser }) => {
+  const senderContext = await browser.newContext();
+  const sender = await senderContext.newPage();
+  await sender.goto('/demo/');
+  await sender.getByRole('button', { name: 'Share or export board' }).click();
+  await sender.getByLabel(/Passphrase/).fill('separate sample secret');
+  const download = await Promise.all([
+    sender.waitForEvent('download'),
+    sender.getByRole('button', { name: 'Download encrypted copy' }).click()
+  ]).then(([file]) => file);
+  const stream = await download.createReadStream();
+  let copy = '';
+  for await (const chunk of stream!) copy += chunk.toString();
+
+  const receiverContext = await browser.newContext();
+  const receiver = await receiverContext.newPage();
+  await receiver.goto('/');
+  await receiver.getByRole('button', { name: 'Share or export board' }).click();
+  await receiver.getByLabel(/Passphrase/).fill('separate sample secret');
+  await receiver.getByLabel('Or paste a copy code').fill(copy);
+  receiver.once('dialog', (dialog) => dialog.accept());
+  await receiver.getByRole('button', { name: 'Open pasted copy' }).click();
+  await expect(receiver.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+
+  await sender.getByRole('button', { name: 'Close sharing and export' }).click();
+  await sender.getByRole('button', { name: 'Add plan' }).click();
+  await sender.getByLabel('What’s happening?').fill('Later sender change');
+  await sender.getByRole('button', { name: 'Save plan' }).click();
+  await expect(sender.getByRole('button', { name: /Edit Later sender change/ })).toBeVisible();
+  await receiver.reload();
+  await expect(receiver.getByRole('button', { name: /Edit Later sender change/ })).toHaveCount(0);
+  await expect(receiver.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+  await senderContext.close();
+  await receiverContext.close();
+});
+
 test('@claim:installable-pwa exposes a valid manifest and controlling worker', async ({ page }) => {
   await page.goto('/demo/');
   const manifest = await page.evaluate(async () => fetch('/manifest.json').then((response) => response.json()));
@@ -170,22 +206,29 @@ test('@claim:installable-pwa exposes a valid manifest and controlling worker', a
   await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
 });
 
-test('@claim:paid-checkout displays ₹499 once and starts the hosted checkout', async ({ page, request }) => {
+test('@claim:paid-checkout displays ₹499 once and verifies the hosted checkout contract', async ({ page, request }) => {
   await page.goto('/');
   await expect(page.locator('.supporter-section')).toContainText('₹499 once.');
   await page.getByRole('button', { name: 'See supporter pack' }).click();
   await expect(page.locator('.price')).toHaveText(/₹499\s+one time/);
   await expect(page.getByRole('listitem').filter({ hasText: 'No subscription' })).toBeVisible();
-  // A cold request used to fail intermittently. Require repeated redirects,
-  // not a lucky single response, before accepting the hosted purchase claim.
+  // A cold request used to fail intermittently. Require repeated redirects and
+  // inspect Dodo's authoritative session payload, not Weekboard's own copy.
   for (let attempt = 0; attempt < 3; attempt++) {
-    const response = await request.get('https://api.sociobot.in/api/v1/products/family-weekboard/checkout', { maxRedirects: 0 });
-    expect(response.status()).toBe(303);
-    expect(response.headers().location).toMatch(/^https:\/\/checkout\.dodopayments\.com\//);
+    const redirect = await request.get('https://api.sociobot.in/api/v1/products/family-weekboard/checkout', { maxRedirects: 0 });
+    expect(redirect.status()).toBe(303);
+    const hostedUrl = redirect.headers().location;
+    expect(hostedUrl).toMatch(/^https:\/\/checkout\.dodopayments\.com\//);
+    const hosted = await request.get(hostedUrl!);
+    expect(hosted.status()).toBe(200);
+    const session = await hosted.text();
+    expect(session).toMatch(/\\"session_type\\":\\"one_time\\"/);
+    expect(session).toMatch(/\\"is_recurring\\":false/);
+    expect(session).toMatch(/\\"price\\":49900,\\"currency\\":\\"INR\\"/);
   }
 });
 
-test('@claim:free-core keeps planning, printing, and both exports available without a license', async ({ page }) => {
+test('@claim:free-core keeps planning, printing, and both free exports available without a license', async ({ page }) => {
   await page.addInitScript(() => { window.print = () => sessionStorage.setItem('weekboard-print-opened', 'yes'); });
   await page.goto('/');
   await page.getByRole('button', { name: 'Add plan' }).click();
@@ -196,7 +239,7 @@ test('@claim:free-core keeps planning, printing, and both exports available with
   expect(await page.evaluate(() => sessionStorage.getItem('weekboard-print-opened'))).toBe('yes');
   await page.getByRole('button', { name: 'Share or export board' }).click();
   const ics = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export ICS' }).click();
+  await page.getByRole('button', { name: 'Export calendar file' }).click();
   expect((await ics).suggestedFilename()).toMatch(/\.ics$/);
   await page.getByLabel(/Passphrase/).fill('free export passphrase');
   const encrypted = page.waitForEvent('download');
@@ -213,7 +256,7 @@ test('@claim:ics-import imports a standard calendar plan into the board', async 
     buffer: Buffer.from('BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nUID:import-claim\r\nSUMMARY:Imported school meeting\r\nDTSTART:20260825T130000Z\r\nDTEND:20260825T140000Z\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n')
   });
   await expect(page.locator('.event-card', { hasText: 'Imported school meeting' })).toHaveCount(1);
-  await expect(page.locator('#statusLine')).toContainText('1 plan imported from ICS.');
+  await expect(page.locator('#statusLine')).toContainText('1 plan imported from a calendar file.');
 });
 
 test('@claim:calendar-options handles all-day, daily, weekly, and monthly plans', async ({ page }) => {
@@ -252,10 +295,11 @@ test('@claim:person-lanes shows names and distinct lane colours', async ({ page 
   expect(colours.length).toBeGreaterThanOrEqual(3);
 });
 
-test('@claim:responsive-agenda shows seven desktop days and one phone day', async ({ page }) => {
+test('@claim:responsive-agenda shows seven desktop days and one phone day', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/demo/');
   await expect(page.locator('.day-column:visible')).toHaveCount(7);
+  if (testInfo.project.name === 'chromium') await page.screenshot({ path: '.factory/evidence/polish-2/demo-1440.png' });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('.day-column:visible')).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
@@ -320,7 +364,7 @@ test('@claim:license-revocation locks supporter extras after a revoked verdict',
     contentType: 'application/json', body: JSON.stringify({ valid: false, reason: 'revoked' })
   }));
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Support Weekboard' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'See supporter pack' })).toBeVisible();
   await page.getByRole('button', { name: 'Edit people' }).click();
   await expect(page.getByLabel('Board name')).toBeDisabled();
 });

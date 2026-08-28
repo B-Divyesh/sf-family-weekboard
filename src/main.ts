@@ -17,6 +17,9 @@ async function start(): Promise<void> {
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', location.pathname === '/' ? 'https://family-weekboard.sociobot.in/?demo=1' : 'https://family-weekboard.sociobot.in/demo/');
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'Demo — Weekboard');
     document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', 'Demo — Weekboard');
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', location.pathname === '/' ? 'https://family-weekboard.sociobot.in/?demo=1' : 'https://family-weekboard.sociobot.in/demo/');
   }
   try {
     const store = await BoardStore.create(demo);

@@ -10,11 +10,11 @@ Demo: <https://family-weekboard.sociobot.in/?demo=1> — opens a seeded sample
 board in a separate browser database. Use **Reset demo**
 to restore the sample or **Start for real** to leave without copying changes.
 
-## What v1 includes
+## What Weekboard includes
 
 - A seven-day desktop board and focused one-day phone agenda
-- Person colors, all-day plans, and daily, weekly, or monthly repeats
-- Import and export standard calendar files. Weekboard keeps repeat rules and time zones in the file.
+- Person colours, all-day plans, and daily, weekly, or monthly repeats
+- Import and export standard calendar files (.ics). Exported daily and weekly repeats use UTC calendar times.
 - Share a password-encrypted Weekboard file or QR code. Each is a copy, not live sync.
 - Install Weekboard on your device and keep using it offline after the first visit.
 - Optional ₹499 one-time supporter license through the Sociobot billing API
@@ -34,7 +34,7 @@ npm run preview     # serves dist for browser checks
 npm run test:e2e    # builds and starts an isolated preview automatically
 ```
 
-`npm test` covers calendar recurrence and ICS interoperability. The Playwright
+`npm test` covers calendar recurrence and calendar-file import and export. The Playwright
 suite covers creation/persistence, keyboard-accessible dialogs, mobile layout,
 accessibility, demo isolation, claims, and installed/offline reload. Every
 user-facing product claim and its exact command is listed in
@@ -44,8 +44,8 @@ Sociobot billing API.
 
 ## Data ownership and deployment
 
-IndexedDB holds the board. ICS is the interoperable backup; `.weekboard` files
-are encrypted snapshots. Importing an encrypted snapshot replaces the receiving
+IndexedDB holds the board. Standard calendar files are a UTC backup; `.weekboard` files
+are encrypted copies. Importing an encrypted copy replaces the receiving
 board after a named confirmation.
 
 Deploy the contents of `dist/` as a static site with `index.html` at its root.

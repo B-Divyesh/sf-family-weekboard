@@ -88,3 +88,7 @@ WebP files in `src/assets/` are bundled under content-hashed names. Generated im
 to Weekboard and disclosed in the footer. `public/social-card.webp` is a
 1200×630 centre crop of that same original image, produced locally with
 ImageMagick; it introduces no third-party artwork.
+
+`public/icon-180.png` is a lossless 180×180 derivative of Weekboard’s
+hand-authored `public/icon.svg`/192px icon, made locally for the Apple touch
+icon requirement. It introduces no third-party asset.
