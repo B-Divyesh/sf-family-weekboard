@@ -74,11 +74,46 @@ Claim-specific commands and sandbox conditions are in `.factory/claims.json`.
 
 ## Deployment and live evidence
 
-Pending the repair commit and static deployment. This section will be updated
-after byte-identity, response-policy, offline, accessibility, Lighthouse, and
-checkout checks complete against the live origin.
+Deployable repair commit: `8b8769c` (pushed to `origin/main`). Azure Static Web
+Apps production deployment `28b6f572-27ff-4169-9c9e-86ad4e008fb5` completed
+successfully at <https://family-weekboard.sociobot.in>.
+
+- All 18 served release files match local `dist/` byte-for-byte. Representative
+  SHA-256 values: `index.html`
+  `1de98cb2385fc22b710995f6fb350019b06161c3fe80666ca8b581bcec805ef1`;
+  `main-Bs7ESc_5.js`
+  `435097428bc2cddfa90d3f14c20a033bced011217a5a3beba27fe544d5ee1152`;
+  `style-CPJKgGnq.css`
+  `aff15d20c6df3557e3b6125b5d968f38918b1bc4ae267aa691d48a3b8c99aacc`;
+  `sw.js`
+  `149262821881bb519c1d9237124b965f0c4e0f39ebed45ad5ad1b2c93184e6b2`.
+- `verify-url.sh` passed in 917 ms with one h1, title, `lang`, main landmark,
+  complete image alts and button names, and zero console/page errors.
+- Live axe scans found zero serious/critical issues on `/`, `/demo/`,
+  `/privacy/`, and `/terms/` at both 1440×900 and 390×844.
+- Fresh live demo capture made zero cross-origin requests. The worker controlled
+  the page, cached the seeded plans, and reloaded them offline with the OFFLINE
+  state visible. The live cache revision is
+  `weekboard-shell-bd5679470c6fb1ad`.
+- Live 390 px keyboard smoke moved the selected and focused tab with ArrowRight.
+  At 200% body text size, document width remained 390 px. Reduced-motion dialog
+  animation computed to `0.00001s`.
+- `/demo/`, legal pages, robots, sitemap, manifest, and social image return 200.
+  An unknown route returns the designed HTML with HTTP 404. Manifest MIME is
+  `application/json`; Chromium reports zero manifest errors.
+- HTTPS redirects from HTTP. Root responses include HSTS, CSP, frame denial,
+  `nosniff`, restrictive Permissions-Policy, and strict-origin referrer policy.
+  Hashed assets are one-year immutable; `sw.js` is no-store/must-revalidate.
+- The live checkout returns 303 to Dodo. Browser smoke reached the hosted
+  `Sociobot | Checkout` page with the Weekboard Supporter Pack order summary.
+  An invalid license returns `{valid:false, reason:"invalid"}` with
+  `Cache-Control: no-store`. A 45-request burst returned 30 × 200 and 15 × 429;
+  limited responses included `Retry-After: 4`.
+- Lighthouse 13.4.1 mobile: performance 100, accessibility 100, best practices
+  100, SEO 100; FCP 1.1 s, LCP 1.1 s, Speed Index 1.1 s, TBT 30 ms, CLS 0.
 
 ## Known gaps
 
 No code or product-contract gaps are known. A real paid card was not charged;
-the release smoke test stops at the live hosted Dodo checkout page.
+the release smoke test stops at the live hosted Dodo checkout page. Field INP
+data is unavailable, so no field-INP result is claimed.
