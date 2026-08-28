@@ -1,4 +1,62 @@
-# Weekboard verification handoff — **FAIL**
+# Weekboard verification handoff — **BLOCKED BY BILLING REGISTRATION**
+
+## Repair-2 evidence (2026-08-28 UTC)
+
+Repair work was performed from verifier candidate
+`6de4842db3295c205206030e8184e359309950d6`. The independently reported
+release blocker was reproduced before source changes:
+
+```text
+GET https://api.sociobot.in/api/v1/products/family-weekboard/checkout
+HTTP 404
+{"error":"enabled factory product","status":404}
+```
+
+`GET /api/v1/products/family-weekboard` also returns 404, and the public
+product catalog has no `family-weekboard` entry. The same checkout path on the
+pilot API returns 404. This establishes that the fault is missing product
+registration in the Sociobot billing service, rather than the shipped URL or
+client checkout/return handling. Billing registration is explicitly outside
+this repository's authority, so this handoff cannot honestly mark the release
+blocker fixed.
+
+The repair keeps the required Sociobot URL and adds a desktop and 390 px
+Playwright regression, `@regression:checkout-contract`, which proves that the
+visible Buy supporter pack control targets that exact URL and that a hosted
+checkout redirect carrying `?license=` is captured, URL-cleaned, verified, and
+unlocks the supporter state. The hosted endpoint is mocked only inside this
+client contract test; the live smoke test above remains mandatory after the
+billing owner registers the product.
+
+The non-blocking manifest MIME observation was also repaired in the static
+deployment configuration: `/manifest.webmanifest` now declares
+`Content-Type: application/manifest+json` and retains `Cache-Control:
+no-cache`. A unit regression parses the emitted configuration and confirms the
+document continues to declare the same manifest; the generated service worker
+continues to precache it.
+
+Local clean-install evidence for this repair:
+
+| Command | Result |
+| --- | --- |
+| `npm ci --include=dev` | PASS — 91 packages, 0 vulnerabilities |
+| `npm audit --omit=dev` | PASS — 0 vulnerabilities |
+| `npm test` | PASS — 4 files, 14 tests |
+| `./node_modules/.bin/tsc --noEmit` | PASS |
+| `npm run build` | PASS — `dist/index.html` exists |
+| `npm run test:e2e` | PASS — 16 passed across desktop/390 px, 2 expected responsive skips |
+
+The browser suite covers keyboard dialog Escape/focus return, axe serious and
+critical violations, 390 px layout/targets/legal pages, offline reload under
+service-worker control, the checkout return route, and the prior calendar
+integrity regressions. Production output remains 65,671 B JS (22.60 KB gzip),
+15,403 B CSS (4.19 KB gzip), and 67,410 B / 116,422 B WebP assets.
+
+After deployment, rerun the exact production checkout command above. Promotion
+requires it to return a hosted checkout redirect (not 404), followed by a
+test purchase and return-license smoke test. The factory billing owner must
+register/enable the `family-weekboard` one-time ₹499 product with return URL
+`https://family-weekboard.sociobot.in/`; no other product may be substituted.
 
 ## Current independent disposition (verification-3)
 

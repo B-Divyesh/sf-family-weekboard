@@ -13,6 +13,15 @@ function readRelease(dist: string): { cache: string; assets: string[] } {
 }
 
 describe('production PWA build', () => {
+  it('serves a declared manifest with its explicit interoperability MIME policy', () => {
+    const config = JSON.parse(readFileSync('public/staticwebapp.config.json', 'utf8')) as {
+      routes: Array<{ route: string; headers?: Record<string, string> }>;
+    };
+    const manifestRoute = config.routes.find((route) => route.route === '/manifest.webmanifest');
+    expect(manifestRoute?.headers?.['Content-Type']).toBe('application/manifest+json');
+    expect(readFileSync('index.html', 'utf8')).toContain('href="/manifest.webmanifest"');
+  });
+
   it('revisions the worker and precache URLs whenever application code changes', () => {
     const sandbox = mkdtempSync(join(tmpdir(), 'weekboard-pwa-'));
     try {

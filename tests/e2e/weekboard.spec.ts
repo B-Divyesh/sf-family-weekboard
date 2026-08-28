@@ -32,6 +32,29 @@ test('dialog closes with Escape and returns focus', async ({ page }) => {
   await expect(trigger).toBeFocused();
 });
 
+test('@regression:checkout-contract starts the required hosted checkout and accepts its returned license', async ({ page, baseURL }) => {
+  const checkout = 'https://api.sociobot.in/api/v1/products/family-weekboard/checkout';
+  const returnedLicense = 'returned-license-from-hosted-checkout';
+  await page.route(checkout, (route) => route.fulfill({
+    status: 302,
+    headers: { location: new URL(`/?license=${returnedLicense}`, baseURL).href }
+  }));
+  await page.route(`**/products/family-weekboard/verify?license=${returnedLicense}`, (route) => route.fulfill({
+    contentType: 'application/json',
+    body: JSON.stringify({ valid: true, reason: 'ok' })
+  }));
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  const buy = page.getByRole('link', { name: 'Buy supporter pack' });
+  await expect(buy).toHaveAttribute('href', checkout);
+  await buy.click();
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('sb_license:family-weekboard'))).toBe(returnedLicense);
+  await expect(page.getByRole('button', { name: 'Supporter ✓' })).toBeVisible();
+});
+
 test('reloads the installed app while offline', async ({ page, context }) => {
   await page.goto('/');
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
