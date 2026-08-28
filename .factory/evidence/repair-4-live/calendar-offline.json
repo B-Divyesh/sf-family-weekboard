@@ -1,0 +1,18 @@
+{
+  "dst": {
+    "total": 1,
+    "monday": 0,
+    "sunday": 1,
+    "errors": [],
+    "crossOrigin": []
+  },
+  "until": {
+    "total": 2,
+    "afterLimit": 0
+  },
+  "offline": {
+    "banner": true,
+    "sample": 5,
+    "controlled": true
+  }
+}

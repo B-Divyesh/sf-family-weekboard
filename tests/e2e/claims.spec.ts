@@ -78,6 +78,10 @@ test('@claim:ics-export downloads a standard calendar containing every sample pl
 });
 
 test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ page }) => {
+  const crossOrigin: string[] = [];
+  page.on('request', (request) => {
+    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') crossOrigin.push(request.url());
+  });
   await page.addInitScript(() => {
     const encrypt = SubtleCrypto.prototype.encrypt;
     SubtleCrypto.prototype.encrypt = function (algorithm, key, data) {
@@ -115,6 +119,7 @@ test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ 
   await page.getByRole('button', { name: 'Open pasted copy' }).click();
   await expect(page.getByRole('button', { name: /Edit Mutation to replace/ })).toHaveCount(0);
   await expect(page.locator('.event-card', { hasText: 'Dentist' })).toHaveCount(1);
+  expect(crossOrigin).toEqual([]);
 });
 
 test('@claim:installable-pwa exposes a valid manifest and controlling worker', async ({ page }) => {

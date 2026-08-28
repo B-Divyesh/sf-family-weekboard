@@ -1,0 +1,146 @@
+[
+  {
+    "file": "404.html",
+    "status": 200,
+    "bytes": 2519,
+    "localSha256": "2222f6876d24e978a601b1de47f5dcbca2ecbfb9047a6ab9813340f4d0c41c17",
+    "liveSha256": "2222f6876d24e978a601b1de47f5dcbca2ecbfb9047a6ab9813340f4d0c41c17",
+    "match": true
+  },
+  {
+    "file": "assets/main-D-enI-h2.js",
+    "status": 200,
+    "bytes": 71173,
+    "localSha256": "4af9d601cde541f82e7d0561bfca3c99ad22066519f23fb530cfa19b9aced498",
+    "liveSha256": "4af9d601cde541f82e7d0561bfca3c99ad22066519f23fb530cfa19b9aced498",
+    "match": true
+  },
+  {
+    "file": "assets/style-CPJKgGnq.css",
+    "status": 200,
+    "bytes": 16988,
+    "localSha256": "aff15d20c6df3557e3b6125b5d968f38918b1bc4ae267aa691d48a3b8c99aacc",
+    "liveSha256": "aff15d20c6df3557e3b6125b5d968f38918b1bc4ae267aa691d48a3b8c99aacc",
+    "match": true
+  },
+  {
+    "file": "assets/weekboard-station-1440-DINOgyjI.webp",
+    "status": 200,
+    "bytes": 116422,
+    "localSha256": "218e2a07301ee095af456ff2aa36b878234d506d0a0f76b9c0758a621b9b9baa",
+    "liveSha256": "218e2a07301ee095af456ff2aa36b878234d506d0a0f76b9c0758a621b9b9baa",
+    "match": true
+  },
+  {
+    "file": "assets/weekboard-station-960-BcYy-mM-.webp",
+    "status": 200,
+    "bytes": 67410,
+    "localSha256": "8056ba3eb11f0d1403b044f5440cfd2022297272ef9536d9d12ff0d198eca1ac",
+    "liveSha256": "8056ba3eb11f0d1403b044f5440cfd2022297272ef9536d9d12ff0d198eca1ac",
+    "match": true
+  },
+  {
+    "file": "demo/index.html",
+    "status": 200,
+    "bytes": 1886,
+    "localSha256": "eb371ca6859c906cdcfb1ff232ecea38893200450d667ee3d58a0c53f2fa386b",
+    "liveSha256": "eb371ca6859c906cdcfb1ff232ecea38893200450d667ee3d58a0c53f2fa386b",
+    "match": true
+  },
+  {
+    "file": "icon-192.png",
+    "status": 200,
+    "bytes": 18673,
+    "localSha256": "6924ca97c29cbb218bd15799f2d4e03c3afd363f83871e99c4cf4a0958731a20",
+    "liveSha256": "6924ca97c29cbb218bd15799f2d4e03c3afd363f83871e99c4cf4a0958731a20",
+    "match": true
+  },
+  {
+    "file": "icon-512.png",
+    "status": 200,
+    "bytes": 19636,
+    "localSha256": "e10b95e12113d109a70903f97546affd0e52749cc89baf1e1ca6e07707514336",
+    "liveSha256": "e10b95e12113d109a70903f97546affd0e52749cc89baf1e1ca6e07707514336",
+    "match": true
+  },
+  {
+    "file": "icon.svg",
+    "status": 200,
+    "bytes": 443,
+    "localSha256": "0e3a3087cddbbcffe4b94a9c66077cd5ed339137ffd1079e171dfd695966a8ba",
+    "liveSha256": "0e3a3087cddbbcffe4b94a9c66077cd5ed339137ffd1079e171dfd695966a8ba",
+    "match": true
+  },
+  {
+    "file": "index.html",
+    "status": 200,
+    "bytes": 1971,
+    "localSha256": "699791219dc35b387a91431bb3a4a0cc616ed69f9d0a4ea8bcb90c1c3ee5ccde",
+    "liveSha256": "699791219dc35b387a91431bb3a4a0cc616ed69f9d0a4ea8bcb90c1c3ee5ccde",
+    "match": true
+  },
+  {
+    "file": "manifest.json",
+    "status": 200,
+    "bytes": 628,
+    "localSha256": "ab50d6007476e999e7a10c71aa6b03ff8f5a751bb370d84d2cc54f980a2f9e65",
+    "liveSha256": "ab50d6007476e999e7a10c71aa6b03ff8f5a751bb370d84d2cc54f980a2f9e65",
+    "match": true
+  },
+  {
+    "file": "offline.html",
+    "status": 200,
+    "bytes": 697,
+    "localSha256": "140558a2a57596b634886ff90bc10ecad64a0f1676b0fafd91c0b05828a998ce",
+    "liveSha256": "140558a2a57596b634886ff90bc10ecad64a0f1676b0fafd91c0b05828a998ce",
+    "match": true
+  },
+  {
+    "file": "privacy/index.html",
+    "status": 200,
+    "bytes": 3882,
+    "localSha256": "4e39b5f5eb6e28ad8eef07af336db74fea2026733752e8bd0ade90bacdf99a9b",
+    "liveSha256": "4e39b5f5eb6e28ad8eef07af336db74fea2026733752e8bd0ade90bacdf99a9b",
+    "match": true
+  },
+  {
+    "file": "robots.txt",
+    "status": 200,
+    "bytes": 98,
+    "localSha256": "05c8ebb266fea90340c73df9c2845cd2c1240020525cffc3007fcb48761d523e",
+    "liveSha256": "05c8ebb266fea90340c73df9c2845cd2c1240020525cffc3007fcb48761d523e",
+    "match": true
+  },
+  {
+    "file": "sitemap.xml",
+    "status": 200,
+    "bytes": 310,
+    "localSha256": "6e8261183bfa47e4f7fa4718cdaf090b13973f68b47207d32269b92128d6c70d",
+    "liveSha256": "6e8261183bfa47e4f7fa4718cdaf090b13973f68b47207d32269b92128d6c70d",
+    "match": true
+  },
+  {
+    "file": "social-card.webp",
+    "status": 200,
+    "bytes": 91692,
+    "localSha256": "e40b9a3e7d0c6ca0813f94c8de7c87938c85a5877f374faea60dcdd5fd75032a",
+    "liveSha256": "e40b9a3e7d0c6ca0813f94c8de7c87938c85a5877f374faea60dcdd5fd75032a",
+    "match": true
+  },
+  {
+    "file": "sw.js",
+    "status": 200,
+    "bytes": 2285,
+    "localSha256": "dff03eb3e77e6479d34063b8b803f2f0b8f6b3b39667449282e198c9cccb7d65",
+    "liveSha256": "dff03eb3e77e6479d34063b8b803f2f0b8f6b3b39667449282e198c9cccb7d65",
+    "match": true
+  },
+  {
+    "file": "terms/index.html",
+    "status": 200,
+    "bytes": 3921,
+    "localSha256": "99957f4fecaaf985f20076e747114b2d20fbca1e6c49fed60a62a31c8f7293d9",
+    "liveSha256": "99957f4fecaaf985f20076e747114b2d20fbca1e6c49fed60a62a31c8f7293d9",
+    "match": true
+  }
+]

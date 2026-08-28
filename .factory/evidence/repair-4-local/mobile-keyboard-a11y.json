@@ -1,0 +1,14 @@
+{
+  "errors": [],
+  "arrow": {
+    "selected": "true",
+    "focused": true
+  },
+  "duration": "1e-05s",
+  "sizing": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "visibleDays": 1
+  },
+  "undersizedControls": []
+}
