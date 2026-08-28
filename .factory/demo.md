@@ -2,7 +2,7 @@
 
 - URL: `https://family-weekboard.sociobot.in/?demo=1` (also available at `/demo/`; local: `http://127.0.0.1:4173/?demo=1`).
 - Entry: select **Try it with sample data** on the first screen, or open the URL directly.
-- Sample: Asha, Ravi, and Kids with school drop-off, dentist, football practice, and grocery plans in the current week.
+- Sample: Asha, Ravi, and Kids with school drop-off, dentist, football practice, and grocery plans in the current week. On a 390×844 phone, the selected day’s first sample plan appears in the initial viewport.
 - Storage: the demo uses IndexedDB database `demo:weekboard-local-v1`. The real board uses `weekboard-local-v1`; demo code never opens the real database.
 - Reset: **Reset demo** replaces only the demo database with its original sample.
 - Exit: **Start for real** resets the sample database, then opens the real board. Demo changes are not copied.

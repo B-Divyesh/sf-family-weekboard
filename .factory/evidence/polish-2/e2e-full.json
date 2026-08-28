@@ -1,0 +1,3062 @@
+{
+  "config": {
+    "configFile": "/work/repo/playwright.config.ts",
+    "rootDir": "/work/repo/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/work/repo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/work/repo/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/work/repo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/work/repo/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run build && npm run preview -- --port 4173",
+      "url": "http://127.0.0.1:4173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "claims.spec.ts",
+      "file": "claims.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@claim:demo-sandbox keeps sample changes separate from the real board",
+          "ok": true,
+          "tags": [
+            "claim:demo-sandbox"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4974,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:06.973Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-63c380a5c424f2503f13",
+          "file": "claims.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "@claim:offline-reload reloads the sample board without a network",
+          "ok": true,
+          "tags": [
+            "claim:offline-reload"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 891,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:12.170Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-a59e94e2a70e249d7366",
+          "file": "claims.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "@claim:local-privacy sends no sample schedule off-origin",
+          "ok": true,
+          "tags": [
+            "claim:local-privacy"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1223,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:13.075Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-f032cb48618116259997",
+          "file": "claims.spec.ts",
+          "line": 45,
+          "column": 1
+        },
+        {
+          "title": "@claim:ics-export downloads a standard calendar and round-trips final recurring occurrences",
+          "ok": true,
+          "tags": [
+            "claim:ics-export"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4306,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:14.315Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-66b6739a52b2c81b268c",
+          "file": "claims.spec.ts",
+          "line": 62,
+          "column": 1
+        },
+        {
+          "title": "@claim:encrypted-handoff encrypts the complete sample snapshot",
+          "ok": true,
+          "tags": [
+            "claim:encrypted-handoff"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:18.667Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-11feea6f7f5d58a2dfa8",
+          "file": "claims.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "@claim:copy-not-sync keeps an opened copy separate from later sender changes",
+          "ok": true,
+          "tags": [
+            "claim:copy-not-sync"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:21.982Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-06e0e2ab4f4d8b07a1f1",
+          "file": "claims.spec.ts",
+          "line": 163,
+          "column": 1
+        },
+        {
+          "title": "@claim:installable-pwa exposes a valid manifest and controlling worker",
+          "ok": true,
+          "tags": [
+            "claim:installable-pwa"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 870,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:25.820Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-a3170a53d1e5eaf7444e",
+          "file": "claims.spec.ts",
+          "line": 199,
+          "column": 1
+        },
+        {
+          "title": "@claim:paid-checkout displays ₹499 once and verifies the hosted checkout contract",
+          "ok": true,
+          "tags": [
+            "claim:paid-checkout"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5079,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:26.704Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-37b6e58ac9d3dd12f97d",
+          "file": "claims.spec.ts",
+          "line": 209,
+          "column": 1
+        },
+        {
+          "title": "@claim:free-core keeps planning, printing, and both free exports available without a license",
+          "ok": true,
+          "tags": [
+            "claim:free-core"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2085,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:31.801Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-902ebf4368589bc21043",
+          "file": "claims.spec.ts",
+          "line": 231,
+          "column": 1
+        },
+        {
+          "title": "@claim:ics-import imports a standard calendar plan into the board",
+          "ok": true,
+          "tags": [
+            "claim:ics-import"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 883,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:33.901Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-bf96ede8e5683038e0f8",
+          "file": "claims.spec.ts",
+          "line": 250,
+          "column": 1
+        },
+        {
+          "title": "@claim:calendar-options handles all-day, daily, weekly, and monthly plans",
+          "ok": true,
+          "tags": [
+            "claim:calendar-options"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3485,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:34.805Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-2f0582d54378b6ec3e24",
+          "file": "claims.spec.ts",
+          "line": 262,
+          "column": 1
+        },
+        {
+          "title": "@claim:person-lanes shows names and distinct lane colours",
+          "ok": true,
+          "tags": [
+            "claim:person-lanes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 673,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:38.310Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-40048c738ceba2ea58ce",
+          "file": "claims.spec.ts",
+          "line": 289,
+          "column": 1
+        },
+        {
+          "title": "@claim:responsive-agenda shows seven desktop days and one phone day",
+          "ok": true,
+          "tags": [
+            "claim:responsive-agenda"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 759,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:38.999Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-508014ec1fc16fcaf312",
+          "file": "claims.spec.ts",
+          "line": 298,
+          "column": 1
+        },
+        {
+          "title": "@claim:print-board opens printing with all seven days laid out",
+          "ok": true,
+          "tags": [
+            "claim:print-board"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 710,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:39.776Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-069d40dc374f601fc06f",
+          "file": "claims.spec.ts",
+          "line": 308,
+          "column": 1
+        },
+        {
+          "title": "@claim:themes applies and remembers system, light, and dark themes",
+          "ok": true,
+          "tags": [
+            "claim:themes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1259,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:40.504Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-4506e43ac027aab2308f",
+          "file": "claims.spec.ts",
+          "line": 319,
+          "column": 1
+        },
+        {
+          "title": "@claim:supporter-entitlements enables a custom name, extra colours, and more than four people",
+          "ok": true,
+          "tags": [
+            "claim:supporter-entitlements"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3620,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:41.773Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-3120c9dd89a0db411cf1",
+          "file": "claims.spec.ts",
+          "line": 332,
+          "column": 1
+        },
+        {
+          "title": "@claim:license-revocation locks supporter extras after a revoked verdict",
+          "ok": true,
+          "tags": [
+            "claim:license-revocation"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 778,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:45.405Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-de24392aa54ed1d557ec",
+          "file": "claims.spec.ts",
+          "line": 357,
+          "column": 1
+        },
+        {
+          "title": "@claim:demo-sandbox keeps sample changes separate from the real board",
+          "ok": true,
+          "tags": [
+            "claim:demo-sandbox"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4734,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:37.612Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-964fd5e6a6f1df1ee663",
+          "file": "claims.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "@claim:offline-reload reloads the sample board without a network",
+          "ok": true,
+          "tags": [
+            "claim:offline-reload"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 743,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:42.567Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-50cb1bc83db7a32f0c18",
+          "file": "claims.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "@claim:local-privacy sends no sample schedule off-origin",
+          "ok": true,
+          "tags": [
+            "claim:local-privacy"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1146,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:43.321Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-51f6ef587fcb40bf78f2",
+          "file": "claims.spec.ts",
+          "line": 45,
+          "column": 1
+        },
+        {
+          "title": "@claim:ics-export downloads a standard calendar and round-trips final recurring occurrences",
+          "ok": true,
+          "tags": [
+            "claim:ics-export"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:44.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-614d72ef138e93ef9fc1",
+          "file": "claims.spec.ts",
+          "line": 62,
+          "column": 1
+        },
+        {
+          "title": "@claim:encrypted-handoff encrypts the complete sample snapshot",
+          "ok": true,
+          "tags": [
+            "claim:encrypted-handoff"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2229,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:47.557Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-6805dde4f93ee4d8edae",
+          "file": "claims.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "@claim:copy-not-sync keeps an opened copy separate from later sender changes",
+          "ok": true,
+          "tags": [
+            "claim:copy-not-sync"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2752,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:49.810Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-3cdda276678e4f95414f",
+          "file": "claims.spec.ts",
+          "line": 163,
+          "column": 1
+        },
+        {
+          "title": "@claim:installable-pwa exposes a valid manifest and controlling worker",
+          "ok": true,
+          "tags": [
+            "claim:installable-pwa"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:52.629Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-d4c0e9b2298b479d79a1",
+          "file": "claims.spec.ts",
+          "line": 199,
+          "column": 1
+        },
+        {
+          "title": "@claim:paid-checkout displays ₹499 once and verifies the hosted checkout contract",
+          "ok": true,
+          "tags": [
+            "claim:paid-checkout"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4246,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:53.327Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-67e00409d73b3bd88f59",
+          "file": "claims.spec.ts",
+          "line": 209,
+          "column": 1
+        },
+        {
+          "title": "@claim:free-core keeps planning, printing, and both free exports available without a license",
+          "ok": true,
+          "tags": [
+            "claim:free-core"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1610,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:57.585Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-6c2f4cd420304117e6dc",
+          "file": "claims.spec.ts",
+          "line": 231,
+          "column": 1
+        },
+        {
+          "title": "@claim:ics-import imports a standard calendar plan into the board",
+          "ok": true,
+          "tags": [
+            "claim:ics-import"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 691,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:59.209Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-982644fcc011bf155f45",
+          "file": "claims.spec.ts",
+          "line": 250,
+          "column": 1
+        },
+        {
+          "title": "@claim:calendar-options handles all-day, daily, weekly, and monthly plans",
+          "ok": true,
+          "tags": [
+            "claim:calendar-options"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3339,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:59.952Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-108dd3968750d0d7861d",
+          "file": "claims.spec.ts",
+          "line": 262,
+          "column": 1
+        },
+        {
+          "title": "@claim:person-lanes shows names and distinct lane colours",
+          "ok": true,
+          "tags": [
+            "claim:person-lanes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 611,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:03.365Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-efeca07e47a411a3dc2e",
+          "file": "claims.spec.ts",
+          "line": 289,
+          "column": 1
+        },
+        {
+          "title": "@claim:responsive-agenda shows seven desktop days and one phone day",
+          "ok": true,
+          "tags": [
+            "claim:responsive-agenda"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 771,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:03.990Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-cb08f1c8be99d231a0fd",
+          "file": "claims.spec.ts",
+          "line": 298,
+          "column": 1
+        },
+        {
+          "title": "@claim:print-board opens printing with all seven days laid out",
+          "ok": true,
+          "tags": [
+            "claim:print-board"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 908,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:04.775Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-b0a1c04aac454e6ab03c",
+          "file": "claims.spec.ts",
+          "line": 308,
+          "column": 1
+        },
+        {
+          "title": "@claim:themes applies and remembers system, light, and dark themes",
+          "ok": true,
+          "tags": [
+            "claim:themes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 879,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:05.698Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-5719ab916855e138002b",
+          "file": "claims.spec.ts",
+          "line": 319,
+          "column": 1
+        },
+        {
+          "title": "@claim:supporter-entitlements enables a custom name, extra colours, and more than four people",
+          "ok": true,
+          "tags": [
+            "claim:supporter-entitlements"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:06.589Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-5073d97b45625c58898d",
+          "file": "claims.spec.ts",
+          "line": 332,
+          "column": 1
+        },
+        {
+          "title": "@claim:license-revocation locks supporter extras after a revoked verdict",
+          "ok": true,
+          "tags": [
+            "claim:license-revocation"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 567,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:08.900Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d980a722f8828033cf5-a3de72aa3b085c844b53",
+          "file": "claims.spec.ts",
+          "line": 357,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "weekboard.spec.ts",
+      "file": "weekboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "creates a plan, persists it, and keeps the page free of serious accessibility issues",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3431,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:06.878Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-f4d90f825fc55b338c70",
+          "file": "weekboard.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "dialog closes with Escape and returns focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 719,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:10.467Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-bf6114f7ca33e33d02a6",
+          "file": "weekboard.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "@regression:dark-demo-actions retain accessible contrast",
+          "ok": true,
+          "tags": [
+            "regression:dark-demo-actions"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2706,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:11.200Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-21d37328d832864a6a26",
+          "file": "weekboard.spec.ts",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "@regression:manifest-mime serves the install manifest as JSON",
+          "ok": true,
+          "tags": [
+            "regression:manifest-mime"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 241,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:13.919Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-ee91fface055c29df36a",
+          "file": "weekboard.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "@claim:license-restore @regression:checkout-contract accepts and verifies a returned license",
+          "ok": true,
+          "tags": [
+            "claim:license-restore",
+            "regression:checkout-contract"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1400,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:14.217Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-741444e255c5c520d0df",
+          "file": "weekboard.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "@regression:checkout-offline-feedback keeps a failed checkout in context",
+          "ok": true,
+          "tags": [
+            "regression:checkout-offline-feedback"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 981,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:15.679Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-76ebb02af3cb054a4773",
+          "file": "weekboard.spec.ts",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "reloads the installed app while offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1077,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:16.683Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-c8288803342cddbfcd6a",
+          "file": "weekboard.spec.ts",
+          "line": 86,
+          "column": 1
+        },
+        {
+          "title": "mobile agenda shows one day without horizontal overflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile layout only",
+                  "location": {
+                    "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                    "line": 104,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "skipped",
+                  "duration": 96,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:17.779Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile layout only",
+                      "location": {
+                        "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                        "line": 104,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "71927d888f9495547155-10844c5cd5fc8f446ac0",
+          "file": "weekboard.spec.ts",
+          "line": 103,
+          "column": 1
+        },
+        {
+          "title": "@regression:mobile-demo-shows-a-sample-plan-before-scrolling",
+          "ok": true,
+          "tags": [
+            "regression:mobile-demo-shows-a-sample-plan-before-scrolling"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile layout only",
+                  "location": {
+                    "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                    "line": 119,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "skipped",
+                  "duration": 104,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:17.891Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile layout only",
+                      "location": {
+                        "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                        "line": 119,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "71927d888f9495547155-2316f125b3d4767eb2d5",
+          "file": "weekboard.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "@regression:license-network-failure never trusts an unverified token",
+          "ok": true,
+          "tags": [
+            "regression:license-network-failure"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1278,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:18.010Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-6cad0e94e63a87d77e54",
+          "file": "weekboard.spec.ts",
+          "line": 131,
+          "column": 1
+        },
+        {
+          "title": "@regression:ics-timed-until excludes a timed occurrence after the imported UTC limit",
+          "ok": true,
+          "tags": [
+            "regression:ics-timed-until"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 991,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:26.512Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-a26af52a74c6f80c2ca7",
+          "file": "weekboard.spec.ts",
+          "line": 214,
+          "column": 1
+        },
+        {
+          "title": "@regression:csp-retry reloads the storage error page without an inline handler",
+          "ok": true,
+          "tags": [
+            "regression:csp-retry"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 444,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:27.573Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-560423b3f1ef7ec59551",
+          "file": "weekboard.spec.ts",
+          "line": 226,
+          "column": 1
+        },
+        {
+          "title": "@regression:route-metadata gives every route complete sharing metadata and the standard shell",
+          "ok": true,
+          "tags": [
+            "regression:route-metadata"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4285,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:28.029Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-8e321ec0ea7fdb64bc0a",
+          "file": "weekboard.spec.ts",
+          "line": 241,
+          "column": 1
+        },
+        {
+          "title": "@regression:apple-touch-icon-is-an-original-180px-asset",
+          "ok": true,
+          "tags": [
+            "regression:apple-touch-icon-is-an-original-180px-asset"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 434,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:32.358Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-e1636963d09a5df23be3",
+          "file": "weekboard.spec.ts",
+          "line": 263,
+          "column": 1
+        },
+        {
+          "title": "@regression:person-whitespace explains why a person was not added",
+          "ok": true,
+          "tags": [
+            "regression:person-whitespace"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 936,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:32.865Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-03649c261b5de83e780f",
+          "file": "weekboard.spec.ts",
+          "line": 274,
+          "column": 1
+        },
+        {
+          "title": "mobile legal pages have named links and 44px controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile layout only",
+                  "location": {
+                    "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                    "line": 284,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "skipped",
+                  "duration": 102,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:33.873Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile layout only",
+                      "location": {
+                        "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                        "line": 284,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "71927d888f9495547155-03d618164da46e2508af",
+          "file": "weekboard.spec.ts",
+          "line": 283,
+          "column": 1
+        },
+        {
+          "title": "@regression:mobile-dialog-targets gives every visible control a 44px target",
+          "ok": true,
+          "tags": [
+            "regression:mobile-dialog-targets"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile layout only",
+                  "location": {
+                    "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                    "line": 311,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "skipped",
+                  "duration": 96,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:33.995Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile layout only",
+                      "location": {
+                        "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                        "line": 311,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "71927d888f9495547155-8675620d64324f5d7111",
+          "file": "weekboard.spec.ts",
+          "line": 310,
+          "column": 1
+        },
+        {
+          "title": "@regression:document-routes focus and announce the destination heading",
+          "ok": true,
+          "tags": [
+            "regression:document-routes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1163,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:34.102Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-d097b546357f82b59e5b",
+          "file": "weekboard.spec.ts",
+          "line": 334,
+          "column": 1
+        },
+        {
+          "title": "creates a plan, persists it, and keeps the page free of serious accessibility issues",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3116,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:48.590Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-680050ed761faa8cc4fc",
+          "file": "weekboard.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "dialog closes with Escape and returns focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 691,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:51.882Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-7c66f95e9cee1c82203f",
+          "file": "weekboard.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "@regression:dark-demo-actions retain accessible contrast",
+          "ok": true,
+          "tags": [
+            "regression:dark-demo-actions"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1975,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:52.589Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-d50c064ba7205afc4547",
+          "file": "weekboard.spec.ts",
+          "line": 35,
+          "column": 1
+        },
+        {
+          "title": "@regression:manifest-mime serves the install manifest as JSON",
+          "ok": true,
+          "tags": [
+            "regression:manifest-mime"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 105,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:54.575Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-41971db929c48174402e",
+          "file": "weekboard.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "@claim:license-restore @regression:checkout-contract accepts and verifies a returned license",
+          "ok": true,
+          "tags": [
+            "claim:license-restore",
+            "regression:checkout-contract"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 742,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:54.689Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-a46e196959ed4df3685a",
+          "file": "weekboard.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "@regression:checkout-offline-feedback keeps a failed checkout in context",
+          "ok": true,
+          "tags": [
+            "regression:checkout-offline-feedback"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 537,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:55.441Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-8c5f4233cc3cc6e38b9c",
+          "file": "weekboard.spec.ts",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "reloads the installed app while offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 471,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:55.988Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-9c208457712d3154c09c",
+          "file": "weekboard.spec.ts",
+          "line": 86,
+          "column": 1
+        },
+        {
+          "title": "mobile agenda shows one day without horizontal overflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 342,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:56.470Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-2d45d5091ff0769f5cfe",
+          "file": "weekboard.spec.ts",
+          "line": 103,
+          "column": 1
+        },
+        {
+          "title": "@regression:mobile-demo-shows-a-sample-plan-before-scrolling",
+          "ok": true,
+          "tags": [
+            "regression:mobile-demo-shows-a-sample-plan-before-scrolling"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 458,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:56.823Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-8f7440117083ecc55729",
+          "file": "weekboard.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "@regression:license-network-failure never trusts an unverified token",
+          "ok": true,
+          "tags": [
+            "regression:license-network-failure"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 777,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:09:57.291Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-8c5a1366fdb1027001c6",
+          "file": "weekboard.spec.ts",
+          "line": 131,
+          "column": 1
+        },
+        {
+          "title": "@regression:ics-timed-until excludes a timed occurrence after the imported UTC limit",
+          "ok": true,
+          "tags": [
+            "regression:ics-timed-until"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 868,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:03.797Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-17e39c1f4c32a4140f37",
+          "file": "weekboard.spec.ts",
+          "line": 214,
+          "column": 1
+        },
+        {
+          "title": "@regression:csp-retry reloads the storage error page without an inline handler",
+          "ok": true,
+          "tags": [
+            "regression:csp-retry"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 625,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:04.679Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-2383a4e9dd4504ba5cd9",
+          "file": "weekboard.spec.ts",
+          "line": 226,
+          "column": 1
+        },
+        {
+          "title": "@regression:route-metadata gives every route complete sharing metadata and the standard shell",
+          "ok": true,
+          "tags": [
+            "regression:route-metadata"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5584,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:05.316Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-44761b67f7519a5aa224",
+          "file": "weekboard.spec.ts",
+          "line": 241,
+          "column": 1
+        },
+        {
+          "title": "@regression:apple-touch-icon-is-an-original-180px-asset",
+          "ok": true,
+          "tags": [
+            "regression:apple-touch-icon-is-an-original-180px-asset"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 200,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:10.910Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-d07074e7ec9ed14f86bd",
+          "file": "weekboard.spec.ts",
+          "line": 263,
+          "column": 1
+        },
+        {
+          "title": "@regression:person-whitespace explains why a person was not added",
+          "ok": true,
+          "tags": [
+            "regression:person-whitespace"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 547,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:11.121Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-f091c3ad5c21ace4af93",
+          "file": "weekboard.spec.ts",
+          "line": 274,
+          "column": 1
+        },
+        {
+          "title": "mobile legal pages have named links and 44px controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1371,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:11.680Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-c71e36375de29f3a973e",
+          "file": "weekboard.spec.ts",
+          "line": 283,
+          "column": 1
+        },
+        {
+          "title": "@regression:mobile-dialog-targets gives every visible control a 44px target",
+          "ok": true,
+          "tags": [
+            "regression:mobile-dialog-targets"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2419,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:13.061Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "71927d888f9495547155-0e4411bfdf9dee21f234",
+          "file": "weekboard.spec.ts",
+          "line": 310,
+          "column": 1
+        },
+        {
+          "title": "@regression:document-routes focus and announce the destination heading",
+          "ok": true,
+          "tags": [
+            "regression:document-routes"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "the compact header intentionally omits navigation links",
+                  "location": {
+                    "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                    "line": 335,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 54,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-28T16:10:15.492Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "the compact header intentionally omits navigation links",
+                      "location": {
+                        "file": "/work/repo/tests/e2e/weekboard.spec.ts",
+                        "line": 335,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "71927d888f9495547155-83e789010f892f01bb5c",
+          "file": "weekboard.spec.ts",
+          "line": 334,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "calendar integrity regressions",
+          "file": "weekboard.spec.ts",
+          "line": 143,
+          "column": 6,
+          "specs": [
+            {
+              "title": "reopens an all-day plan on the same spring-forward civil date",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:19.302Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-3a9787b97e56a4ff1f63",
+              "file": "weekboard.spec.ts",
+              "line": 146,
+              "column": 3
+            },
+            {
+              "title": "rejects inverted recurrence ranges before they can be persisted",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1227,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:21.004Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-b8e32ca73576dc18e7e5",
+              "file": "weekboard.spec.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "rejects whitespace-only plan titles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1379,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:22.369Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-79c0a57cd5dbef1619b8",
+              "file": "weekboard.spec.ts",
+              "line": 174,
+              "column": 3
+            },
+            {
+              "title": "@regression:dst-all-day keeps a weekly all-day plan on its civil day after fall-back",
+              "ok": true,
+              "tags": [
+                "regression:dst-all-day"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1832,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:23.786Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-c3a4e93eb13405906e88",
+              "file": "weekboard.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "@regression:ics-all-day-default keeps an imported spring-forward date to one day",
+              "ok": true,
+              "tags": [
+                "regression:ics-all-day-default"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 815,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:25.681Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-23dce7c84e259fd94f20",
+              "file": "weekboard.spec.ts",
+              "line": 200,
+              "column": 3
+            },
+            {
+              "title": "reopens an all-day plan on the same spring-forward civil date",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1218,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:58.081Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-8f0b4e17de47e9ed8811",
+              "file": "weekboard.spec.ts",
+              "line": 146,
+              "column": 3
+            },
+            {
+              "title": "rejects inverted recurrence ranges before they can be persisted",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1127,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:09:59.316Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-21b09aa781e74f868433",
+              "file": "weekboard.spec.ts",
+              "line": 160,
+              "column": 3
+            },
+            {
+              "title": "rejects whitespace-only plan titles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 981,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:10:00.490Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-8ad3d969641a05498b6e",
+              "file": "weekboard.spec.ts",
+              "line": 174,
+              "column": 3
+            },
+            {
+              "title": "@regression:dst-all-day keeps a weekly all-day plan on its civil day after fall-back",
+              "ok": true,
+              "tags": [
+                "regression:dst-all-day"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1471,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:10:01.489Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-8e01936e15342fe7c2bd",
+              "file": "weekboard.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "@regression:ics-all-day-default keeps an imported spring-forward date to one day",
+              "ok": true,
+              "tags": [
+                "regression:ics-all-day-default"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 806,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-28T16:10:02.972Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "71927d888f9495547155-1c2c57cf6299ebc7a1ca",
+              "file": "weekboard.spec.ts",
+              "line": 200,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-28T16:09:05.060Z",
+    "duration": 70574.062,
+    "expected": 75,
+    "skipped": 5,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
