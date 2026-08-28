@@ -29,7 +29,7 @@ npm run dev
 npm test
 npm run build       # exact production command; output is dist/
 npm run preview     # serves dist for browser checks
-npm run test:e2e    # build/preview must be running on port 4173
+npm run test:e2e    # builds and starts an isolated preview automatically
 ```
 
 `npm test` covers calendar recurrence and ICS interoperability. The Playwright

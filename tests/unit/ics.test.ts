@@ -40,4 +40,12 @@ describe('ICS interoperability', () => {
     expect(imported.start).toBe('2026-08-24T11:30:00.000Z');
     expect(imported.end).toBe('2026-08-24T12:30:00.000Z');
   });
+
+  it('does not silently misrepresent an advanced recurrence rule', () => {
+    const ics = 'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:Classes\r\nDTSTART:20260824T100000Z\r\nDTEND:20260824T110000Z\r\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n';
+    const imported = importIcs(ics, person.id)[0];
+    expect(imported.recurrence).toBe('none');
+    expect(imported.notes).toContain('not expanded');
+    expect(imported.notes).toContain('BYDAY=MO,WE');
+  });
 });

@@ -111,17 +111,20 @@ export function importIcs(source: string, defaultPersonId: string): BoardEvent[]
     const endRaw = values.get('DTEND');
     const end = endRaw ? parseDate(endRaw.value, allDay, endRaw.params) : new Date(start.getTime() + (allDay ? 86_400_000 : 3_600_000));
     const rule = values.get('RRULE')?.value ?? '';
-    const frequency = rule.match(/FREQ=(DAILY|WEEKLY|MONTHLY)/)?.[1]?.toLowerCase() ?? 'none';
+    const simpleRule = rule.split(';').filter(Boolean).every((part) => /^(FREQ=(DAILY|WEEKLY|MONTHLY)|UNTIL=\d{8}(T\d{6}Z)?)$/.test(part));
+    const frequency = simpleRule ? (rule.match(/FREQ=(DAILY|WEEKLY|MONTHLY)/)?.[1]?.toLowerCase() ?? 'none') : 'none';
     const untilRaw = rule.match(/UNTIL=(\d{8})/)?.[1];
+    const importedNotes = unescapeIcs(values.get('DESCRIPTION')?.value || '');
+    const recurrenceNote = rule && !simpleRule ? `Imported recurrence rule (not expanded): ${rule}` : '';
     return {
       id: (values.get('UID')?.value.split('@')[0] || crypto.randomUUID()) + `-${crypto.randomUUID().slice(0, 6)}`,
       title: unescapeIcs(values.get('SUMMARY')?.value || 'Untitled plan'),
       personId: defaultPersonId,
       start: start.toISOString(), end: end.toISOString(), allDay,
       location: unescapeIcs(values.get('LOCATION')?.value || ''),
-      notes: unescapeIcs(values.get('DESCRIPTION')?.value || ''),
+      notes: [importedNotes, recurrenceNote].filter(Boolean).join('\n'),
       recurrence: frequency as BoardEvent['recurrence'],
-      recurrenceUntil: untilRaw ? `${untilRaw.slice(0, 4)}-${untilRaw.slice(4, 6)}-${untilRaw.slice(6, 8)}` : undefined,
+      recurrenceUntil: simpleRule && untilRaw ? `${untilRaw.slice(0, 4)}-${untilRaw.slice(4, 6)}-${untilRaw.slice(6, 8)}` : undefined,
       updatedAt: now
     };
   });
