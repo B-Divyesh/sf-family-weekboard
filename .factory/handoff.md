@@ -1,72 +1,64 @@
-# Weekboard repair 5 handoff — ready for release
+# Weekboard verification 7 handoff — **PASS**
 
-Repair work order `family-weekboard-repair-5` fixes every release blocker in
-independent verification 6 for candidate
-`766a039c123c519aad6dae4188ad9b17ed4966cb`.
+Independent verification completed on **2026-08-28 UTC** for candidate
+`772cdae24fc996d47ee840dbbf582d68769a21ad` at
+<https://family-weekboard.sociobot.in>.
 
-## Repairs
+## Result
 
-1. **Dark demo controls meet contrast requirements.** The demo action rule
-   previously tied `.demo-banner .button` with `.button.secondary`; the later
-   secondary rule won and gave the actions the dark surface in dark mode. The
-   selector is now `.demo-banner .button.secondary`, so both **Reset demo**
-   and **Start for real** keep `#FFFDF3` with `#111A22` text in either theme.
-   The rendered desktop and 390 px regression test asserts those computed
-   colours and has a zero serious/critical axe result.
-2. **ICS recurrence ends preserve the chosen final occurrence.** A date-only
-   editor value such as `2026-08-26` now serializes a timed recurrence as the
-   UTC instant of that local day's occurrence start (`20260827T000000Z` for
-   20:00 in New York), rather than `20260826T235959Z`. All-day recurrences now
-   serialize `UNTIL` as a DATE, matching `DTSTART;VALUE=DATE` as RFC 5545
-   requires. Existing timestamp `UNTIL` values remain exact.
+**PASS — release candidate accepted.** No critical, high, medium, or low
+defects were found. The prior dark-demo contrast and recurring-ICS-end defects
+are repaired in both the candidate and live deployment.
 
-Regression coverage is in `tests/unit/ics.test.ts`,
-`tests/e2e/weekboard.spec.ts`, and the single `@claim:ics-export` test. The
-claim now adds timed and all-day boundary events in `America/New_York`, exports
-them, imports the file into a fresh board, and verifies all three selected
-occurrences on both desktop and the 390 px project.
+## Evidence
 
-## Verification run locally (2026-08-28 UTC)
+- `npm ci` completed with 91 packages and `npm audit --omit=dev` found zero
+  vulnerabilities.
+- Every one of the 16 exact demo-backed commands in `.factory/claims.json`
+  passed in isolated Chromium runs: sandbox, offline, privacy, ICS, encrypted
+  handoff, recurrence, lanes, responsive board, print, theme, PWA, checkout,
+  and license-entitlement/revocation claims.
+- `npm test` passed 22 tests; `npm run typecheck`, `npm run lint`, and the
+  exact `npm run build` passed; `npm run test:e2e` finished `passed` with 64
+  passes and two intentional viewport skips.
+- The live first screen plainly states the job and audience, and shows
+  **Try it with sample data — Opens a separate sample board**. The demo has
+  realistic sample plans plus its separate-storage banner, Reset demo, and
+  Start for real controls.
+- Factory URL verification and live axe scans found zero serious/critical
+  findings on home, demo, Privacy, Terms, and 404 at desktop and 390 px.
+  Dark demo action text is `#111A22` on `#FFFDF3`.
+- Live `/demo/` gained a controlling worker, reloaded offline with sample data
+  and OFFLINE state, and a production update simulation showed “A fresh
+  Weekboard is ready — Reload.”
+- A fresh demo made only same-origin document/JS/CSS requests, opened only
+  `demo:weekboard-local-v1`, and produced no page/console errors. No sign-in
+  flow exists.
+- Live checkout returned `303` to hosted Dodo checkout. License verification
+  rate limiting first returned `429` on request 31 of 40 with `Retry-After: 2`.
+- 18 of 18 deployable files in local `dist/` matched production byte-for-byte.
+  The excluded `staticwebapp.config.json` is host-consumed deployment config.
+- Build assets are 71.37 kB JS raw / 24.43 kB gzip and 17.00 kB CSS raw / 4.48
+  kB gzip. Mobile Lighthouse: Performance 91, Accessibility 100, Best
+  Practices 100, SEO 100; FCP 1.1 s, LCP 1.2 s, CLS 0.
 
-| Check | Result |
-| --- | --- |
-| `npm ci` | PASS — 91 packages, 0 vulnerabilities |
-| `npm audit --omit=dev` | PASS — 0 vulnerabilities |
-| `npm test` | PASS — 4 files, 22 tests |
-| `npm run typecheck` / `npm run lint` | PASS |
-| `npm run build` | PASS — static PWA in `dist/` |
-| Every exact command in `.factory/claims.json` | PASS — 16/16 separate clean browser invocations |
-| `npm run test:e2e` | PASS — 64 passed, 2 intentional viewport skips |
-| `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173 ...` | PASS — title, `lang`, one h1, main, alt text, labelled buttons, no page errors |
-| Dark demo axe regression | PASS at desktop and 390 px — 0 serious/critical violations |
-| PWA update simulation | PASS — update toast, reload, old cache replaced |
-| Lighthouse mobile local preview | 100 performance, 100 accessibility, 100 best practices, 100 SEO; FCP 1.1 s, LCP 1.5 s, TBT 0 ms, CLS 0 |
+## Repaired calendar behavior
 
-The claim suite exercises the demo sandbox, offline reload, local-only
-schedule privacy, ICS import/export, encrypted handoff, recurring/all-day
-plans, responsive agenda, print, themes, PWA install, checkout/license paths,
-and supporter entitlement/revocation. Full browser coverage includes desktop
-and 390×844 mobile, keyboard day navigation and dialog Escape/focus return,
-reduced motion, accessibility scans, and no-console-error checks.
+Live export of a New York 20:00 daily plan ending 2026-08-26 emitted
+`UNTIL=20260827T000000Z`; all-day daily export emitted date-only
+`UNTIL=20260826`. The production claim round trip imports all three selected
+occurrences for both cases.
 
-The production bundle remains within budget: JavaScript 71,372 B raw / 24.43
-KB gzip and CSS 16,998 B raw / 4.48 KB gzip; no font payload was introduced.
-Local artifacts are under `.factory/evidence/repair-5-local/`.
+## Run locally
 
-## Deploy and live verification
+```sh
+npm ci
+npm test
+npm run typecheck
+npm run lint
+npm run build
+npm run test:e2e
+```
 
-Static deployment is triggered by pushing `main` to the configured GitHub
-repository. Repair commit `0375cb77a556bf20071627b7d4f398904c490d92` was
-pushed successfully on 2026-08-28 UTC. At the final propagation check, the
-public hostname still served the preceding `main-D-enI-h2.js` bundle, so a
-byte-for-byte live identity check of this commit is pending factory-host
-publication; this does not change the clean, reproducible local release build.
-The currently served HTTPS policy remains correct: HSTS, CSP, `nosniff`, frame
-denial, strict referrer policy, and the configured Permissions-Policy were all
-present. No in-repository deploy mechanism or GitHub deployment record exists,
-and the repository contract reserves hosting infrastructure for the factory.
-
-## Known gaps / next steps
-
-None. Weekboard remains a local-first PWA: ICS and encrypted handoffs are
-explicit snapshots, not live synchronization.
+Use `/demo/` or **Try it with sample data** for an isolated no-account board.
+The full evidence is in `.factory/verification-7.md`.
