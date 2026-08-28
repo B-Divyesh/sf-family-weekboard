@@ -35,6 +35,13 @@
     "sandbox": "fresh /demo context; download a calendar file and assert VCALENDAR, UTC DTSTART, daily and weekly RRULE, and four sample VEVENTs"
   },
   {
+    "id": "ics-person-colour-notes",
+    "claim": "Calendar exports include each person's name and colour in the event notes.",
+    "where": "handoff dialog",
+    "test": "npx playwright test --project=chromium --grep '@claim:ics-person-colour-notes'",
+    "sandbox": "fresh /demo context; download a calendar file and assert each shipped sample person's name and hexadecimal colour appear together in its event notes"
+  },
+  {
     "id": "ics-import",
     "claim": "Imports a standard calendar file into the board.",
     "where": "empty state, handoff dialog, README",

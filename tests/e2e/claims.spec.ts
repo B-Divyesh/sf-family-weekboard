@@ -115,6 +115,21 @@ test('@claim:ics-export downloads a standard calendar and round-trips final recu
   await receiverContext.close();
 });
 
+test('@claim:ics-person-colour-notes includes each sample person and colour in calendar-file notes', async ({ page }) => {
+  await page.goto('/demo/');
+  await page.getByRole('button', { name: 'Share or export board' }).click();
+  const download = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByRole('button', { name: 'Export calendar file' }).click()
+  ]).then(([file]) => file);
+  const stream = await download.createReadStream();
+  let text = '';
+  for await (const chunk of stream!) text += chunk.toString();
+  for (const [name, colour] of [['Asha', '#087d96'], ['Ravi', '#b54b23'], ['Kids', '#397144']]) {
+    expect(text).toContain(`Weekboard person: ${name}\\nWeekboard colour: ${colour}`);
+  }
+});
+
 test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ page }) => {
   const crossOrigin: string[] = [];
   page.on('request', (request) => {

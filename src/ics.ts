@@ -54,7 +54,7 @@ function fold(line: string): string {
 }
 
 export function exportIcs(events: BoardEvent[], people: Person[], boardName: string): string {
-  const names = new Map(people.map((person) => [person.id, person.name]));
+  const peopleById = new Map(people.map((person) => [person.id, person]));
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Sociobot//Weekboard 1.0//EN', 'CALSCALE:GREGORIAN', `X-WR-CALNAME:${escapeIcs(boardName)}`];
   events.forEach((event) => {
     lines.push('BEGIN:VEVENT', `UID:${event.id}@family-weekboard.sociobot.in`, `DTSTAMP:${stamp(new Date(event.updatedAt))}`);
@@ -65,8 +65,12 @@ export function exportIcs(events: BoardEvent[], people: Person[], boardName: str
     }
     lines.push(`SUMMARY:${escapeIcs(event.title)}`);
     if (event.location) lines.push(`LOCATION:${escapeIcs(event.location)}`);
-    const person = names.get(event.personId);
-    const description = [person ? `Weekboard lane: ${person}` : '', event.notes].filter(Boolean).join('\n');
+    const person = peopleById.get(event.personId);
+    // Calendar files have no portable "person colour" field. Keep the
+    // assignment useful outside Weekboard by adding both the person's name and
+    // their exact CSS colour as ordinary, readable event notes.
+    const personNote = person ? `Weekboard person: ${person.name}\nWeekboard colour: ${person.color}` : '';
+    const description = [personNote, event.notes].filter(Boolean).join('\n');
     if (description) lines.push(`DESCRIPTION:${escapeIcs(description)}`);
     if (event.recurrence !== 'none') {
       const frequency = event.recurrence.toUpperCase();

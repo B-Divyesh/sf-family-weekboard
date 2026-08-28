@@ -14,14 +14,14 @@ const event: BoardEvent = {
 describe('ICS interoperability', () => {
   const originalTimeZone = process.env.TZ;
   afterEach(() => { process.env.TZ = originalTimeZone; });
-  it('exports valid UTC dates, escaped text, lane metadata, and RRULE', () => {
+  it('exports valid UTC dates, escaped text, person colour notes, and RRULE', () => {
     const ics = exportIcs([event], [person], 'Our week');
     expect(ics).toContain('BEGIN:VCALENDAR\r\n');
     expect(ics).toContain('DTSTART:20260824T073000Z');
     expect(ics).toContain('SUMMARY:School run\\, then library');
     expect(ics).toContain('LOCATION:North\\; gate');
     expect(ics).toContain('RRULE:FREQ=WEEKLY;UNTIL=20261214T073000Z');
-    expect(ics).toContain('Weekboard lane: Mum\\, Dad & kids');
+    expect(ics).toContain('Weekboard person: Mum\\, Dad & kids\\nWeekboard colour: #087d96');
   });
 
   it('imports unfolded ICS and preserves supported recurrence', () => {
