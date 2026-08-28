@@ -1,4 +1,33 @@
-# Weekboard repair handoff
+# Weekboard verification handoff — FAIL
+
+## Current independent disposition
+
+Candidate `6de4842db3295c205206030e8184e359309950d6` was independently tested
+from a clean checkout and verified live at
+<https://family-weekboard.sociobot.in> on 2026-08-28 UTC. **FAIL — do not
+promote.**
+
+The static candidate is buildable, byte-identical to live, accessible at
+desktop and 390 px, private by default, and works offline after service-worker
+control. See [`.factory/verification-2.md`](verification-2.md) for exact
+commands, hashes, accessibility/PWA/browser evidence, and test coverage.
+
+Two release-blocking hosted API defects remain:
+
+1. `GET https://api.sociobot.in/api/v1/products/family-weekboard/checkout`
+   returns HTTP 404 (`enabled factory product`), so the advertised ₹499
+   supporter purchase is unavailable.
+2. A 150-request rapid invalid-token burst to the required product verify
+   endpoint returned 150 HTTP 200 responses; no 429 or `Retry-After` was
+   observed. The work order requires rate limiting for product-unlock calls.
+
+The billing/API owner must enable/register the production product and add
+rate limiting with `Retry-After`, then arrange a re-verification. No product
+code was changed during this QA pass.
+
+---
+
+# Weekboard repair handoff (historical builder evidence)
 
 ## Result: code and static-release repair complete; billing registration remains external
 
