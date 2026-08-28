@@ -59,7 +59,20 @@ Deploy the generated `dist/` directory using the static work-order pipeline.
 `staticwebapp.config.json` retains the real 404 rewrite/status policy and
 hashed-asset caching policy.
 
+## Deployment and cold live verification
+
+- Deployed with `/opt/fleet/lib/deploy-static.sh family-weekboard dist` to the
+  configured Static Web App. Deployment id:
+  `becc7d84-6911-48ba-8ec4-bbe2e3dcd25e`.
+- `https://family-weekboard.sociobot.in/?demo=1` cold check: HTTP 200; 870 ms
+  load; title `Demo — Weekboard`; `lang=en`; one h1/main; no missing alt or
+  unlabeled buttons; zero console errors. Evidence:
+  `.factory/evidence/polish-1-live/verify.json` and its screenshots.
+- Live route sweep: `/`, `/demo/`, `/privacy/`, `/terms/` = 200; unknown route
+  = 404. Live demo reset preserved the shipped sample. Privacy navigation
+  focused its h1 and announced `Privacy — Weekboard`. Axe reported no serious
+  or critical issue on live demo, Privacy, Terms, or 404.
+
 ## Known gaps
 
-None in the local build. Deployment and cold live URL verification are recorded
-after the repair commit is pushed and the static work-order release completes.
+None.

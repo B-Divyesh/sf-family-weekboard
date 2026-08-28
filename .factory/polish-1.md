@@ -6,9 +6,9 @@ adversarial review `3c0edcda51177c9973bdd3e4672e822333582464`.
 Local visual evidence: `.factory/evidence/polish-1/demo-390.png` and
 `.factory/evidence/polish-1/demo-1440.png`. The first shows the direct
 `?demo=1` sample board, persistent banner, 45 px actions, and one-day phone
-agenda. Browser verification was run against the production build at
-`http://127.0.0.1:4173/?demo=1`; the deployment check is recorded in the final
-handoff after the release URL is updated.
+agenda. Live evidence is in `.factory/evidence/polish-1-live/`: the factory
+verifier opened `https://family-weekboard.sociobot.in/?demo=1` cold with no
+console errors; its 390 px and desktop screenshots are included.
 
 | Finding | Repair | Evidence |
 | --- | --- | --- |
@@ -51,3 +51,7 @@ handoff after the release URL is updated.
 - Full browser validation covers responsive layout, PWA offline reload, no
   cross-origin demo traffic, metadata, real static routes, focus, dialogs, and
   all historical calendar/licensing regressions.
+- Post-deploy live checks passed: `/`, `/demo/`, `/privacy/`, and `/terms/`
+  returned 200; an unknown path returned 404. The live demo reset retained its
+  shipped sample; the live Privacy route focused and announced its h1; live axe
+  reported no serious or critical issues on demo, Privacy, Terms, or 404.
