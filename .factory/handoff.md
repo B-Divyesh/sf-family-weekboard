@@ -57,6 +57,28 @@ test purchase and return-license smoke test. The factory billing owner must
 register/enable the `family-weekboard` one-time ₹499 product with return URL
 `https://family-weekboard.sociobot.in/`; no other product may be substituted.
 
+### Final deployed evidence
+
+Commits `d2a4aaf` and `71c352c` were pushed to `main`; the final static build
+was deployed to <https://family-weekboard.sociobot.in> on 2026-08-28 UTC.
+The factory URL verifier passed: HTTPS 200, 777 ms load, no console/page
+errors, title, `lang="en"`, one h1, a main landmark, and no missing image alt
+or unnamed button. The live application has cache revision
+`weekboard-shell-d27e9205fc311ec9`, and `/manifest.json` returned HTTP 200
+with `Content-Type: application/json` and `Cache-Control: no-cache`.
+
+Fresh live Playwright checks at 1280 × 900 and 390 × 844 found zero serious or
+critical axe violations on home, Privacy, and Terms; zero console/page errors;
+no horizontal overflow at 390 px; and a controlling service worker that
+successfully reloaded the board offline while showing `OFFLINE`. SHA-256
+matched local `dist/` to live for `index.html` (`88ebe8e…`), main JS
+(`76004ca…`), CSS (`96bada…`), `sw.js` (`cf8ad557…`), and `manifest.json`
+(`ab50d600…`). The response-policy headers remained present.
+
+The final live checkout smoke at 2026-08-28 09:21 UTC still returned
+`404 {"error":"enabled factory product","status":404}`. This is the sole
+remaining release blocker.
+
 ## Current independent disposition (verification-3)
 
 Candidate `6de4842db3295c205206030e8184e359309950d6` was independently tested
