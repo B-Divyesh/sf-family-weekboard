@@ -3,7 +3,7 @@
 ## Result: code and static-release repair complete; billing registration remains external
 
 - Repair base: `b96404a75cad8c60ac301edf13ea7f7ccb063f3f`
-- Repaired application commit: recorded after the final verification below
+- Repaired application commit: `cfc55e77d169c43e99d555fb815335825be43450`
 - Product: `family-weekboard` — Vite + TypeScript local-first PWA, static deploy
 - Date: 2026-08-28 UTC
 - Original independent evidence: [`.factory/verification.md`](verification.md)
@@ -62,6 +62,27 @@ All are inside the static/PWA budgets. The full desktop/mobile suite checks
 keyboard dialog escape/focus return, skip-link semantics through axe scans,
 390 px layout, offline reload, no console errors, dark/reduced-motion paths,
 and the original normal scheduling/ICS/encrypted handoff flows.
+
+## Live deployment evidence
+
+`cfc55e7` was pushed to `main` and deployed to
+<https://family-weekboard.sociobot.in> with the static work-order deployment.
+The factory URL verifier returned HTTPS 200 in 1,766 ms with no console/page
+errors, a title, `lang="en"`, one h1, main landmark, and no missing image alt
+or unnamed buttons. SHA-256 matches between local `dist/` and the live origin
+for the application JS (`76004ca8…`), CSS (`96bada53…`), and generated worker
+(`ccadb260…`). The live worker cache is `weekboard-shell-d5eac90cf24c7905` and
+its precache names the deployed hashed JS, CSS, and WebP assets.
+
+At live 390 × 844, axe found zero serious/critical violations on both
+`/privacy/` and `/terms/`; each has the `Weekboard home` link at 44 × 44 px.
+The live root supplies CSP, `X-Frame-Options: DENY`, restrictive
+Permissions-Policy, `nosniff`, and strict referrer policy. Hashed assets return
+`Cache-Control: public, max-age=31536000, immutable`; `/sw.js` returns
+`no-cache, no-store, must-revalidate`.
+
+Lighthouse 12.8.2 mobile against the live URL: **99 performance, 100
+accessibility, 100 best practices; FCP 1.4 s, LCP 1.7 s, CLS 0, TBT 110 ms**.
 
 ## Billing finding and disposition
 
