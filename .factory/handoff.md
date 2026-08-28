@@ -56,8 +56,15 @@ Local artifacts are under `.factory/evidence/repair-5-local/`.
 ## Deploy and live verification
 
 Static deployment is triggered by pushing `main` to the configured GitHub
-repository. The commit SHA, production byte identity, HTTPS response policy,
-and live smoke result are appended after the push completes.
+repository. Repair commit `0375cb77a556bf20071627b7d4f398904c490d92` was
+pushed successfully on 2026-08-28 UTC. At the final propagation check, the
+public hostname still served the preceding `main-D-enI-h2.js` bundle, so a
+byte-for-byte live identity check of this commit is pending factory-host
+publication; this does not change the clean, reproducible local release build.
+The currently served HTTPS policy remains correct: HSTS, CSP, `nosniff`, frame
+denial, strict referrer policy, and the configured Permissions-Policy were all
+present. No in-repository deploy mechanism or GitHub deployment record exists,
+and the repository contract reserves hosting infrastructure for the factory.
 
 ## Known gaps / next steps
 
