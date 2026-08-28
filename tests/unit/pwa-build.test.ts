@@ -39,6 +39,7 @@ describe('production PWA build', () => {
     expect(readFileSync('README.md', 'utf8')).toContain('unknown paths must serve `/404.html`\nwith HTTP 404, not an SPA fallback');
     expect(readFileSync('public/robots.txt', 'utf8')).toContain('Sitemap: https://family-weekboard.sociobot.in/sitemap.xml');
     expect(readFileSync('public/sitemap.xml', 'utf8')).toContain('<loc>https://family-weekboard.sociobot.in/privacy/</loc>');
+    expect(readFileSync('public/sitemap.xml', 'utf8')).toContain('<loc>https://family-weekboard.sociobot.in/demo/</loc>');
   });
 
   it('revisions the worker and precache URLs whenever application code changes', () => {

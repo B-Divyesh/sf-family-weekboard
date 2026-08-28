@@ -24,17 +24,17 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to privacy policy</a>
-    <header class="topbar"><a class="brand" href="/" aria-label="Weekboard home"><span class="brand-mark" aria-hidden="true">W</span><span>WEEKBOARD</span></a><nav class="site-nav" aria-label="Main navigation"><a href="/demo/">Demo</a><a href="/#how-it-works">How it works</a><a href="/privacy/" aria-current="page">Privacy</a></nav></header>
+    <header class="topbar"><a class="brand" href="/" aria-label="Weekboard home"><span class="brand-mark" aria-hidden="true">W</span><span>WEEKBOARD</span></a><nav class="site-nav" aria-label="Main navigation"><a href="/?demo=1">Demo</a><a href="/#how-it-works">How it works</a><a href="/privacy/" aria-current="page">Privacy</a></nav></header>
     <main id="main" class="legal-page">
       <p class="eyebrow">PLAIN-LANGUAGE POLICY · 28 AUGUST 2026</p>
       <h1>Privacy</h1>
       <p class="lede">Your household schedule belongs to your household. Weekboard is designed so we do not receive it.</p>
       <h2>Data stored on your device</h2>
-      <p>People, plans, notes, board preferences, and an optional license token are stored in your browser’s IndexedDB or local storage. They remain there until you delete site data, remove them in Weekboard, or replace the board during an import.</p>
+      <p>People, plans, notes, board preferences, and an optional license token stay in this browser. They remain until you delete site data, remove them, or replace the board during an import.</p>
       <h2>Exports and handoffs</h2>
-      <p>ICS and Weekboard exports are created locally. Encrypted handoffs use AES-GCM encryption in your browser. Files, codes, and QR images go only where you choose to send them. Anyone with both an encrypted copy and its passphrase can read it.</p>
+      <p>ICS and Weekboard exports are created locally. Encrypted copies use AES-GCM encryption in your browser. Files, codes, and QR images go only where you choose to send them. Anyone with both an encrypted copy and its passphrase can read it.</p>
       <h2>Network requests</h2>
-      <p>The free planner makes no API request and has no advertising, analytics, tracking pixel, or third-party font. If you enter a supporter license, the token is sent to the Sociobot billing API only to check whether it is valid. A purchase opens Sociobot’s hosted checkout; Sociobot / Dodo then processes the transaction under its own checkout policy.</p>
+      <p>The free planner requires no account and makes no API request. It has no advertising, analytics, tracking pixel, or third-party font. If you enter a supporter license, the token goes to the Sociobot billing API only to check whether it is valid. A purchase opens Sociobot’s hosted checkout.</p>
       <h2>Your controls</h2>
       <p>Export an ICS copy at any time. To erase all local data, clear storage for this site in your browser. Uninstalling the PWA may not clear browser storage on every platform.</p>
       <h2>Contact</h2>
@@ -42,5 +42,6 @@
       <p><a class="button secondary" href="/">Return to Weekboard</a></p>
     </main>
     <footer><span>Plan a family week without a shared cloud account. · Build 1.0.0-r4</span><nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory <span class="sr-only">(external site)</span></a></nav></footer>
+    <script type="module" src="/src/route-focus.ts"></script>
   </body>
 </html>

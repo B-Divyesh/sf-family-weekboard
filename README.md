@@ -1,27 +1,25 @@
 # Weekboard
 
-Weekboard is a private, installable weekly planner for households that use a
-mix of Android, iPhone, desktop, and paper—but do not want to put their shared
-schedule into another cloud account. It runs fully offline and stores plans in
-the browser on the current device.
+Weekboard is a weekly planner for families using phones, computers, and paper.
+It keeps their shared schedule out of cloud accounts. After the first visit, it
+works offline and stores plans in this browser.
 
 Live: <https://family-weekboard.sociobot.in>
 
-Demo: <https://family-weekboard.sociobot.in/demo/> — opens a seeded sample
-board in the separate `demo:weekboard-local-v1` database. Use **Reset demo**
+Demo: <https://family-weekboard.sociobot.in/?demo=1> — opens a seeded sample
+board in a separate browser database. Use **Reset demo**
 to restore the sample or **Start for real** to leave without copying changes.
 
 ## What v1 includes
 
 - A seven-day desktop board and focused one-day phone agenda
-- Household people/lane colours, all-day plans, and daily/weekly/monthly repeats
-- Standard ICS import and export, with UTC timestamps and RRULE recurrence
-- Explicit AES-GCM encrypted file and QR handoff (a snapshot, not live sync)
-- Print layout, light/dark/system themes, installable PWA, and offline storage
+- Person colors, all-day plans, and daily, weekly, or monthly repeats
+- Import and export standard calendar files. Weekboard keeps repeat rules and time zones in the file.
+- Share a password-encrypted Weekboard file or QR code. Each is a copy, not live sync.
+- Install Weekboard on your device and keep using it offline after the first visit.
 - Optional ₹499 one-time supporter license through the Sociobot billing API
 
-There are deliberately no accounts, invitations, cloud sync, contacts, chat,
-analytics, third-party scripts, or CalDAV server.
+Weekboard has no account and does not send your schedule.
 
 ## Develop and verify
 

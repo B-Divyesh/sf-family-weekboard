@@ -60,7 +60,7 @@ export class WeekboardApp {
       const field = this.root.querySelector<HTMLTextAreaElement>('#handoffCode');
       const trigger = this.root.querySelector<HTMLElement>('#transferButton');
       if (field && trigger) { field.value = code; this.openDialog('transferDialog', trigger); }
-    } catch { this.announce('That QR handoff link could not be read.'); }
+    } catch { this.announce('That QR copy link could not be read.'); }
   }
 
   private async refresh(): Promise<void> {
@@ -85,10 +85,10 @@ export class WeekboardApp {
     this.root.innerHTML = `
       <header class="topbar">
         <a class="brand" href="/" aria-label="Weekboard home"><span class="brand-mark" aria-hidden="true">W</span><span>WEEKBOARD</span></a>
-        <nav class="site-nav" aria-label="Main navigation"><a href="/demo/">Demo</a><a href="#how-it-works">How it works</a><a href="/privacy/">Privacy</a></nav>
+        <nav class="site-nav" aria-label="Main navigation"><a href="/?demo=1">Demo</a><a href="#how-it-works">How it works</a><a href="/privacy/">Privacy</a></nav>
         <div class="header-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Change colour theme" title="Change colour theme">◐</button>
-          ${this.demo ? '' : `<button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Supporter ✓' : 'Support Weekboard'}</button>`}
+          ${this.demo ? '' : `<button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Manage supporter pack' : 'Support Weekboard'}</button>`}
         </div>
       </header>
       ${this.demo ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Changes stay separate from your real board.</span><div><button class="button secondary compact" id="resetDemo" type="button">Reset demo</button><button class="button secondary compact" id="startReal" type="button">Start for real</button></div></aside>` : ''}
@@ -99,12 +99,12 @@ export class WeekboardApp {
             <p class="eyebrow">${escapeHtml(this.settings.boardName)} · LOCAL TIME</p>
             <h1 id="pageTitle">Plan your family week together</h1>
             <p class="lede">For families using phones, computers, and paper who need one shared weekly view without a new account.</p>
-            <ul class="hero-facts" aria-label="Key facts"><li>Works offline after the first visit.</li><li>Your schedule stays on this device.</li><li>Core planning and export are free.</li></ul>
+            <ul class="hero-facts" aria-label="Key facts"><li>Works offline after the first visit.</li><li>Your schedule stays on this device.</li><li>Adding plans, printing, and both exports are free.</li></ul>
           </div>
           <div class="primary-actions">
             <button class="button primary" id="addEvent" type="button"><span aria-hidden="true">＋</span> Add plan</button>
-            <button class="button secondary" id="transferButton" type="button">Move / share</button>
-            ${this.demo ? '' : '<a class="button secondary" href="/demo/">Try it with sample data</a><small>Opens a separate sample board.</small>'}
+            <button class="button secondary" id="transferButton" type="button">Share or export board</button>
+            ${this.demo ? '' : '<a class="button secondary" href="/?demo=1">Try it with sample data</a><small>Opens a separate sample board.</small>'}
           </div>
         </section>
 
@@ -112,13 +112,13 @@ export class WeekboardApp {
           <div class="week-toolbar">
             <div class="week-nav" aria-label="Choose week">
               <button class="icon-button" id="previousWeek" type="button" aria-label="Previous week">←</button>
-              <button class="button text-button" id="todayButton" type="button">This week</button>
+              <button class="button text-button" id="todayButton" type="button">Show this week</button>
               <button class="icon-button" id="nextWeek" type="button" aria-label="Next week">→</button>
             </div>
             <h2 id="weekHeading">${rangeLabel}</h2>
             <div class="board-tools">
-              <button class="button text-button" id="peopleButton" type="button">People</button>
-              <button class="button text-button" id="printButton" type="button">Print</button>
+              <button class="button text-button" id="peopleButton" type="button">Edit people</button>
+              <button class="button text-button" id="printButton" type="button">Print week</button>
             </div>
           </div>
           <div class="mobile-days" role="tablist" aria-label="Days this week">
@@ -134,8 +134,8 @@ export class WeekboardApp {
                 <img src="${heroDesktop}" width="1440" height="960" alt="Pixel-art household planning console with seven calendar panels" decoding="async" fetchpriority="high" />
               </picture>
               <div>
-                <p class="eyebrow">READY PLAYER HOUSEHOLD</p>
-                <h2>Your week is clear</h2>
+                <p class="eyebrow">EMPTY BOARD</p>
+                <h2>No plans this week</h2>
                 <p>Add the first plan, or import an existing ICS calendar. Everything stays in this browser unless you explicitly export it.</p>
                 <button class="button primary" id="emptyAdd" type="button">Add the first plan</button>
               </div>
@@ -143,22 +143,22 @@ export class WeekboardApp {
         </section>
         <p class="status-line" id="statusLine" aria-live="polite">Saved locally · ${this.events.length} plan${this.events.length === 1 ? '' : 's'} on board</p>
         <section class="info-section" id="how-it-works" aria-labelledby="howHeading">
-          <p class="eyebrow">THREE MOVES</p><h2 id="howHeading">How it works</h2>
-          <ol><li><strong>Add plans.</strong> Put each commitment on a person’s lane.</li><li><strong>Check the week.</strong> Use seven columns or one phone-friendly day.</li><li><strong>Move a copy.</strong> Print, export ICS, or share an encrypted snapshot.</li></ol>
+          <p class="eyebrow">THREE STEPS</p><h2 id="howHeading">How it works</h2>
+          <ol><li><strong>Add plans.</strong> Put each commitment on a person’s color.</li><li><strong>Check the week.</strong> Use seven columns or one phone-friendly day.</li><li><strong>Share a copy.</strong> Print, export ICS, or share an encrypted copy.</li></ol>
         </section>
         <section class="info-section limits" aria-labelledby="limitsHeading">
           <p class="eyebrow">CLEAR BOUNDARIES</p><h2 id="limitsHeading">What Weekboard does not do</h2>
-          <p>It does not create accounts, invite people, or sync changes live. File and QR handoffs are snapshots.</p>
+          <p>It has no account and does not send your schedule. File and QR copies do not sync.</p>
         </section>
         ${this.demo ? '' : `<section class="info-section supporter-section" aria-labelledby="supporterHeading">
           <p class="eyebrow">OPTIONAL SUPPORTER PACK</p><h2 id="supporterHeading">Add room for a bigger household</h2>
-          <p><strong>₹499 once.</strong> Add more than four people, extra lane colours, and a custom board name. Planning, accessibility, encryption, and export stay free.</p>
+          <p><strong>₹499 once.</strong> Add more than four people, extra colors, and a custom board name. Adding plans, printing, and both exports are free.</p>
           <button class="button secondary" id="supportSectionButton" type="button">See supporter pack</button>
         </section>`}
       </main>
       <footer>
         <span>Plan a family week without a shared cloud account. · Build ${__BUILD_ID__}</span>
-        <nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><button class="link-button" id="aboutButton" type="button">About</button><a href="https://sociobot.in">Built by Param Factory <span class="sr-only">(external site)</span></a></nav>
+        <nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><button class="link-button" id="aboutButton" type="button">Read about Weekboard</button><a href="https://sociobot.in">Built by Param Factory <span class="sr-only">(external site)</span></a></nav>
       </footer>
       <div class="toast" id="updateToast" role="status" hidden><span>A fresh Weekboard is ready.</span><button type="button" id="reloadButton">Reload</button></div>
       ${this.dialogs()}
@@ -210,40 +210,40 @@ export class WeekboardApp {
           <label class="full">Note <span class="hint">optional</span><textarea id="eventNotes" name="notes" rows="2" maxlength="500"></textarea></label>
         </div>
         <p class="form-error" id="eventError" role="alert"></p>
-        <div class="dialog-actions"><button class="button danger" id="deleteEvent" type="button" hidden>Delete</button><span></span><button class="button secondary close-dialog" value="cancel">Cancel</button><button class="button primary" value="default" id="saveEvent">Save plan</button></div>
+        <div class="dialog-actions"><button class="button danger" id="deleteEvent" type="button" hidden>Delete plan</button><span></span><button class="button secondary close-dialog" value="cancel">Cancel</button><button class="button primary" value="default" id="saveEvent">Save plan</button></div>
       </form></dialog>
 
       <dialog id="peopleDialog" aria-labelledby="peopleTitle"><div class="dialog-form">
-        <div class="dialog-header"><div><p class="eyebrow">LANES</p><h2 id="peopleTitle">People on this board</h2></div><button class="icon-button close-dialog" aria-label="Close people settings">×</button></div>
-        <p class="dialog-intro">Colour helps you scan; every plan also carries the person’s name.</p>
+        <div class="dialog-header"><div><p class="eyebrow">PEOPLE</p><h2 id="peopleTitle">People on this board</h2></div><button class="icon-button close-dialog" aria-label="Close people settings">×</button></div>
+        <p class="dialog-intro">Color helps you scan. Every plan also carries the person’s name.</p>
         <ul class="people-list">${this.people.map((person, index) => `<li><span class="person-chip" style="--lane:${person.color}"><i>${escapeHtml(person.name.slice(0, 1).toUpperCase())}</i>${escapeHtml(person.name)}</span>${this.people.length > 1 ? `<button class="icon-button" type="button" data-delete-person="${person.id}" aria-label="Remove ${escapeHtml(person.name)} and their plans">×</button>` : ''}${index === 0 ? '<small>default</small>' : ''}</li>`).join('')}</ul>
         <form id="personForm" class="inline-form"><label>Name<input name="personName" required maxlength="30" autocomplete="off" /></label><label>Colour<select name="personColor">${LANE_COLORS.map((color, index) => `<option value="${color}" ${!this.supporter && index > 3 ? 'disabled' : ''}>Colour ${index + 1}${!this.supporter && index > 3 ? ' · supporter' : ''}</option>`).join('')}</select></label><button class="button primary" type="submit">Add person</button></form>
         <p class="form-error" id="peopleError" role="alert"></p>
         <div class="settings-row"><label for="boardName">Board name ${this.supporter ? '' : '<span class="hint">supporter extra</span>'}</label><div><input id="boardName" maxlength="40" value="${escapeHtml(this.settings.boardName)}" ${this.supporter ? '' : 'disabled'} /><button class="button secondary" id="saveBoardName" type="button" ${this.supporter ? '' : 'disabled'}>Save name</button></div></div>
-        <button class="button secondary close-dialog" type="button">Done</button>
+        <button class="button secondary close-dialog" type="button">Close people settings</button>
       </div></dialog>
 
       <dialog id="transferDialog" aria-labelledby="transferTitle"><div class="dialog-form transfer-dialog">
-        <div class="dialog-header"><div><p class="eyebrow">EXPLICIT HANDOFF</p><h2 id="transferTitle">Move or share a copy</h2></div><button class="icon-button close-dialog" aria-label="Close move and share">×</button></div>
-        <div class="notice"><strong>This is not live sync.</strong> Importing replaces the receiving board with the copy you send. Weekboard never uploads it.</div>
-        <section><h3>Standard calendar file</h3><p>Use ICS with Apple, Google, Outlook, or another calendar app. Person colours are included as notes.</p><div class="action-row"><button class="button primary" id="exportIcs" type="button">Export ICS</button><label class="button secondary file-button">Import ICS<input id="importIcs" type="file" accept=".ics,text/calendar" /></label></div></section>
-        <section><h3>Private Weekboard copy</h3><p>Encrypts people, notes, and plans in this browser. Share the passphrase separately.</p><label>Passphrase <span class="hint">at least 8 characters</span><input id="handoffPassphrase" type="password" minlength="8" autocomplete="new-password" /></label><div class="action-row"><button class="button primary" id="exportEncrypted" type="button">Download encrypted copy</button><button class="button secondary" id="makeQr" type="button">Make QR handoff</button><label class="button secondary file-button">Open encrypted copy<input id="importEncrypted" type="file" accept=".weekboard,text/plain" /></label></div>
+        <div class="dialog-header"><div><p class="eyebrow">SHARE A COPY</p><h2 id="transferTitle">Share or export a copy</h2></div><button class="icon-button close-dialog" aria-label="Close sharing and export">×</button></div>
+        <div class="notice"><strong>Copies do not sync.</strong> Importing replaces the receiving board with the copy you send. Weekboard never uploads it.</div>
+        <section><h3>Standard calendar file</h3><p>Export a standard ICS calendar file. Person colors are included as notes.</p><div class="action-row"><button class="button primary" id="exportIcs" type="button">Export ICS</button><label class="button secondary file-button">Import ICS<input id="importIcs" type="file" accept=".ics,text/calendar" /></label></div></section>
+        <section><h3>Private Weekboard copy</h3><p>Encrypts people, notes, and plans in this browser. Share the passphrase separately.</p><label>Passphrase <span class="hint">at least 8 characters</span><input id="handoffPassphrase" type="password" minlength="8" autocomplete="new-password" /></label><div class="action-row"><button class="button primary" id="exportEncrypted" type="button">Download encrypted copy</button><button class="button secondary" id="makeQr" type="button">Make QR copy</button><label class="button secondary file-button">Open encrypted copy<input id="importEncrypted" type="file" accept=".weekboard,text/plain" /></label></div>
           <div id="qrOutput" class="qr-output" hidden></div>
-          <label>Or paste a handoff code<textarea id="handoffCode" rows="3" spellcheck="false"></textarea></label><button class="button secondary" id="importCode" type="button">Open pasted copy</button>
+          <label>Or paste a copy code<textarea id="handoffCode" rows="3" spellcheck="false"></textarea></label><button class="button secondary" id="importCode" type="button">Open pasted copy</button>
         </section>
         <p class="form-error" id="transferError" role="alert"></p>
       </div></dialog>
 
       <dialog id="supportDialog" aria-labelledby="supportTitle"><div class="dialog-form">
-        <div class="dialog-header"><div><p class="eyebrow">ONE-TIME SUPPORTER PACK</p><h2 id="supportTitle">Keep small software possible</h2></div><button class="icon-button close-dialog" aria-label="Close supporter information">×</button></div>
-        ${this.supporter ? '<div class="supporter-active"><strong>Supporter pack active</strong><span>Thanks for backing private household software.</span></div>' : '<p class="price">₹499 <small>one time</small></p><p>Core planning, offline use, printing, encryption, and every export stay free. The supporter pack adds a custom board name, extra lane colours, and more than four people.</p>'}
+        <div class="dialog-header"><div><p class="eyebrow">ONE-TIME SUPPORTER PACK</p><h2 id="supportTitle">Add options for a bigger household</h2></div><button class="icon-button close-dialog" aria-label="Close supporter information">×</button></div>
+        ${this.supporter ? '<div class="supporter-active"><strong>Supporter pack active</strong><span>Thanks for backing private household software.</span></div>' : '<p class="price">₹499 <small>one time</small></p><p>Adding plans, printing, and both exports are free. The supporter pack adds a custom board name, extra colors, and more than four people.</p>'}
         <ul class="feature-list"><li>No subscription</li><li>No account required</li><li>One license can be restored on your devices</li></ul>
-        ${this.supporter ? '' : `<a class="button primary center" href="${CHECKOUT_URL}">Buy supporter pack</a>`}
+        ${this.supporter ? '' : `<a class="button primary center" id="buySupporter" href="${CHECKOUT_URL}">Buy supporter pack</a>`}
         <form id="licenseForm"><label>Have a license? Paste it here<input name="license" value="${escapeHtml(this.demo ? '' : getLicense())}" autocomplete="off" /></label><button class="button secondary" type="submit">Verify license</button></form>
-        <p class="form-error" id="licenseStatus" role="status"></p><p class="fine-print">Sociobot / Dodo is the merchant of record. Refunds are handled there and revoke the license. See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
+        <p class="form-error" id="licenseStatus" role="status"></p><p class="fine-print">Checkout and refund details appear in the hosted checkout. See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
       </div></dialog>
 
-      <dialog id="aboutDialog" aria-labelledby="aboutTitle"><div class="dialog-form"><div class="dialog-header"><div><p class="eyebrow">ABOUT</p><h2 id="aboutTitle">A calendar that is not a cloud</h2></div><button class="icon-button close-dialog" aria-label="Close about Weekboard">×</button></div><p>Weekboard is a deliberately small, installable weekly view. It stores data in IndexedDB on this device and sends nothing unless you choose an export.</p><p>The first-run pixel illustration is original AI-generated artwork made for Weekboard with the factory image model; interface marks are hand-authored.</p><button class="button secondary close-dialog" type="button">Close</button></div></dialog>
+      <dialog id="aboutDialog" aria-labelledby="aboutTitle"><div class="dialog-form"><div class="dialog-header"><div><p class="eyebrow">ABOUT</p><h2 id="aboutTitle">How Weekboard stores your schedule</h2></div><button class="icon-button close-dialog" aria-label="Close about Weekboard">×</button></div><p>Weekboard is a deliberately small, installable weekly view. It stores your board in this browser and sends nothing unless you export it.</p><p>The first-run pixel illustration was generated for Weekboard with the factory image model.</p><p>The interface marks are hand-authored.</p><button class="button secondary close-dialog" type="button">Close</button></div></dialog>
     `;
   }
 
@@ -282,6 +282,13 @@ export class WeekboardApp {
     this.on('#importEncrypted', 'change', (event) => void this.importEncryptedFile(event));
     this.on('#importCode', 'click', () => void this.importEncryptedCode());
     this.on('#licenseForm', 'submit', (event) => void this.restoreLicense(event));
+    this.on('#buySupporter', 'click', (event) => {
+      if (!navigator.onLine) {
+        event.preventDefault();
+        const status = this.root.querySelector<HTMLElement>('#licenseStatus');
+        if (status) status.textContent = 'Checkout needs an internet connection. Reconnect, then try again.';
+      }
+    });
     this.on('#resetDemo', 'click', () => void this.resetDemo());
     this.on('#startReal', 'click', () => void this.startForReal());
   }
@@ -477,7 +484,7 @@ export class WeekboardApp {
       const handoffUrl = `${location.origin}/#handoff=${encodeURIComponent(code)}`;
       if (handoffUrl.length > 2800) throw new Error('This board is too large for one QR. Download the encrypted copy instead.');
       const src = await QRCode.toDataURL(handoffUrl, { errorCorrectionLevel: 'L', width: 320, margin: 2, color: { dark: '#18242e', light: '#fffdf3' } });
-      output.innerHTML = `<img src="${src}" width="320" height="320" alt="Encrypted Weekboard handoff QR code" /><p>Scan on the other device, then enter the passphrase separately.</p><button class="button secondary" id="copyCode" type="button">Copy code instead</button>`;
+      output.innerHTML = `<img src="${src}" width="320" height="320" alt="Encrypted Weekboard copy QR code" /><p>Scan on the other device, then enter the passphrase separately.</p><button class="button secondary" id="copyCode" type="button">Copy code instead</button>`;
       output.hidden = false; (this.root.querySelector('#handoffCode') as HTMLTextAreaElement).value = code;
       this.on('#copyCode', 'click', () => void navigator.clipboard.writeText(code).then(() => this.announce('Encrypted code copied.')).catch(() => { error.textContent = 'Copy was blocked. Select the code below and copy it manually.'; }));
       error.textContent = '';
@@ -493,7 +500,7 @@ export class WeekboardApp {
   private async importEncryptedCode(): Promise<void> {
     const code = this.root.querySelector<HTMLTextAreaElement>('#handoffCode')!.value;
     const error = this.root.querySelector<HTMLElement>('#transferError')!;
-    if (!code.trim()) { error.textContent = 'Choose an encrypted copy or paste its handoff code first.'; return; }
+    if (!code.trim()) { error.textContent = 'Choose an encrypted copy or paste its copy code first.'; return; }
     try {
       const snapshot = await decryptSnapshot(code, this.passphrase());
       if (!confirm(`Replace this board with “${snapshot.settings?.boardName ?? 'Our week'}” (${snapshot.events.length} plans)?`)) return;

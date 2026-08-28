@@ -24,11 +24,11 @@ test('creates a plan, persists it, and keeps the page free of serious accessibil
 
 test('dialog closes with Escape and returns focus', async ({ page }) => {
   await page.goto('/');
-  const trigger = page.getByRole('button', { name: 'Move / share' });
+  const trigger = page.getByRole('button', { name: 'Share or export board' });
   await trigger.click();
-  await expect(page.getByRole('dialog', { name: 'Move or share a copy' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Share or export a copy' })).toBeVisible();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog', { name: 'Move or share a copy' })).not.toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Share or export a copy' })).not.toBeVisible();
   await expect(trigger).toBeFocused();
 });
 
@@ -71,7 +71,16 @@ test('@claim:license-restore @regression:checkout-contract accepts and verifies 
 
   await expect(page).toHaveURL(/\/$/);
   await expect.poll(() => page.evaluate(() => localStorage.getItem('sb_license:family-weekboard'))).toBe(returnedLicense);
-  await expect(page.getByRole('button', { name: 'Supporter ✓' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Manage supporter pack' })).toBeVisible();
+});
+
+test('@regression:checkout-offline-feedback keeps a failed checkout in context', async ({ page, context }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  await context.setOffline(true);
+  await page.getByRole('link', { name: 'Buy supporter pack' }).click();
+  await expect(page.locator('#licenseStatus')).toHaveText('Checkout needs an internet connection. Reconnect, then try again.');
+  await context.setOffline(false);
 });
 
 test('reloads the installed app while offline', async ({ page, context }) => {
@@ -178,7 +187,7 @@ test.describe('calendar integrity regressions', () => {
   test('@regression:ics-all-day-default keeps an imported spring-forward date to one day', async ({ page }) => {
     await page.clock.install({ time: new Date('2027-03-14T12:00:00-04:00') });
     await page.goto('/');
-    await page.getByRole('button', { name: 'Move / share' }).click();
+    await page.getByRole('button', { name: 'Share or export board' }).click();
     await page.locator('#importIcs').setInputFiles({
       name: 'spring.ics', mimeType: 'text/calendar',
       buffer: Buffer.from('BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:Spring holiday\r\nDTSTART;VALUE=DATE:20270314\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n')
@@ -192,7 +201,7 @@ test.describe('calendar integrity regressions', () => {
 test('@regression:ics-timed-until excludes a timed occurrence after the imported UTC limit', async ({ page }) => {
   await page.clock.install({ time: new Date('2026-08-24T12:00:00Z') });
   await page.goto('/');
-  await page.getByRole('button', { name: 'Move / share' }).click();
+  await page.getByRole('button', { name: 'Share or export board' }).click();
   await page.locator('#importIcs').setInputFiles({
     name: 'until.ics', mimeType: 'text/calendar',
     buffer: Buffer.from('BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:Evening task\r\nDTSTART:20260824T180000Z\r\nDTEND:20260824T183000Z\r\nRRULE:FREQ=DAILY;UNTIL=20260826T120000Z\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n')
@@ -235,7 +244,7 @@ test('@regression:route-metadata gives every route complete sharing metadata and
 
 test('@regression:person-whitespace explains why a person was not added', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'People' }).click();
+  await page.getByRole('button', { name: 'Edit people' }).click();
   await page.getByLabel('Name', { exact: true }).fill('   ');
   await page.getByRole('button', { name: 'Add person' }).click();
   await expect(page.locator('#peopleError')).toHaveText('Give this person a name, not only spaces.');
@@ -261,10 +270,45 @@ test('mobile legal pages have named links and 44px controls', async ({ page }, t
     page.getByRole('button', { name: 'Support Weekboard' }),
     page.getByRole('link', { name: 'Privacy' }),
     page.getByRole('link', { name: 'Terms' }),
-    page.getByRole('button', { name: 'About' })
+    page.getByRole('button', { name: 'Read about Weekboard' })
   ]) {
     const box = await control.boundingBox();
     expect(box?.width).toBeGreaterThanOrEqual(44);
     expect(box?.height).toBeGreaterThanOrEqual(44);
   }
+});
+
+test('@regression:mobile-dialog-targets gives every visible control a 44px target', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'mobile layout only');
+  await page.goto('/');
+  const openers = [
+    page.getByRole('button', { name: 'Add plan' }),
+    page.getByRole('button', { name: 'Edit people' }),
+    page.getByRole('button', { name: 'Share or export board' }),
+    page.getByRole('button', { name: 'Support Weekboard' }),
+    page.getByRole('button', { name: 'Read about Weekboard' })
+  ];
+  for (const opener of openers) {
+    await opener.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    const controls = dialog.locator('button:visible, a:visible, input:visible, select:visible, textarea:visible');
+    for (const control of await controls.all()) {
+      const box = await control.boundingBox();
+      expect(box?.width, await control.getAttribute('aria-label') ?? await control.textContent() ?? 'control').toBeGreaterThanOrEqual(44);
+      expect(box?.height, await control.getAttribute('aria-label') ?? await control.textContent() ?? 'control').toBeGreaterThanOrEqual(44);
+    }
+    await page.keyboard.press('Escape');
+  }
+});
+
+test('@regression:document-routes focus and announce the destination heading', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'the compact header intentionally omits navigation links');
+  await page.goto('/');
+  await page.getByLabel('Main navigation').getByRole('link', { name: 'Privacy' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+  await expect(page.locator('#routeAnnouncement')).toContainText('Privacy — Weekboard');
+  await page.goBack();
+  await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+  await expect(page.locator('#routeAnnouncement')).toContainText('Weekboard — plan your family week');
 });

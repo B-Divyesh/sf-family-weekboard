@@ -9,7 +9,7 @@ test('@claim:demo-sandbox keeps sample changes separate from the real board', as
   await expect(page.getByRole('button', { name: /Edit Real family plan/ })).toBeVisible();
 
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
-  await expect(page).toHaveURL(/\/demo\/$/);
+  await expect(page).toHaveURL(/\?demo=1$/);
   await expect(page.getByLabel('Demo mode')).toContainText('nothing is saved');
   await expect(page.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
   await expect(page.getByRole('button', { name: /Edit Real family plan/ })).toHaveCount(0);
@@ -81,7 +81,7 @@ test('@claim:ics-export downloads a standard calendar and round-trips final recu
   await page.getByLabel('Repeats').selectOption('daily');
   await page.getByLabel('Repeat until').fill('2026-08-26');
   await page.getByRole('button', { name: 'Save plan' }).click();
-  await page.getByRole('button', { name: 'Move / share' }).click();
+  await page.getByRole('button', { name: 'Share or export board' }).click();
   const download = await Promise.all([
     page.waitForEvent('download'),
     page.getByRole('button', { name: 'Export ICS' }).click()
@@ -105,7 +105,7 @@ test('@claim:ics-export downloads a standard calendar and round-trips final recu
   const receiver = await receiverContext.newPage();
   await receiver.clock.install({ time: new Date('2026-08-24T12:00:00-04:00') });
   await receiver.goto('/');
-  await receiver.getByRole('button', { name: 'Move / share' }).click();
+  await receiver.getByRole('button', { name: 'Share or export board' }).click();
   await receiver.locator('#importIcs').setInputFiles({ name: 'weekboard.ics', mimeType: 'text/calendar', buffer: Buffer.from(text) });
   // On phones only the selected day is visible, so inspect the board's three
   // rendered recurrence cards rather than its visible accessibility tree.
@@ -128,7 +128,7 @@ test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ 
     };
   });
   await page.goto('/demo/');
-  await page.getByRole('button', { name: 'Move / share' }).click();
+  await page.getByRole('button', { name: 'Share or export board' }).click();
   await page.getByLabel(/Passphrase/).fill('sample secret');
   const download = await Promise.all([
     page.waitForEvent('download'),
@@ -141,15 +141,15 @@ test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ 
   expect(code).not.toContain('Dentist');
   expect(code).not.toContain('Asha');
   expect(await page.evaluate(() => sessionStorage.getItem('weekboard-encryption-algorithm'))).toBe('AES-GCM');
-  await page.getByRole('button', { name: 'Make QR handoff' }).click();
-  await expect(page.getByRole('img', { name: 'Encrypted Weekboard handoff QR code' })).toBeVisible();
-  await page.getByRole('button', { name: 'Close move and share' }).click();
+  await page.getByRole('button', { name: 'Make QR copy' }).click();
+  await expect(page.getByRole('img', { name: 'Encrypted Weekboard copy QR code' })).toBeVisible();
+  await page.getByRole('button', { name: 'Close sharing and export' }).click();
   await page.getByRole('button', { name: 'Add plan' }).click();
   await page.getByLabel('What’s happening?').fill('Mutation to replace');
   await page.getByRole('button', { name: 'Save plan' }).click();
-  await page.getByRole('button', { name: 'Move / share' }).click();
+  await page.getByRole('button', { name: 'Share or export board' }).click();
   await page.getByLabel(/Passphrase/).fill('sample secret');
-  await page.getByLabel('Or paste a handoff code').fill(code);
+  await page.getByLabel('Or paste a copy code').fill(code);
   page.once('dialog', async (dialog) => {
     expect(dialog.message()).toContain('Replace this board with “Patel family week” (4 plans)?');
     await dialog.accept();
@@ -176,15 +176,38 @@ test('@claim:paid-checkout displays ₹499 once and starts the hosted checkout',
   await page.getByRole('button', { name: 'See supporter pack' }).click();
   await expect(page.locator('.price')).toHaveText(/₹499\s+one time/);
   await expect(page.getByRole('listitem').filter({ hasText: 'No subscription' })).toBeVisible();
-  const response = await request.get('https://api.sociobot.in/api/v1/products/family-weekboard/checkout', { maxRedirects: 0 });
-  expect(response.status()).toBe(303);
-  expect(response.headers().location).toMatch(/^https:\/\/checkout\.dodopayments\.com\//);
+  // A cold request used to fail intermittently. Require repeated redirects,
+  // not a lucky single response, before accepting the hosted purchase claim.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const response = await request.get('https://api.sociobot.in/api/v1/products/family-weekboard/checkout', { maxRedirects: 0 });
+    expect(response.status()).toBe(303);
+    expect(response.headers().location).toMatch(/^https:\/\/checkout\.dodopayments\.com\//);
+  }
+});
+
+test('@claim:free-core keeps planning, printing, and both exports available without a license', async ({ page }) => {
+  await page.addInitScript(() => { window.print = () => sessionStorage.setItem('weekboard-print-opened', 'yes'); });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Add plan' }).click();
+  await page.getByLabel('What’s happening?').fill('Free family plan');
+  await page.getByRole('button', { name: 'Save plan' }).click();
+  await expect(page.getByRole('button', { name: /Edit Free family plan/ })).toBeVisible();
+  await page.getByRole('button', { name: 'Print week' }).click();
+  expect(await page.evaluate(() => sessionStorage.getItem('weekboard-print-opened'))).toBe('yes');
+  await page.getByRole('button', { name: 'Share or export board' }).click();
+  const ics = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export ICS' }).click();
+  expect((await ics).suggestedFilename()).toMatch(/\.ics$/);
+  await page.getByLabel(/Passphrase/).fill('free export passphrase');
+  const encrypted = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download encrypted copy' }).click();
+  expect((await encrypted).suggestedFilename()).toMatch(/\.weekboard$/);
 });
 
 test('@claim:ics-import imports a standard calendar plan into the board', async ({ page }) => {
   await page.clock.install({ time: new Date('2026-08-24T12:00:00Z') });
   await page.goto('/demo/');
-  await page.getByRole('button', { name: 'Move / share' }).click();
+  await page.getByRole('button', { name: 'Share or export board' }).click();
   await page.locator('#importIcs').setInputFiles({
     name: 'family.ics', mimeType: 'text/calendar',
     buffer: Buffer.from('BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nUID:import-claim\r\nSUMMARY:Imported school meeting\r\nDTSTART:20260825T130000Z\r\nDTEND:20260825T140000Z\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n')
@@ -241,7 +264,7 @@ test('@claim:responsive-agenda shows seven desktop days and one phone day', asyn
 test('@claim:print-board opens printing with all seven days laid out', async ({ page }) => {
   await page.addInitScript(() => { window.print = () => sessionStorage.setItem('weekboard-print-opened', 'yes'); });
   await page.goto('/demo/');
-  await page.getByRole('button', { name: 'Print' }).click();
+  await page.getByRole('button', { name: 'Print week' }).click();
   expect(await page.evaluate(() => sessionStorage.getItem('weekboard-print-opened'))).toBe('yes');
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('.day-column:visible')).toHaveCount(7);
@@ -269,9 +292,9 @@ test('@claim:supporter-entitlements enables a custom name, extra colours, and mo
   }));
   await page.addInitScript((license) => localStorage.setItem('sb_license:family-weekboard', license), token);
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Supporter ✓' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Manage supporter pack' })).toBeVisible();
   for (const name of ['Asha', 'Ravi', 'Kids', 'Grandma']) {
-    await page.getByRole('button', { name: 'People', exact: true }).click();
+    await page.getByRole('button', { name: 'Edit people', exact: true }).click();
     await page.getByLabel('Name', { exact: true }).fill(name);
     if (name === 'Grandma') {
       const colour = page.locator('select[name="personColor"]');
@@ -280,7 +303,7 @@ test('@claim:supporter-entitlements enables a custom name, extra colours, and mo
     }
     await page.getByRole('button', { name: 'Add person' }).click();
   }
-  await page.getByRole('button', { name: 'People', exact: true }).click();
+  await page.getByRole('button', { name: 'Edit people', exact: true }).click();
   await expect(page.locator('.people-list li')).toHaveCount(5);
   await page.getByLabel('Board name').fill('The Rao board');
   await page.getByRole('button', { name: 'Save name' }).click();
@@ -298,6 +321,6 @@ test('@claim:license-revocation locks supporter extras after a revoked verdict',
   }));
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Support Weekboard' })).toBeVisible();
-  await page.getByRole('button', { name: 'People' }).click();
+  await page.getByRole('button', { name: 'Edit people' }).click();
   await expect(page.getByLabel('Board name')).toBeDisabled();
 });

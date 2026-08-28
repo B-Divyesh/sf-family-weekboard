@@ -102,7 +102,7 @@ h3 { font-size: 1rem; }
 .primary-actions { max-width: 440px; justify-content: flex-end; }
 .primary-actions small { flex-basis: 100%; color: var(--muted); text-align: right; }
 
-.button, .icon-button { min-height: 44px; border: 2px solid var(--line); border-radius: 2px; background: var(--paper); font-weight: 700; transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease; }
+.button, .icon-button { min-height: 45px; border: 2px solid var(--line); border-radius: 2px; background: var(--paper); font-weight: 700; transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 15px; color: var(--ink); text-decoration: none; box-shadow: 3px 3px 0 var(--shadow); }
 .button:hover, .icon-button:hover { background: var(--paper-2); }
 .button:active, .icon-button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
@@ -113,7 +113,7 @@ h3 { font-size: 1rem; }
 .button.text-button { min-height: 44px; padding: 6px 8px; background: transparent; box-shadow: none; border-color: transparent; text-decoration: underline; text-underline-offset: 4px; }
 .button.compact { min-height: 44px; padding: 7px 10px; font-size: 14px; }
 .button.center { width: fit-content; margin-inline: auto; }
-.icon-button { width: 44px; padding: 0; display: inline-grid; place-items: center; font-size: 22px; box-shadow: 2px 2px 0 var(--shadow); }
+.icon-button { width: 45px; min-width: 45px; height: 45px; padding: 0; display: inline-grid; place-items: center; font-size: 22px; box-shadow: 2px 2px 0 var(--shadow); }
 .link-button { min-width: 44px; min-height: 44px; border: 0; padding: 8px 0; background: transparent; color: var(--electric); text-decoration: underline; text-underline-offset: 3px; }
 
 .board-shell { border: 2px solid var(--line); background: var(--paper); box-shadow: 5px 5px 0 var(--shadow); }
@@ -172,11 +172,11 @@ dialog[open] { animation: dialog-in 180ms ease-out; }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
 .form-grid .full { grid-column: 1 / -1; }
 label { display: flex; flex-direction: column; gap: 5px; font-weight: 700; }
-input, select, textarea { width: 100%; min-height: 44px; padding: 8px 10px; border: 2px solid var(--line); border-radius: 2px; background: var(--paper); }
+input, select, textarea { width: 100%; min-height: 45px; padding: 8px 10px; border: 2px solid var(--line); border-radius: 2px; background: var(--paper); }
 textarea { resize: vertical; }
 input:disabled { opacity: .6; background: var(--paper-2); }
-.check-label { min-height: 44px; flex-direction: row; align-items: center; }
-.check-label input { width: 24px; min-height: 24px; accent-color: var(--electric); }
+.check-label { min-height: 45px; flex-direction: row; align-items: center; }
+.check-label input { width: 45px; height: 45px; min-height: 45px; accent-color: var(--electric); }
 .hint { color: var(--muted); font-size: 12px; font-weight: 400; }
 .form-error { min-height: 24px; margin: 12px 0 0; color: var(--danger); font-weight: 700; }
 .dialog-actions { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 10px; margin-top: 16px; }
@@ -202,6 +202,9 @@ input:disabled { opacity: .6; background: var(--paper-2); }
 .supporter-active { display: flex; flex-direction: column; gap: 3px; margin-bottom: 20px; padding: 14px; border: 2px solid var(--ok); }
 #licenseForm { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 10px; margin-top: 24px; }
 .fine-print { margin: 16px 0 0; color: var(--muted); font-size: 13px; }
+/* Links embedded in prose remain readable links while still meeting the phone
+   target baseline. Their line box reserves enough room to avoid overlap. */
+.fine-print a, .legal-page a:not(.button) { display: inline-flex; align-items: center; min-width: 45px; min-height: 45px; }
 .legal-page { width: min(760px, 100%); margin: 0 auto; padding-top: clamp(48px, 8vw, 96px); padding-bottom: 80px; }
 .legal-page h1 { margin-bottom: 18px; }
 .legal-page .lede { margin-bottom: 48px; font-size: 1.1rem; }

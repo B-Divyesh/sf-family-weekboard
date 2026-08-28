@@ -1,6 +1,7 @@
 {
   "slug": "family-weekboard",
   "title": "Weekboard",
+  "summary": "Plan a family week without a shared cloud account.",
   "territory": "utilities",
   "user": "Cross-platform families who need a simple shared weekly view without committing their household schedule to Google, Apple, or a new subscription account.",
   "current_workaround": "Google Calendar, Apple Family Sharing, paper calendars, or testing/self-hosting several CalDAV products.",

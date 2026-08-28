@@ -15,10 +15,17 @@
   },
   {
     "id": "local-privacy",
-    "claim": "The free planner stores the schedule on-device and sends no schedule, analytics, or tracking request away.",
+    "claim": "The free planner needs no account, stores the schedule on-device, and sends no schedule, analytics, or tracking request away.",
     "where": "first screen, about dialog, privacy page, README",
     "test": "npx playwright test --project=chromium --grep '@claim:local-privacy'",
     "sandbox": "fresh /demo context with full request capture; add and reload a plan; assert persistence, no account UI, and zero cross-origin requests"
+  },
+  {
+    "id": "free-core",
+    "claim": "Adding plans, printing, ICS export, and encrypted export are free.",
+    "where": "first screen, supporter section, supporter dialog, terms",
+    "test": "npx playwright test --project=chromium --grep '@claim:free-core'",
+    "sandbox": "fresh unlicensed board; add a plan, invoke print, and download both ICS and encrypted exports"
   },
   {
     "id": "ics-export",
