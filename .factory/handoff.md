@@ -29,9 +29,10 @@ Adversarial findings source: `3c0edcda51177c9973bdd3e4672e822333582464`.
 - `npm test` — pass: 22 tests.
 - `npm run build` — pass; `dist/index.html` exists. Main JavaScript is
   71,459 bytes raw / 24.24 kB gzip; initial JS stays below the 200 kB budget.
-- Every exact command in `.factory/claims.json` was invoked separately from a
-  fresh browser context — 17/17 pass. The paid checkout test made three cold
-  requests, each a 303 to the hosted Dodo checkout.
+- All 17 claim scenarios ran in the clean-clone `npm run test:e2e` pass, and
+  every exact command in `.factory/claims.json` was also invoked separately
+  from a fresh browser context — 17/17 pass. The paid checkout test made three
+  cold requests, each a 303 to the hosted Dodo checkout.
 - `npm run test:e2e` — pass: 70 passed, 4 expected project-specific skips.
   This includes demo isolation, offline reload, no cross-origin demo traffic,
   real-board persistence, all historical date/ICS/license regressions,
