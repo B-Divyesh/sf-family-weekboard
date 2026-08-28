@@ -1,6 +1,7 @@
 # Weekboard polish 1 handoff — PASS locally
 
-Repair commit: pending. Base reviewed: `772cdae24fc996d47ee840dbbf582d68769a21ad`.
+Repair commit: `189b515467e8ca45d69eac5ec2476bfdd06a5db9`. Base reviewed:
+`772cdae24fc996d47ee840dbbf582d68769a21ad`.
 Adversarial findings source: `3c0edcda51177c9973bdd3e4672e822333582464`.
 
 ## Delivered
