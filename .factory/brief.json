@@ -1,0 +1,14 @@
+{
+  "slug": "family-weekboard",
+  "title": "Weekboard",
+  "territory": "utilities",
+  "user": "Cross-platform families who need a simple shared weekly view without committing their household schedule to Google, Apple, or a new subscription account.",
+  "current_workaround": "Google Calendar, Apple Family Sharing, paper calendars, or testing/self-hosting several CalDAV products.",
+  "incumbents_and_gap": "Existing calendars solve storage, but not a tiny household-first weekly board with no account and a clean local export/import handoff.",
+  "smallest_useful_product": "An offline PWA weekly board with people/lane colors, recurring events, printable view, and standard ICS import/export; sharing is an explicit encrypted file/QR handoff.",
+  "success_measure": "In a four-week pilot, 70% of households publish or exchange an updated ICS board weekly and report fewer than one missed shared commitment per household per month.",
+  "artifact_class": "pwa-offline",
+  "monetization": "one-time",
+  "constraints": "Use standard ICS without silently sending event data; document that file/QR exchange is not real-time sync; handle timezone and recurrence rules carefully.",
+  "non_goals": ["email invitations", "cloud sync", "chat", "contacts", "CalDAV server"]
+}

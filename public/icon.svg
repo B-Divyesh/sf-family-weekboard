@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Weekboard calendar W">
+  <rect width="512" height="512" rx="72" fill="#18242e"/>
+  <path fill="#57d7e8" d="M72 112h368v320H72z"/>
+  <path fill="#fffdf3" d="M96 152h320v248H96z"/>
+  <path fill="#c85812" d="M128 72h48v104h-48zm208 0h48v104h-48z"/>
+  <path fill="#18242e" d="M120 216h48l24 104 40-104h48l40 104 24-104h48l-48 144h-48l-40-88-40 88h-48z"/>
+</svg>
