@@ -1,4 +1,24 @@
-# Weekboard polish 2 handoff — PASS
+# Weekboard review 3 handoff — FAIL
+
+## Review-3 addendum
+
+No product code was modified in this review. The review report is
+`.factory/review-3.md`.
+
+- Fresh clone: `/tmp/weekboard-review3.cYXVr5`; `npm ci` passed.
+- Every one of the 18 exact claim commands in `.factory/claims.json` passed.
+- `npm test` passed (22 tests), `npm run build` passed and emitted `dist/`,
+  and `npm run test:e2e` passed (80 expected outcomes; intentional responsive
+  skips only).
+- Live cold checks covered 390px and desktop landing pages, direct demo/reset,
+  route metadata, history focus, headers, 404, and link crawl. `verify-url.sh`
+  passed against the live query-demo URL.
+
+**Remaining work:** F-3-1 is a false, unlisted export promise. The ICS
+implementation writes the person's name but not their colour. Implement and
+test a colour note with a matching claim, or rewrite the copy to the actually
+exported person name and test that narrower claim. Re-run the declared claims
+after the repair.
 
 The round-2 repair is deployed at
 <https://family-weekboard.sociobot.in>. Product repair commit:
@@ -71,5 +91,7 @@ Open `http://127.0.0.1:4173/?demo=1` for the isolated sample board.
 
 ## Known gaps
 
-None. The product remains a local-first static PWA; file and QR copies are
-deliberately copies, not live sync.
+F-3-1 remains until the exported person-colour-note promise is implemented,
+claimed, and tested (or rewritten to the exported person name). The product
+remains a local-first static PWA; file and QR copies are deliberately copies,
+not live sync.
