@@ -28,12 +28,11 @@ unlocks the supporter state. The hosted endpoint is mocked only inside this
 client contract test; the live smoke test above remains mandatory after the
 billing owner registers the product.
 
-The non-blocking manifest MIME observation was also repaired in the static
-deployment configuration: `/manifest.webmanifest` now declares
-`Content-Type: application/manifest+json` and retains `Cache-Control:
-no-cache`. A unit regression parses the emitted configuration and confirms the
-document continues to declare the same manifest; the generated service worker
-continues to precache it.
+The non-blocking manifest MIME observation was also repaired: the document and
+service worker now use `/manifest.json`, which Azure Static Web Apps serves as
+`application/json`, and it retains `Cache-Control: no-cache`. A unit regression
+parses the emitted configuration and confirms the document continues to declare
+that manifest; the generated service worker continues to precache it.
 
 Local clean-install evidence for this repair:
 
@@ -44,7 +43,7 @@ Local clean-install evidence for this repair:
 | `npm test` | PASS — 4 files, 14 tests |
 | `./node_modules/.bin/tsc --noEmit` | PASS |
 | `npm run build` | PASS — `dist/index.html` exists |
-| `npm run test:e2e` | PASS — 16 passed across desktop/390 px, 2 expected responsive skips |
+| `npm run test:e2e` | PASS — 18 passed across desktop/390 px, 2 expected responsive skips |
 
 The browser suite covers keyboard dialog Escape/focus return, axe serious and
 critical violations, 390 px layout/targets/legal pages, offline reload under

@@ -19,7 +19,7 @@ function serviceWorkerBuildPlugin() {
       const dist = outDir;
       const template = readFileSync(resolve(__dirname, 'public/sw.js'), 'utf8');
       const precache = [
-        '/', '/index.html', '/offline.html', '/manifest.webmanifest',
+        '/', '/index.html', '/offline.html', '/manifest.json',
         '/icon.svg', '/icon-192.png', '/icon-512.png', '/privacy/', '/privacy/index.html', '/terms/', '/terms/index.html',
         ...filesIn(join(dist, 'assets')).map((file) => `/${relative(dist, file).replaceAll('\\', '/')}`)
       ].sort();

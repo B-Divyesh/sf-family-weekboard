@@ -13,13 +13,13 @@ function readRelease(dist: string): { cache: string; assets: string[] } {
 }
 
 describe('production PWA build', () => {
-  it('serves a declared manifest with its explicit interoperability MIME policy', () => {
+  it('serves a declared manifest through the host JSON MIME mapping', () => {
     const config = JSON.parse(readFileSync('public/staticwebapp.config.json', 'utf8')) as {
       routes: Array<{ route: string; headers?: Record<string, string> }>;
     };
-    const manifestRoute = config.routes.find((route) => route.route === '/manifest.webmanifest');
-    expect(manifestRoute?.headers?.['Content-Type']).toBe('application/manifest+json');
-    expect(readFileSync('index.html', 'utf8')).toContain('href="/manifest.webmanifest"');
+    const manifestRoute = config.routes.find((route) => route.route === '/manifest.json');
+    expect(manifestRoute?.headers?.['Cache-Control']).toBe('no-cache');
+    expect(readFileSync('index.html', 'utf8')).toContain('href="/manifest.json"');
   });
 
   it('revisions the worker and precache URLs whenever application code changes', () => {

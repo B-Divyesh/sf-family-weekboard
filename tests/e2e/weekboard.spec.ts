@@ -32,6 +32,12 @@ test('dialog closes with Escape and returns focus', async ({ page }) => {
   await expect(trigger).toBeFocused();
 });
 
+test('@regression:manifest-mime serves the install manifest as JSON', async ({ page }) => {
+  const response = await page.goto('/manifest.json');
+  expect(response?.headers()['content-type']).toContain('application/json');
+  await expect(page.locator('body')).toContainText('Weekboard');
+});
+
 test('@regression:checkout-contract starts the required hosted checkout and accepts its returned license', async ({ page, baseURL }) => {
   const checkout = 'https://api.sociobot.in/api/v1/products/family-weekboard/checkout';
   const returnedLicense = 'returned-license-from-hosted-checkout';
