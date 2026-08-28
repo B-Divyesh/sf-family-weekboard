@@ -1,29 +1,28 @@
-# Weekboard verification handoff — FAIL
+# Weekboard verification handoff — **FAIL**
 
-## Current independent disposition
+## Current independent disposition (verification-3)
 
 Candidate `6de4842db3295c205206030e8184e359309950d6` was independently tested
 from a clean checkout and verified live at
 <https://family-weekboard.sociobot.in> on 2026-08-28 UTC. **FAIL — do not
-promote.**
+promote.** Full fresh evidence is in [`.factory/verification-3.md`](verification-3.md).
 
-The static candidate is buildable, byte-identical to live, accessible at
-desktop and 390 px, private by default, and works offline after service-worker
-control. See [`.factory/verification-2.md`](verification-2.md) for exact
-commands, hashes, accessibility/PWA/browser evidence, and test coverage.
+The deployable application is buildable, byte-identical to live, accessible at
+desktop and 390 px, private by default, and reloads offline under service-worker
+control. The previous calendar, mobile accessibility, cache-update, and policy
+defects did not reproduce. A fresh 40-request invalid-token burst did rate
+limit on request 30 with `429 Retry-After: 3`.
 
-Two release-blocking hosted API defects remain:
+The remaining release blocker is the advertised ₹499 supporter purchase:
+`GET https://api.sociobot.in/api/v1/products/family-weekboard/checkout` returns
+HTTP 404 (`enabled factory product`). The billing/API owner must enable or
+register the production product and smoke-test hosted checkout plus the
+return-license path before re-verification. No product code was changed during
+this QA pass.
 
-1. `GET https://api.sociobot.in/api/v1/products/family-weekboard/checkout`
-   returns HTTP 404 (`enabled factory product`), so the advertised ₹499
-   supporter purchase is unavailable.
-2. A 150-request rapid invalid-token burst to the required product verify
-   endpoint returned 150 HTTP 200 responses; no 429 or `Retry-After` was
-   observed. The work order requires rate limiting for product-unlock calls.
-
-The billing/API owner must enable/register the production product and add
-rate limiting with `Retry-After`, then arrange a re-verification. No product
-code was changed during this QA pass.
+Non-blocking deployment observation: the manifest is served as
+`application/octet-stream`; Chromium still parsed it with zero
+manifest/installability errors, but a manifest/JSON MIME type is recommended.
 
 ---
 
@@ -143,3 +142,46 @@ After deployment, verify the response policies with `curl -I` for `/`,
 `/assets/<hashed-file>`, and `/sw.js`; confirm the generated cache name in
 `/sw.js`; then repeat the checkout smoke test above after the billing product
 has been registered.
+
+## Independent verification-3 result (2026-08-28 UTC): **FAIL**
+
+- Candidate tested: `6de4842db3295c205206030e8184e359309950d6`
+- Deployable application commit: `cfc55e77d169c43e99d555fb815335825be43450`
+- Live URL: <https://family-weekboard.sociobot.in>
+- Environment: Node `v22.23.2`, npm `10.9.8`, Playwright `1.58.2`, Chromium
+  `145.0.7632.6`, Lighthouse `12.8.2`.
+
+Fresh clean-checkout gates all passed: `npm ci --include=dev`, `npm test`
+(13/13), `tsc --noEmit`, `npm audit --omit=dev`, exact `npm run build`, and
+`npm run test:e2e` (14 passed, 2 expected responsive-project skips). There is
+no lint script in `package.json`. The live JS, CSS, worker, and HTML match the
+candidate build byte-for-byte. Live desktop and 390 px mobile functional,
+keyboard, axe, privacy, offline, response-policy, caching, and performance
+checks passed. The live PWA reloads offline under service-worker control;
+the build regression test confirms every app change produces new hashed asset
+URLs and a new worker cache revision.
+
+### Release-blocking defect
+
+- **High — supporter checkout is broken.** A fresh request on 2026-08-28 to
+  `GET https://api.sociobot.in/api/v1/products/family-weekboard/checkout`
+  returned `404 {"error":"enabled factory product","status":404}`. The
+  live UI advertises the ₹499 one-time supporter pack, so a customer cannot
+  buy it. The invalid-license verify endpoint works and rate limits correctly,
+  but it cannot substitute for checkout. This is a required external billing
+  registration/deployment action, not a source-code edit.
+
+### Non-blocking deployment observation
+
+- **Low — manifest MIME type.** `/manifest.webmanifest` is served as
+  `application/octet-stream`, not a manifest/JSON MIME type. Chromium parsed
+  it with zero manifest/installability errors, so this did not block the PWA
+  checks; serving `application/manifest+json` would be safer for wider client
+  compatibility.
+
+### What remains
+
+Register/enable the `family-weekboard` Sociobot one-time product with return
+URL `https://family-weekboard.sociobot.in/`, verify that checkout redirects to
+hosted payment, and repeat this independent verification. No product code was
+changed during verification.
