@@ -1,6 +1,6 @@
 # Weekboard copy audit
 
-Audited 2026-08-28 for polish round 2. Counts treat hyphenated words as one.
+Audited 2026-08-28 for polish round 3. Counts treat hyphenated words as one.
 Every reviewed visitor sentence is 22 words or fewer. No banned marketing term
 appears in visitor copy.
 
@@ -20,6 +20,10 @@ The first screen states the job, audience, first action, offline boundary,
 privacy boundary, and free core functions without asking visitors to interpret
 the visual theme.
 
+The calendar-export note is a six-word, testable statement. The
+`ics-person-colour-notes` claim downloads the sample calendar file and checks
+every shipped person name and hexadecimal colour value.
+
 ## Demo, product, dialogs, and legal copy
 
 | Copy | Words |
@@ -34,6 +38,7 @@ the visual theme.
 | File and QR copies do not sync. | 7 |
 | Add options for a bigger household | 6 |
 | Export a calendar file. | 5 |
+| Person colours are included as notes. | 6 |
 | Copies do not sync. | 4 |
 | How Weekboard stores your schedule | 5 |
 | It stores your board in this browser and sends nothing unless you export it. | 14 |

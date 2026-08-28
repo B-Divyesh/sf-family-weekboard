@@ -1,97 +1,84 @@
-# Weekboard review 3 handoff — FAIL
+# Weekboard polish 3 handoff — complete
 
-## Review-3 addendum
-
-No product code was modified in this review. The review report is
-`.factory/review-3.md`.
-
-- Fresh clone: `/tmp/weekboard-review3.cYXVr5`; `npm ci` passed.
-- Every one of the 18 exact claim commands in `.factory/claims.json` passed.
-- `npm test` passed (22 tests), `npm run build` passed and emitted `dist/`,
-  and `npm run test:e2e` passed (80 expected outcomes; intentional responsive
-  skips only).
-- Live cold checks covered 390px and desktop landing pages, direct demo/reset,
-  route metadata, history focus, headers, 404, and link crawl. `verify-url.sh`
-  passed against the live query-demo URL.
-
-**Remaining work:** F-3-1 is a false, unlisted export promise. The ICS
-implementation writes the person's name but not their colour. Implement and
-test a colour note with a matching claim, or rewrite the copy to the actually
-exported person name and test that narrower claim. Re-run the declared claims
-after the repair.
-
-The round-2 repair is deployed at
-<https://family-weekboard.sociobot.in>. Product repair commit:
-`63e57e456845a68c5cd84a106fa19ba96c13dae3`.
-Azure Static Web Apps deployment ID:
-`f43458e0-15ed-4676-ba9b-89144e351e1a`.
+Weekboard is a local-first family weekly planner with an isolated sample board,
+calendar-file exchange, encrypted copies, printing, and an optional one-time
+supporter pack. This repair closes every finding in reviews 1–3.
 
 ## Delivered
 
-- Compact sample-first demo layout: `?demo=1` keeps its isolated IndexedDB
-  namespace, banner, Reset demo, and Start for real controls while placing a
-  selected-day sample card in the initial 390×844 viewport.
-- `copy-not-sync` claim and a two-browser transfer test. A later sender edit
-  does not appear on a receiver that opened an encrypted copy.
-- Hosted checkout contract test: three cold redirects are followed to the
-  Dodo session and assert INR 499, one-time/non-recurring billing. Unverified
-  refund-detail copy was removed.
-- Plain-language calendar-file copy, consistent “colour” spelling, result-led
-  controls, corrected README claims, and the verb-first catalog description.
-- Query-demo social metadata is internally consistent. All routes link a new
-  original 180×180 Apple touch icon; the service worker precaches it.
-- `.factory/polish-2.md` maps F-1-1 through F-1-29 and F-2-1 through F-2-11
-  to their exact repair and evidence.
+- Fixed F-3-1: calendar exports now include readable `Weekboard person` and
+  `Weekboard colour` notes. This is a deliberate note convention because
+  standard ICS has no portable person-colour property.
+- Added `ics-person-colour-notes` to `.factory/claims.json` and an observable
+  clean-demo download test. The test checks all shipped sample people and their
+  exact hexadecimal colours.
+- Retained all previous first-screen, isolated `?demo=1`, banner/reset,
+  routing, focus, legal, metadata, mobile, offline, privacy, and copy repairs.
+  The round-3 audit map is `.factory/polish-3.md`.
+- Updated the catalog sentence to the verb-first, 50-character “Plan a family
+  week without a shared cloud account.”
 
-## Verification
+## Exact verification
 
-- Fresh remote clone at `/tmp/weekboard-polish2.3GeEJM`, checked out at
-  `63e57e4`: `npm ci`, `npm test` (22/22), `npm run build`, then every exact
-  command in `.factory/claims.json`. All **18/18 claim commands passed**;
-  `test-results/.last-run.json` reports `passed` with no failed tests.
-- Final local gates: `npm run typecheck`, `npm test` (22/22), and
-  `npm run build` all passed. Build output is `dist/`; main JS is 72.08 kB raw
-  / 24.30 kB gzip, CSS 17.64 kB raw / 4.61 kB gzip, and the mobile image is
-  67.41 kB.
-- Full browser suite: `.factory/evidence/polish-2/e2e-full.json` records 75
-  expected passes, 5 intentional responsive skips, 0 unexpected failures.
-  This includes axe serious/critical checks, keyboard/dialog behavior, privacy
-  request capture, offline reload, PWA installability, focus, 404, and mobile
-  targets.
-- Local URL check: `/opt/fleet/lib/verify-url.sh
-  'http://127.0.0.1:4173/?demo=1'
-  .factory/evidence/polish-2/verify-url-local` passed (Demo title, `lang`, one
-  h1, main landmark, alt text, labels, and no console errors).
-- Live cold checks: `/opt/fleet/lib/verify-url.sh
-  'https://family-weekboard.sociobot.in/?demo=1'
-  .factory/evidence/polish-2/verify-url-live` passed in 605 ms with no console
-  errors. Live Playwright checks passed for 390px first-card visibility,
-  demo query metadata, `/demo/`, Privacy, Terms, 404, and history focus/
-  announcement. The live shell serves `icon-180.png` and
-  `main-B8R906Wz.js`.
-- Live Lighthouse mobile, stored in
-  `.factory/evidence/polish-2/lighthouse-live-mobile.json`: Performance 100,
-  Accessibility 100, Best Practices 100, SEO 100; FCP 1.1 s, LCP 1.1 s,
-  TBT 30 ms, CLS 0.
-- Visual evidence: `.factory/evidence/polish-2/demo-390.png` is the loaded
-  390px live Playwright capture; `.factory/evidence/polish-2/demo-1440.png`
-  is the local desktop capture.
+- Fresh clean clone: `/tmp/weekboard-polish3-clean.4ZrLde` at product commit
+  `e33dfe06b7e5940494ace3343a53f9c93fc641ac`; `npm ci` passed with zero audit
+  vulnerabilities.
+- Every exact command in `.factory/claims.json` passed separately under
+  `set -e`: **19/19** including `@claim:ics-person-colour-notes`. A static
+  tag audit also confirmed every declared `@claim:<id>` occurs exactly once.
+- `npm test` passed **22/22**. `npm run typecheck`, `npm run lint`, and
+  `npm run build` passed. The build emitted `dist/` with a 72.11 kB raw /
+  24.31 kB gzip main JS, 17.64 kB raw / 4.61 kB gzip CSS, and a 67.41 kB
+  mobile hero image.
+- `npm run test:e2e` passed **77** checks with **5 intentional responsive
+  skips** and no unexpected failure. It covers keyboard/dialog behavior,
+  Axe, phone layout, demo isolation, privacy requests, offline reload, PWA
+  installation, claims, metadata, legal routes, focus, and 404 behavior.
+- Local URL verification passed for `http://127.0.0.1:4173/?demo=1`; evidence:
+  `.factory/evidence/polish-3/verify-url-local/`. Playwright Axe reported zero
+  total violations at 390px. Local screenshots are
+  `.factory/evidence/polish-3/demo-390.png` and `demo-1440.png`.
+- Local mobile Lighthouse in
+  `.factory/evidence/polish-3/lighthouse-local-mobile.json`: Performance **99**,
+  Accessibility **100**, Best Practices **100**, SEO **100**; FCP 1.3 s,
+  LCP 1.7 s, TBT 90 ms, CLS 0.
 
-## Run it
+## Deployment and live verification
+
+- Product repair commit: `e33dfe06b7e5940494ace3343a53f9c93fc641ac`.
+- Azure Static Web Apps deployment: `009e1846-39bc-46b4-a607-d8fe8caea504`.
+  It deployed `/work/repo/dist` to the existing `sf-family-weekboard` app.
+- Cold live URL verification passed at
+  `https://family-weekboard.sociobot.in/?demo=1`; evidence:
+  `.factory/evidence/polish-3/verify-url-live/`. It found the Demo title,
+  `lang`, one h1, main landmark, image alt text, named controls, and no console
+  errors.
+- A separate cold live browser check recorded
+  `.factory/evidence/polish-3/live-checks.json`: the current
+  `main-D6Zy94Yg.js` asset, two visible 390px sample cards, banner/reset/exit,
+  all real routes and designed 404, canonical metadata, Privacy/Back focus and
+  announcement, and a downloaded ICS file with all three person-colour notes.
+  `live-demo-390.png` is the matching live screenshot. Live Playwright Axe
+  reported zero serious or critical violations.
+
+## Run locally
 
 ```sh
 npm ci
 npm test
+npm run typecheck
+npm run lint
 npm run build
 npm run test:e2e
 npm run preview
 ```
 
-Open `http://127.0.0.1:4173/?demo=1` for the isolated sample board.
+Open `http://127.0.0.1:4173/?demo=1` for the isolated sample. The real board
+uses `weekboard-local-v1`; the demo uses `demo:weekboard-local-v1`. Reset demo
+only reseeds the demo database; Start for real discards it.
 
 ## Known gaps
 
-F-3-1 remains until the exported person-colour-note promise is implemented,
-claimed, and tested (or rewritten to the exported person name). The product
-remains a local-first static PWA; file and QR copies are deliberately copies,
-not live sync.
+None. File and QR exchange deliberately create copies rather than real-time
+sync, which is a documented product boundary rather than a limitation left for
+later.
