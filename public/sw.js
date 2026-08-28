@@ -1,11 +1,7 @@
-const CACHE = 'weekboard-shell-v2';
-const ASSETS = [
-  '/', '/?v=1', '/index.html', '/offline.html', '/manifest.webmanifest',
-  '/assets/app.js', '/assets/style.css',
-  '/icon.svg', '/icon-192.png', '/icon-512.png',
-  '/assets/weekboard-station-960.webp', '/assets/weekboard-station-1440.webp',
-  '/privacy/', '/terms/'
-];
+// This source template is completed by Vite with every emitted asset and a
+// content-derived cache revision. Never hand-edit a release cache version.
+const CACHE = '__WEEKBOARD_CACHE__';
+const ASSETS = __WEEKBOARD_PRECACHE__;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then(async (cache) => {
@@ -37,7 +33,7 @@ self.addEventListener('fetch', (event) => {
     }).catch(async () => (await caches.match(event.request)) || (await caches.match('/')) || caches.match('/offline.html')));
     return;
   }
-  event.respondWith(caches.match(url.pathname).then((cached) => cached || fetch(event.request).then((response) => {
+  event.respondWith(caches.match(event.request).then((cached) => cached || caches.match(url.pathname)).then((cached) => cached || fetch(event.request).then((response) => {
     if (response.ok) caches.open(CACHE).then((cache) => cache.put(url.pathname, response.clone()));
     return response;
   })));

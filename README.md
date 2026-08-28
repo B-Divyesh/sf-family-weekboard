@@ -45,7 +45,9 @@ encrypted snapshot replaces the receiving board after a named confirmation.
 
 Deploy the contents of `dist/` as a static site with `index.html` at its root
 and SPA fallback to `/index.html` for unknown navigation requests. `/privacy/`
-and `/terms/` are emitted as real static routes. Do not add runtime CDN assets.
+and `/terms/` are emitted as real static routes. `staticwebapp.config.json`
+ships the CSP, frame/permission policy, no-cache worker rule, and immutable
+caching for Vite’s content-hashed assets. Do not add runtime CDN assets.
 
 The visual system and generated-art provenance are in
 [`.factory/design.md`](.factory/design.md). Build handoff and measured gates are

@@ -1,4 +1,6 @@
 import QRCode from 'qrcode';
+import heroDesktop from './assets/weekboard-station-1440.webp';
+import heroMobile from './assets/weekboard-station-960.webp';
 import { BoardStore } from './db';
 import { addDays, dateKey, eventDays, occurrencesInRange, startOfWeek, toLocalInput, type EventOccurrence } from './dates';
 import { decryptSnapshot, encryptSnapshot } from './crypto';
@@ -122,8 +124,8 @@ export class WeekboardApp {
           ${empty ? `
             <div class="empty-state">
               <picture>
-                <source media="(max-width: 700px)" srcset="/assets/weekboard-station-960.webp" />
-                <img src="/assets/weekboard-station-1440.webp" width="1440" height="960" alt="Pixel-art household planning console with seven calendar panels" decoding="async" fetchpriority="high" />
+                <source media="(max-width: 700px)" srcset="${heroMobile}" />
+                <img src="${heroDesktop}" width="1440" height="960" alt="Pixel-art household planning console with seven calendar panels" decoding="async" fetchpriority="high" />
               </picture>
               <div>
                 <p class="eyebrow">READY PLAYER HOUSEHOLD</p>
@@ -285,7 +287,9 @@ export class WeekboardApp {
     const event = id ? this.events.find((item) => item.id === id) : undefined;
     const start = event ? new Date(event.start) : new Date(`${day ?? this.selectedDay}T09:00:00`);
     let end = event ? new Date(event.end) : new Date(start.getTime() + 3_600_000);
-    if (event?.allDay) end = new Date(end.getTime() - 86_400_000);
+    // All-day end values are exclusive civil midnights. Calendar arithmetic,
+    // rather than milliseconds, keeps the editor correct on 23/25-hour days.
+    if (event?.allDay) end = addDays(end, -1);
     const dialog = this.root.querySelector<HTMLDialogElement>('#eventDialog')!;
     dialog.querySelector<HTMLElement>('#eventDialogTitle')!.textContent = event ? 'Edit plan' : 'Add a plan';
     (dialog.querySelector('#eventTitle') as HTMLInputElement).value = event?.title ?? '';
@@ -320,17 +324,27 @@ export class WeekboardApp {
     if (!form.reportValidity()) return;
     const data = new FormData(form);
     const allDay = data.get('allDay') === 'on';
-    const start = new Date(`${data.get('startDate')}T${allDay ? '00:00' : data.get('startTime')}:00`);
-    let end = new Date(`${data.get('endDate')}T${allDay ? '00:00' : data.get('endTime')}:00`);
+    const startDate = String(data.get('startDate'));
+    const endDate = String(data.get('endDate'));
+    const recurrence = String(data.get('recurrence')) as BoardEvent['recurrence'];
+    const recurrenceUntil = String(data.get('recurrenceUntil') || '') || undefined;
+    const title = String(data.get('title')).trim();
+    const start = new Date(`${startDate}T${allDay ? '00:00' : data.get('startTime')}:00`);
+    let end = new Date(`${endDate}T${allDay ? '00:00' : data.get('endTime')}:00`);
     if (allDay) end = addDays(end, 1);
     const error = this.root.querySelector<HTMLElement>('#eventError')!;
+    if (!title) { error.textContent = 'Give this plan a name, not only spaces.'; return; }
     if (end <= start) { error.textContent = 'The end must be after the start.'; return; }
+    if (recurrence !== 'none' && recurrenceUntil && recurrenceUntil < startDate) {
+      error.textContent = 'Repeat until must be the start date or a later date.';
+      return;
+    }
     const existing = this.events.find((item) => item.id === this.editingId);
     const event: BoardEvent = {
-      id: existing?.id ?? crypto.randomUUID(), title: String(data.get('title')).trim(), personId: String(data.get('personId')),
+      id: existing?.id ?? crypto.randomUUID(), title, personId: String(data.get('personId')),
       start: start.toISOString(), end: end.toISOString(), allDay,
       location: String(data.get('location')).trim(), notes: String(data.get('notes')).trim(),
-      recurrence: String(data.get('recurrence')) as BoardEvent['recurrence'], recurrenceUntil: String(data.get('recurrenceUntil') || '') || undefined,
+      recurrence, recurrenceUntil,
       updatedAt: new Date().toISOString()
     };
     try {

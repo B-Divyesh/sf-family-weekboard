@@ -2,7 +2,25 @@ import type { BoardEvent, BoardSettings, BoardSnapshot, Person } from './models'
 import { DEFAULT_SETTINGS, LANE_COLORS } from './models';
 
 const DB_NAME = 'weekboard-local-v1';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
+
+function localDateKey(value: string): string {
+  const date = new Date(value);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// A v1 board could contain a recurrence ending before it began. Keep its
+// initial plan visible (and therefore editable) instead of leaving a hidden
+// record stranded in IndexedDB.
+function recoverRecurrenceRange(event: BoardEvent): BoardEvent {
+  if (event.recurrence !== 'none' && event.recurrenceUntil && event.recurrenceUntil < localDateKey(event.start)) {
+    return { ...event, recurrenceUntil: localDateKey(event.start) };
+  }
+  return event;
+}
 
 function request<T>(value: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -21,11 +39,21 @@ function transactionDone(tx: IDBTransaction): Promise<void> {
 
 export async function openBoardDb(): Promise<IDBDatabase> {
   const open = indexedDB.open(DB_NAME, DB_VERSION);
-  open.onupgradeneeded = () => {
+  open.onupgradeneeded = (upgrade) => {
     const db = open.result;
     if (!db.objectStoreNames.contains('events')) db.createObjectStore('events', { keyPath: 'id' });
     if (!db.objectStoreNames.contains('people')) db.createObjectStore('people', { keyPath: 'id' });
     if (!db.objectStoreNames.contains('meta')) db.createObjectStore('meta');
+    if (open.transaction && (upgrade as IDBVersionChangeEvent).oldVersion < 2) {
+      const events = open.transaction.objectStore('events');
+      events.openCursor().onsuccess = (event) => {
+        const cursor = (event.target as IDBRequest<IDBCursorWithValue | null>).result;
+        if (!cursor) return;
+        const recovered = recoverRecurrenceRange(cursor.value as BoardEvent);
+        if (recovered !== cursor.value) cursor.update(recovered);
+        cursor.continue();
+      };
+    }
   };
   return request(open);
 }
@@ -57,7 +85,7 @@ export class BoardStore {
 
   async saveEvent(event: BoardEvent): Promise<void> {
     const tx = this.db.transaction('events', 'readwrite');
-    tx.objectStore('events').put(event);
+    tx.objectStore('events').put(recoverRecurrenceRange(event));
     await transactionDone(tx);
   }
 
@@ -100,7 +128,7 @@ export class BoardStore {
     tx.objectStore('people').clear();
     tx.objectStore('events').clear();
     snapshot.people.forEach((person) => tx.objectStore('people').put(person));
-    snapshot.events.forEach((event) => tx.objectStore('events').put(event));
+    snapshot.events.forEach((event) => tx.objectStore('events').put(recoverRecurrenceRange(event)));
     tx.objectStore('meta').put(snapshot.settings ?? DEFAULT_SETTINGS, 'settings');
     await transactionDone(tx);
   }
