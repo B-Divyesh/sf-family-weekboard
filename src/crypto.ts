@@ -39,17 +39,22 @@ export async function encryptSnapshot(snapshot: BoardSnapshot, passphrase: strin
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(passphrase, salt, ['encrypt']);
   const data = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoder.encode(JSON.stringify(snapshot)));
-  const payload: EncryptedPayload = {
-    format: 'weekboard-encrypted', version: 1,
-    salt: bytesToBase64(salt), iv: bytesToBase64(iv), data: bytesToBase64(new Uint8Array(data))
-  };
-  return `WB1.${bytesToBase64(encoder.encode(JSON.stringify(payload)))}`;
+  // One compact envelope keeps ordinary household boards within QR capacity.
+  // The reader below still accepts the original JSON-in-base64 WB1 envelope.
+  return `WB1.${bytesToBase64(salt)}.${bytesToBase64(iv)}.${bytesToBase64(new Uint8Array(data))}`;
 }
 
 export async function decryptSnapshot(code: string, passphrase: string): Promise<BoardSnapshot> {
   try {
-    const raw = code.trim().replace(/^WB1\./, '');
-    const payload = JSON.parse(decoder.decode(base64ToBytes(raw))) as EncryptedPayload;
+    const trimmed = code.trim();
+    const parts = trimmed.split('.');
+    let payload: EncryptedPayload;
+    if (parts.length === 4 && parts[0] === 'WB1') {
+      payload = { format: 'weekboard-encrypted', version: 1, salt: parts[1], iv: parts[2], data: parts[3] };
+    } else {
+      const raw = trimmed.replace(/^WB1\./, '');
+      payload = JSON.parse(decoder.decode(base64ToBytes(raw))) as EncryptedPayload;
+    }
     if (payload.format !== 'weekboard-encrypted' || payload.version !== 1) throw new Error();
     const salt = base64ToBytes(payload.salt);
     const iv = base64ToBytes(payload.iv);

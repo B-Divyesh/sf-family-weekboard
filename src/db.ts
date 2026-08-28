@@ -2,6 +2,7 @@ import type { BoardEvent, BoardSettings, BoardSnapshot, Person } from './models'
 import { DEFAULT_SETTINGS, LANE_COLORS } from './models';
 
 const DB_NAME = 'weekboard-local-v1';
+const DEMO_DB_NAME = 'demo:weekboard-local-v1';
 const DB_VERSION = 2;
 
 function localDateKey(value: string): string {
@@ -37,8 +38,8 @@ function transactionDone(tx: IDBTransaction): Promise<void> {
   });
 }
 
-export async function openBoardDb(): Promise<IDBDatabase> {
-  const open = indexedDB.open(DB_NAME, DB_VERSION);
+export async function openBoardDb(demo = false): Promise<IDBDatabase> {
+  const open = indexedDB.open(demo ? DEMO_DB_NAME : DB_NAME, DB_VERSION);
   open.onupgradeneeded = (upgrade) => {
     const db = open.result;
     if (!db.objectStoreNames.contains('events')) db.createObjectStore('events', { keyPath: 'id' });
@@ -61,11 +62,12 @@ export async function openBoardDb(): Promise<IDBDatabase> {
 export class BoardStore {
   constructor(private readonly db: IDBDatabase) {}
 
-  static async create(): Promise<BoardStore> {
-    const store = new BoardStore(await openBoardDb());
+  static async create(demo = false): Promise<BoardStore> {
+    const store = new BoardStore(await openBoardDb(demo));
     const people = await store.getPeople();
     if (!people.length) {
-      await store.savePerson({ id: crypto.randomUUID(), name: 'Everyone', color: LANE_COLORS[0], createdAt: new Date().toISOString() });
+      if (demo) await store.resetDemo();
+      else await store.savePerson({ id: crypto.randomUUID(), name: 'Everyone', color: LANE_COLORS[0], createdAt: new Date().toISOString() });
     }
     return store;
   }
@@ -131,5 +133,34 @@ export class BoardStore {
     snapshot.events.forEach((event) => tx.objectStore('events').put(recoverRecurrenceRange(event)));
     tx.objectStore('meta').put(snapshot.settings ?? DEFAULT_SETTINGS, 'settings');
     await transactionDone(tx);
+  }
+
+  async resetDemo(now = new Date()): Promise<void> {
+    const monday = new Date(now);
+    const weekday = (monday.getDay() + 6) % 7;
+    monday.setDate(monday.getDate() - weekday);
+    monday.setHours(0, 0, 0, 0);
+    const at = (day: number, hour: number, minute = 0) => {
+      const value = new Date(monday);
+      value.setDate(value.getDate() + day);
+      value.setHours(hour, minute, 0, 0);
+      return value.toISOString();
+    };
+    const createdAt = now.toISOString();
+    const people: Person[] = [
+      { id: 'demo-asha', name: 'Asha', color: LANE_COLORS[0], createdAt },
+      { id: 'demo-ravi', name: 'Ravi', color: LANE_COLORS[1], createdAt },
+      { id: 'demo-kids', name: 'Kids', color: LANE_COLORS[2], createdAt }
+    ];
+    const events: BoardEvent[] = [
+      { id: 'demo-school', title: 'School drop-off', personId: 'demo-kids', start: at(0, 8), end: at(0, 8, 30), allDay: false, location: 'North gate', notes: '', recurrence: 'daily', recurrenceUntil: localDateKey(at(4, 8)), updatedAt: createdAt },
+      { id: 'demo-dentist', title: 'Dentist', personId: 'demo-asha', start: at(2, 15, 30), end: at(2, 16, 30), allDay: false, location: 'Oak Street', notes: '', recurrence: 'none', updatedAt: createdAt },
+      { id: 'demo-football', title: 'Football practice', personId: 'demo-kids', start: at(4, 17), end: at(4, 18, 15), allDay: false, location: 'Community field', notes: '', recurrence: 'weekly', updatedAt: createdAt },
+      { id: 'demo-groceries', title: 'Groceries and meal prep', personId: 'demo-ravi', start: at(6, 10), end: at(6, 12), allDay: false, location: 'Market', notes: '', recurrence: 'none', updatedAt: createdAt }
+    ];
+    await this.replace({
+      format: 'weekboard', version: 1, exportedAt: createdAt,
+      people, events, settings: { ...DEFAULT_SETTINGS, boardName: 'Patel family week' }
+    });
   }
 }

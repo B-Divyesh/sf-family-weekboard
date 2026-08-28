@@ -19,7 +19,7 @@ function serviceWorkerBuildPlugin() {
       const dist = outDir;
       const template = readFileSync(resolve(__dirname, 'public/sw.js'), 'utf8');
       const precache = [
-        '/', '/index.html', '/offline.html', '/manifest.json',
+        '/', '/index.html', '/demo/', '/demo/index.html', '/offline.html', '/404.html', '/manifest.json',
         '/icon.svg', '/icon-192.png', '/icon-512.png', '/privacy/', '/privacy/index.html', '/terms/', '/terms/index.html',
         ...filesIn(join(dist, 'assets')).map((file) => `/${relative(dist, file).replaceAll('\\', '/')}`)
       ].sort();
@@ -36,6 +36,9 @@ function serviceWorkerBuildPlugin() {
 }
 
 export default defineConfig({
+  define: {
+    __BUILD_ID__: JSON.stringify(process.env.VITE_BUILD_ID ?? '1.0.0-r3')
+  },
   build: {
     target: 'es2022',
     sourcemap: false,
@@ -43,6 +46,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        demo: resolve(__dirname, 'demo/index.html'),
+        notFound: resolve(__dirname, '404.html'),
         privacy: resolve(__dirname, 'privacy/index.html'),
         terms: resolve(__dirname, 'terms/index.html')
       },

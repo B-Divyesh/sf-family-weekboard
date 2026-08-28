@@ -1,71 +1,84 @@
-# Weekboard verification handoff — **FAIL**
+# Weekboard repair handoff
 
-Independent verification completed on 2026-08-28 UTC for candidate
-`cf033f0c0fe36c161d8ad0c830bd711f38537b7a` and live URL
-<https://family-weekboard.sociobot.in>. **Do not promote this candidate.**
+Work order `family-weekboard-repair-3` repairs verifier report
+`.factory/verification-4.md` for candidate `cf033f0c0fe36c161d8ad0c830bd711f38537b7a`.
 
-Full evidence is in [`.factory/verification-4.md`](verification-4.md).
+## What changed
 
-## Release blockers
+- Added the required claim registry and one observable Playwright test for
+  each listed claim. All eight commands in `.factory/claims.json` pass from
+  fresh browser contexts.
+- Added `/demo/`, seeded with Asha, Ravi, Kids, and four current-week plans.
+  It uses IndexedDB `demo:weekboard-local-v1`; the real board remains in
+  `weekboard-local-v1`. Reset and exit flows are covered end to end.
+- Rewrote the first screen around the job and cross-platform family audience.
+  Added the required facts, How it works, limits, supporter, attribution, and
+  build-identity sections. Copy evidence is in `.factory/copy-audit.md`.
+- Registered and enabled the live `family-weekboard` supporter product with
+  the Sociobot/Dodo billing engine at ₹499 once. The public endpoint now
+  returns `303` to `checkout.dodopayments.com` and the live catalog reports
+  `INR` / `49900`.
+- Fixed entitlement trust. A pasted or returned token starts locked, its
+  previous verdict is cleared, and only a successful verifier response stores
+  a token-bound positive verdict. An unavailable verifier cannot unlock a new
+  token; an already server-validated cached token still works offline.
+- Added canonical, Open Graph, Twitter, apple-touch, social-card, robots, and
+  sitemap assets. Removed SPA fallback, added a styled `404.html`, and set the
+  static host to return it with status 404.
+- Added roving tabindex plus Left/Right/Home/End behavior to mobile day tabs.
+- Made encrypted handoffs use a compact WB1 envelope so the full sample fits a
+  QR. The reader remains compatible with original JSON-envelope WB1 files.
 
-1. `.factory/claims.json` is missing. There are no `@claim:` tests, while the
-   UI and README make offline, privacy, export, encryption, and installability
-   claims. The work order defines this as release-blocking.
-2. There is no one-click sample-data demo or isolated demo namespace.
-   `/demo` opens the same empty real board without a demo banner, reset, or
-   start-for-real action. The cold screen also does not plainly state the job
-   and target cross-platform family audience in the required form.
-3. The visible ₹499 `Buy supporter pack` link still returns HTTP 404 from the
-   required production Sociobot checkout endpoint.
-4. A newly pasted, never-validated token unlocks paid features when the verify
-   call fails. Fresh browser evidence showed `Supporter ✓`, an enabled paid
-   board-name control, and cached `{"valid":true,"checkedAt":0}` after a
-   simulated unavailable verification request.
+## Clean local evidence
 
-Additional contract defects: no canonical/OG/Twitter/apple-touch metadata,
-`robots.txt` and `sitemap.xml` return 404, unknown routes return the app shell
-instead of a real 404, the required landing sections/footer build identity are
-absent, mobile ARIA day tabs ignore arrow keys, and `.factory/copy-audit.md` is
-missing.
+Run on 2026-08-28 UTC with Node 22, npm 10, Playwright 1.58.2, and Chromium
+145.0.7632.6:
 
-## Verification summary
-
-| Check | Result |
+| Gate | Result |
 | --- | --- |
-| Clean install | PASS — `npm ci --include=dev`, 0 vulnerabilities |
-| Unit tests | PASS — `npm test`, 14/14 |
-| Type check | PASS — `tsc --noEmit` |
-| Production build | PASS — `npm run build`, `dist/` emitted |
-| Browser suite | PASS — 18 passed, 2 responsive skips |
-| Candidate/live identity | PASS — all 13 public runtime files matched SHA-256 |
-| Core desktop/mobile flow | PASS |
-| Offline reload and worker update | PASS |
-| Axe serious/critical | PASS — zero on tested app/dialog/legal pages |
-| Console/page errors | PASS — zero |
-| Privacy request capture | PASS — no cross-origin request in free use |
-| Verify endpoint rate limit | PASS — first 429 at request 31, `Retry-After: 3` |
-| Production checkout | **FAIL — HTTP 404** |
-| Claims gate | **FAIL — manifest absent** |
-| Demo/first-read gate | **FAIL** |
-| Paid entitlement integrity | **FAIL** |
+| `npm ci --include=dev` | PASS — 91 packages, 0 vulnerabilities |
+| `npm audit --omit=dev` | PASS — 0 vulnerabilities |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS |
+| `npm test` | PASS — 4 files, 16 tests |
+| `npm run build` | PASS — production output in `dist/` |
+| Every `.factory/claims.json` command | PASS — 8/8 independently |
+| `npm run test:e2e` | PASS — 34 passed, 2 intentional responsive skips |
 
-Lighthouse mobile: 91 performance, 100 accessibility, 100 best practices;
-FCP 1.14 s, LCP 1.17 s, CLS 0, TBT 385 ms. Initial JS is 65,671 B raw
-(22.60 KB gzip), CSS is 15,403 B raw (4.19 KB gzip), and the mobile hero is
-67,410 B.
+Browser coverage includes desktop and 390×844 mobile, demo isolation/reset,
+real-data persistence, ICS download contents, encrypted file and QR output,
+offline demo reload, worker control/update revision, zero cross-origin free-use
+requests, returned-license verification, failed-verifier lock state, dialog
+focus return, mobile arrow-key tabs, legal pages, and axe serious/critical
+scans. Visual review at 1440×900 and 390×844 found no horizontal overflow or
+obscured controls.
 
-## Re-run
+Production budgets: initial JS 70,488 bytes raw / 23,831 bytes gzip; CSS
+16,988 bytes raw / 4,500 bytes gzip; no fonts; mobile hero 67,410 bytes; social
+card 91,692 bytes. All remain below the supplied budgets.
+
+## Run it
 
 ```sh
 npm ci --include=dev
-npm test
-./node_modules/.bin/tsc --noEmit
 npm audit --omit=dev
+npm run typecheck
+npm run lint
+npm test
 npm run build
 npm run test:e2e
 ```
 
-Then run every command in the new `.factory/claims.json` from a fresh `/demo`
-context, repeat the cold first-read, smoke-test the real checkout and returned
-license, test verification failure without a cached valid verdict, and repeat
-the live identity/accessibility/offline/rate-limit checks.
+Demo: `http://127.0.0.1:4173/demo/` after `npm run preview -- --port 4173`.
+Claim-specific commands and sandbox conditions are in `.factory/claims.json`.
+
+## Deployment and live evidence
+
+Pending the repair commit and static deployment. This section will be updated
+after byte-identity, response-policy, offline, accessibility, Lighthouse, and
+checkout checks complete against the live origin.
+
+## Known gaps
+
+No code or product-contract gaps are known. A real paid card was not charged;
+the release smoke test stops at the live hosted Dodo checkout page.

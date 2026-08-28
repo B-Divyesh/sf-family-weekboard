@@ -22,10 +22,23 @@ describe('production PWA build', () => {
     expect(readFileSync('index.html', 'utf8')).toContain('href="/manifest.json"');
   });
 
+  it('ships discovery metadata and a true static 404 policy', () => {
+    const config = JSON.parse(readFileSync('public/staticwebapp.config.json', 'utf8')) as {
+      navigationFallback?: unknown;
+      responseOverrides?: Record<string, { rewrite: string; statusCode: number }>;
+    };
+    expect(config.navigationFallback).toBeUndefined();
+    expect(config.responseOverrides?.['404']).toEqual({ rewrite: '/404.html', statusCode: 404 });
+    const html = readFileSync('index.html', 'utf8');
+    for (const marker of ['rel="canonical"', 'property="og:image"', 'name="twitter:card"', 'rel="apple-touch-icon"']) expect(html).toContain(marker);
+    expect(readFileSync('public/robots.txt', 'utf8')).toContain('Sitemap: https://family-weekboard.sociobot.in/sitemap.xml');
+    expect(readFileSync('public/sitemap.xml', 'utf8')).toContain('<loc>https://family-weekboard.sociobot.in/privacy/</loc>');
+  });
+
   it('revisions the worker and precache URLs whenever application code changes', () => {
     const sandbox = mkdtempSync(join(tmpdir(), 'weekboard-pwa-'));
     try {
-      for (const path of ['src', 'public', 'assets', 'index.html', 'privacy', 'terms', 'vite.config.ts', 'tsconfig.json']) {
+      for (const path of ['src', 'public', 'assets', 'index.html', '404.html', 'demo', 'privacy', 'terms', 'vite.config.ts', 'tsconfig.json']) {
         cpSync(resolve(path), join(sandbox, path), { recursive: true });
       }
       symlinkSync(resolve('node_modules'), join(sandbox, 'node_modules'), 'dir');

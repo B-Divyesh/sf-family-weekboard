@@ -4,11 +4,13 @@ import { BoardStore } from './db';
 import { captureLicenseFromUrl } from './license';
 
 async function start(): Promise<void> {
-  captureLicenseFromUrl();
   const root = document.querySelector<HTMLElement>('#app')!;
+  const demo = location.pathname === '/demo' || location.pathname === '/demo/';
+  if (!demo) captureLicenseFromUrl();
+  document.title = demo ? 'Demo — Weekboard' : 'Weekboard — plan your family week';
   try {
-    const store = await BoardStore.create();
-    await new WeekboardApp(root, store).init();
+    const store = await BoardStore.create(demo);
+    await new WeekboardApp(root, store, demo).init();
   } catch (error) {
     console.error(error);
     root.innerHTML = `<main id="main" class="fatal"><h1>Weekboard could not open</h1><p>Your browser blocked local storage, so no plans can be safely saved.</p><p>Allow site data for this page, or open it in a regular (not private) window, then reload.</p><button onclick="location.reload()">Try again</button></main>`;

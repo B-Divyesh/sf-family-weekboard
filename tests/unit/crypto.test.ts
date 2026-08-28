@@ -16,6 +16,13 @@ describe('encrypted handoff', () => {
     await expect(decryptSnapshot(encrypted, 'a good secret')).resolves.toEqual(snapshot);
   });
 
+  it('continues to open the original JSON-envelope WB1 files', async () => {
+    const compact = await encryptSnapshot(snapshot, 'a good secret');
+    const [, salt, iv, data] = compact.split('.');
+    const legacy = `WB1.${Buffer.from(JSON.stringify({ format: 'weekboard-encrypted', version: 1, salt, iv, data })).toString('base64')}`;
+    await expect(decryptSnapshot(legacy, 'a good secret')).resolves.toEqual(snapshot);
+  });
+
   it('rejects the wrong passphrase with a useful error', async () => {
     const encrypted = await encryptSnapshot(snapshot, 'a good secret');
     await expect(decryptSnapshot(encrypted, 'wrong secret')).rejects.toThrow('did not match');

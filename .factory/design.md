@@ -85,4 +85,6 @@ neon cyberpunk excess, human anatomy, clutter.
 Generated with the factory Azure OpenAI image model (`factory-image`) on
 2026-08-28. The original PNG and prompt sidecar live in `assets/src/`; derived
 WebP files in `src/assets/` are bundled under content-hashed names. Generated imagery is original
-to Weekboard and disclosed in the footer.
+to Weekboard and disclosed in the footer. `public/social-card.webp` is a
+1200×630 centre crop of that same original image, produced locally with
+ImageMagick; it introduces no third-party artwork.

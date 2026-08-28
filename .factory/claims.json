@@ -1,0 +1,58 @@
+[
+  {
+    "id": "demo-sandbox",
+    "claim": "The one-click demo uses sample data and never reads or writes the real board.",
+    "where": "first screen, demo banner, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:demo-sandbox'",
+    "sandbox": "fresh browser context; create real data, enter /demo, mutate and reset it, then return and assert real data remains"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "Works offline after the first visit.",
+    "where": "first screen, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:offline-reload'",
+    "sandbox": "fresh /demo context; install worker, go offline, reload, and assert sample data plus offline state"
+  },
+  {
+    "id": "local-privacy",
+    "claim": "The free planner stores the schedule on-device and sends no schedule, analytics, or tracking request away.",
+    "where": "first screen, privacy page, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:local-privacy'",
+    "sandbox": "fresh /demo context with full request capture; add and reload a plan; assert persistence and zero cross-origin requests"
+  },
+  {
+    "id": "ics-export",
+    "claim": "Exports every plan as a standard ICS calendar.",
+    "where": "handoff dialog, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:ics-export'",
+    "sandbox": "fresh /demo context; download ICS and assert VCALENDAR plus one VEVENT for each of four sample plans"
+  },
+  {
+    "id": "encrypted-handoff",
+    "claim": "Creates an AES-GCM encrypted file and QR board snapshot in the browser.",
+    "where": "handoff dialog, privacy page, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:encrypted-handoff'",
+    "sandbox": "fresh /demo context; assert file ciphertext excludes plan and person text, then render the encrypted QR"
+  },
+  {
+    "id": "installable-pwa",
+    "claim": "Weekboard is an installable PWA.",
+    "where": "about dialog, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:installable-pwa'",
+    "sandbox": "production preview; validate standalone manifest icons and assert a controlling service worker"
+  },
+  {
+    "id": "paid-checkout",
+    "claim": "The supporter pack costs ₹499 once and starts a hosted Sociobot checkout.",
+    "where": "supporter section, supporter dialog, terms, README",
+    "test": "npx playwright test --project=chromium --grep '@claim:paid-checkout'",
+    "sandbox": "request production checkout without following redirects; assert 303 to checkout.dodopayments.com"
+  },
+  {
+    "id": "license-restore",
+    "claim": "A valid supporter license can be restored on another device.",
+    "where": "supporter dialog",
+    "test": "npx playwright test --project=chromium --grep '@claim:license-restore'",
+    "sandbox": "fresh context; simulate hosted return with a valid verifier response and assert supporter state"
+  }
+]

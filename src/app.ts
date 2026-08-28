@@ -34,10 +34,12 @@ export class WeekboardApp {
   private selectedDay = dateKey(new Date());
   private editingId: string | null = null;
   private returnFocus: HTMLElement | null = null;
-  private supporter = getCachedUnlock();
+  private supporter = false;
   private statusTimer = 0;
 
-  constructor(private readonly root: HTMLElement, private readonly store: BoardStore) {}
+  constructor(private readonly root: HTMLElement, private readonly store: BoardStore, private readonly demo = false) {
+    this.supporter = !demo && getCachedUnlock();
+  }
 
   async init(): Promise<void> {
     await this.refresh();
@@ -45,7 +47,7 @@ export class WeekboardApp {
     this.render();
     this.bindGlobalEvents();
     this.captureHandoffFromUrl();
-    void verifyLicense().then((valid) => {
+    if (!this.demo) void verifyLicense().then((valid) => {
       if (valid !== this.supporter) { this.supporter = valid; this.render(); }
     });
   }
@@ -83,22 +85,26 @@ export class WeekboardApp {
     this.root.innerHTML = `
       <header class="topbar">
         <a class="brand" href="/" aria-label="Weekboard home"><span class="brand-mark" aria-hidden="true">W</span><span>WEEKBOARD</span></a>
+        <nav class="site-nav" aria-label="Main navigation"><a href="/demo/">Demo</a><a href="#how-it-works">How it works</a><a href="/privacy/">Privacy</a></nav>
         <div class="header-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Change colour theme" title="Change colour theme">◐</button>
-          <button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Supporter ✓' : 'Support Weekboard'}</button>
+          ${this.demo ? '' : `<button class="button secondary compact" id="supportButton" type="button">${this.supporter ? 'Supporter ✓' : 'Support Weekboard'}</button>`}
         </div>
       </header>
+      ${this.demo ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Changes stay separate from your real board.</span><div><button class="button secondary compact" id="resetDemo" type="button">Reset demo</button><button class="button secondary compact" id="startReal" type="button">Start for real</button></div></aside>` : ''}
       <div class="offline-strip" id="networkStatus" role="status" ${navigator.onLine ? 'hidden' : ''}>OFFLINE · changes still save on this device</div>
       <main id="main" tabindex="-1">
         <section class="masthead" aria-labelledby="pageTitle">
           <div>
-            <p class="eyebrow">PRIVATE HOUSEHOLD CONSOLE · LOCAL TIME</p>
-            <h1 id="pageTitle">${escapeHtml(this.settings.boardName)}</h1>
-            <p class="lede">One clear week. No account, no cloud sync, no schedule sent away.</p>
+            <p class="eyebrow">${escapeHtml(this.settings.boardName)} · LOCAL TIME</p>
+            <h1 id="pageTitle">Plan your family week together</h1>
+            <p class="lede">For families using phones, computers, and paper who need one shared weekly view without a new account.</p>
+            <ul class="hero-facts" aria-label="Key facts"><li>Works offline after the first visit.</li><li>Your schedule stays on this device.</li><li>Core planning and export are free.</li></ul>
           </div>
           <div class="primary-actions">
             <button class="button primary" id="addEvent" type="button"><span aria-hidden="true">＋</span> Add plan</button>
             <button class="button secondary" id="transferButton" type="button">Move / share</button>
+            ${this.demo ? '' : '<a class="button secondary" href="/demo/">Try it with sample data</a><small>Opens a separate sample board.</small>'}
           </div>
         </section>
 
@@ -136,10 +142,23 @@ export class WeekboardApp {
             </div>` : ''}
         </section>
         <p class="status-line" id="statusLine" aria-live="polite">Saved locally · ${this.events.length} plan${this.events.length === 1 ? '' : 's'} on board</p>
+        <section class="info-section" id="how-it-works" aria-labelledby="howHeading">
+          <p class="eyebrow">THREE MOVES</p><h2 id="howHeading">How it works</h2>
+          <ol><li><strong>Add plans.</strong> Put each commitment on a person’s lane.</li><li><strong>Check the week.</strong> Use seven columns or one phone-friendly day.</li><li><strong>Move a copy.</strong> Print, export ICS, or share an encrypted snapshot.</li></ol>
+        </section>
+        <section class="info-section limits" aria-labelledby="limitsHeading">
+          <p class="eyebrow">CLEAR BOUNDARIES</p><h2 id="limitsHeading">What Weekboard does not do</h2>
+          <p>It does not create accounts, invite people, or sync changes live. File and QR handoffs are snapshots.</p>
+        </section>
+        ${this.demo ? '' : `<section class="info-section supporter-section" aria-labelledby="supporterHeading">
+          <p class="eyebrow">OPTIONAL SUPPORTER PACK</p><h2 id="supporterHeading">Add room for a bigger household</h2>
+          <p><strong>₹499 once.</strong> Add more than four people, extra lane colours, and a custom board name. Planning, accessibility, encryption, and export stay free.</p>
+          <button class="button secondary" id="supportSectionButton" type="button">See supporter pack</button>
+        </section>`}
       </main>
       <footer>
-        <span>Weekboard works offline. Your board lives on this device.</span>
-        <nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><button class="link-button" id="aboutButton" type="button">About</button></nav>
+        <span>Plan a family week without a shared cloud account. · Build ${__BUILD_ID__}</span>
+        <nav aria-label="Legal and project links"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><button class="link-button" id="aboutButton" type="button">About</button><a href="https://sociobot.in">Built by Param Factory <span class="sr-only">(external site)</span></a></nav>
       </footer>
       <div class="toast" id="updateToast" role="status" hidden><span>A fresh Weekboard is ready.</span><button type="button" id="reloadButton">Reload</button></div>
       ${this.dialogs()}
@@ -220,7 +239,7 @@ export class WeekboardApp {
         ${this.supporter ? '<div class="supporter-active"><strong>Supporter pack active</strong><span>Thanks for backing private household software.</span></div>' : '<p class="price">₹499 <small>one time</small></p><p>Core planning, offline use, printing, encryption, and every export stay free. The supporter pack adds a custom board name, extra lane colours, and more than four people.</p>'}
         <ul class="feature-list"><li>No subscription</li><li>No account required</li><li>One license can be restored on your devices</li></ul>
         ${this.supporter ? '' : `<a class="button primary center" href="${CHECKOUT_URL}">Buy supporter pack</a>`}
-        <form id="licenseForm"><label>Have a license? Paste it here<input name="license" value="${escapeHtml(getLicense())}" autocomplete="off" /></label><button class="button secondary" type="submit">Verify license</button></form>
+        <form id="licenseForm"><label>Have a license? Paste it here<input name="license" value="${escapeHtml(this.demo ? '' : getLicense())}" autocomplete="off" /></label><button class="button secondary" type="submit">Verify license</button></form>
         <p class="form-error" id="licenseStatus" role="status"></p><p class="fine-print">Sociobot / Dodo is the merchant of record. Refunds are handled there and revoke the license. See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
       </div></dialog>
 
@@ -233,7 +252,11 @@ export class WeekboardApp {
     this.on('#emptyAdd', 'click', (event) => this.openEvent(undefined, undefined, event.currentTarget as HTMLElement));
     this.root.querySelectorAll<HTMLElement>('[data-add-day]').forEach((button) => button.addEventListener('click', () => this.openEvent(button.dataset.addDay, undefined, button)));
     this.root.querySelectorAll<HTMLElement>('[data-edit-event]').forEach((button) => button.addEventListener('click', () => this.openEvent(undefined, button.dataset.editEvent, button)));
-    this.root.querySelectorAll<HTMLElement>('[data-day-tab]').forEach((button) => button.addEventListener('click', () => { this.selectedDay = button.dataset.dayTab ?? this.selectedDay; this.render(); }));
+    this.root.querySelectorAll<HTMLElement>('[data-day-tab]').forEach((button) => {
+      button.tabIndex = button.dataset.dayTab === this.selectedDay ? 0 : -1;
+      button.addEventListener('click', () => { this.selectedDay = button.dataset.dayTab ?? this.selectedDay; this.render(); });
+      button.addEventListener('keydown', (event) => this.moveDayTab(event));
+    });
     this.on('#previousWeek', 'click', () => { this.weekStart = addDays(this.weekStart, -7); this.selectedDay = dateKey(this.weekStart); this.render(); });
     this.on('#nextWeek', 'click', () => { this.weekStart = addDays(this.weekStart, 7); this.selectedDay = dateKey(this.weekStart); this.render(); });
     this.on('#todayButton', 'click', () => { this.weekStart = startOfWeek(new Date()); this.selectedDay = dateKey(new Date()); this.render(); });
@@ -241,6 +264,7 @@ export class WeekboardApp {
     this.on('#peopleButton', 'click', (event) => this.openDialog('peopleDialog', event.currentTarget as HTMLElement));
     this.on('#transferButton', 'click', (event) => this.openDialog('transferDialog', event.currentTarget as HTMLElement));
     this.on('#supportButton', 'click', (event) => this.openDialog('supportDialog', event.currentTarget as HTMLElement));
+    this.on('#supportSectionButton', 'click', (event) => this.openDialog('supportDialog', event.currentTarget as HTMLElement));
     this.on('#aboutButton', 'click', (event) => this.openDialog('aboutDialog', event.currentTarget as HTMLElement));
     this.on('#themeToggle', 'click', () => void this.cycleTheme());
     this.root.querySelectorAll<HTMLButtonElement>('.close-dialog').forEach((button) => button.addEventListener('click', () => this.closeDialog(button.closest('dialog')!)));
@@ -258,6 +282,33 @@ export class WeekboardApp {
     this.on('#importEncrypted', 'change', (event) => void this.importEncryptedFile(event));
     this.on('#importCode', 'click', () => void this.importEncryptedCode());
     this.on('#licenseForm', 'submit', (event) => void this.restoreLicense(event));
+    this.on('#resetDemo', 'click', () => void this.resetDemo());
+    this.on('#startReal', 'click', () => void this.startForReal());
+  }
+
+  private moveDayTab(event: KeyboardEvent): void {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const tabs = [...this.root.querySelectorAll<HTMLButtonElement>('[data-day-tab]')];
+    const current = tabs.indexOf(event.currentTarget as HTMLButtonElement);
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+    this.selectedDay = tabs[next].dataset.dayTab ?? this.selectedDay;
+    this.render();
+    this.root.querySelector<HTMLButtonElement>(`[data-day-tab="${this.selectedDay}"]`)?.focus();
+  }
+
+  private async resetDemo(): Promise<void> {
+    if (!this.demo) return;
+    await this.store.resetDemo();
+    await this.refresh();
+    this.render();
+    this.announce('Demo reset to the original sample plans.');
+  }
+
+  private async startForReal(): Promise<void> {
+    if (this.demo) await this.store.resetDemo();
+    location.assign('/');
   }
 
   private bindGlobalEvents(): void {

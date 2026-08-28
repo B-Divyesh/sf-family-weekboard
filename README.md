@@ -7,6 +7,10 @@ the browser on the current device.
 
 Live: <https://family-weekboard.sociobot.in>
 
+Demo: <https://family-weekboard.sociobot.in/demo/> — opens a seeded sample
+board in the separate `demo:weekboard-local-v1` database. Use **Reset demo**
+to restore the sample or **Start for real** to leave without copying changes.
+
 ## What v1 includes
 
 - A seven-day desktop board and focused one-day phone agenda
@@ -34,8 +38,11 @@ npm run test:e2e    # builds and starts an isolated preview automatically
 
 `npm test` covers calendar recurrence and ICS interoperability. The Playwright
 suite covers creation/persistence, keyboard-accessible dialogs, mobile layout,
-accessibility, and installed/offline reload. The app makes no network request
-except when a user buys or explicitly verifies a supporter license.
+accessibility, demo isolation, claims, and installed/offline reload. Every
+user-facing product claim and its exact command is listed in
+[`.factory/claims.json`](.factory/claims.json). The free planner makes no
+cross-origin request. Buying or verifying a supporter license uses the
+Sociobot billing API.
 
 ## Data ownership and deployment
 

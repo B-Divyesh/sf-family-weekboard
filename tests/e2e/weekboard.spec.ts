@@ -5,7 +5,7 @@ test('creates a plan, persists it, and keeps the page free of serious accessibil
   const errors: string[] = [];
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Our week');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Plan your family week together');
 
   await page.getByRole('button', { name: 'Add plan' }).click();
   await expect(page.getByRole('dialog', { name: 'Add a plan' })).toBeVisible();
@@ -38,7 +38,7 @@ test('@regression:manifest-mime serves the install manifest as JSON', async ({ p
   await expect(page.locator('body')).toContainText('Weekboard');
 });
 
-test('@regression:checkout-contract starts the required hosted checkout and accepts its returned license', async ({ page, baseURL }) => {
+test('@claim:license-restore @regression:checkout-contract accepts and verifies a returned license', async ({ page, baseURL }) => {
   const checkout = 'https://api.sociobot.in/api/v1/products/family-weekboard/checkout';
   const returnedLicense = 'returned-license-from-hosted-checkout';
   await page.route(checkout, (route) => route.fulfill({
@@ -73,7 +73,7 @@ test('reloads the installed app while offline', async ({ page, context }) => {
   })).toBe(true);
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Our week');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Plan your family week together');
   await expect(page.getByText(/OFFLINE/)).toBeVisible();
   await context.setOffline(false);
 });
@@ -87,6 +87,22 @@ test('mobile agenda shows one day without horizontal overflow', async ({ page },
   const tuesday = page.getByRole('tab').nth(1);
   await tuesday.click();
   await expect(tuesday).toHaveAttribute('aria-selected', 'true');
+  await tuesday.press('ArrowRight');
+  const wednesday = page.getByRole('tab').nth(2);
+  await expect(wednesday).toHaveAttribute('aria-selected', 'true');
+  await expect(wednesday).toBeFocused();
+});
+
+test('@regression:license-network-failure never trusts an unverified token', async ({ page }) => {
+  await page.route('**/products/family-weekboard/verify?license=never-validated-token', (route) => route.abort('failed'));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Support Weekboard' }).click();
+  await page.getByLabel('Have a license? Paste it here').fill('never-validated-token');
+  await page.getByRole('button', { name: 'Verify license' }).click();
+  await expect(page.locator('#licenseStatus')).toContainText('not active');
+  await expect(page.getByRole('button', { name: 'Support Weekboard' })).toBeVisible();
+  await expect(page.getByLabel(/Board name/)).toBeDisabled();
+  expect(await page.evaluate(() => localStorage.getItem('sb_license_verdict:family-weekboard'))).toBeNull();
 });
 
 test.describe('calendar integrity regressions', () => {
