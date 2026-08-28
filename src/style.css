@@ -84,7 +84,9 @@ a { color: var(--electric); text-underline-offset: 3px; }
 .demo-banner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 18px; padding: 8px 16px; border-bottom: 2px solid var(--line); background: var(--sun); color: #111a22; }
 .demo-banner strong { font-family: ui-monospace, monospace; }
 .demo-banner div { display: flex; gap: 8px; }
-.demo-banner .button { border-color: #111a22; background: #fffdf3; color: #111a22; box-shadow: 2px 2px 0 #111a22; }
+/* This selector must outrank .button.secondary below. Demo actions retain a
+   light surface in both themes, rather than inheriting the dark --paper. */
+.demo-banner .button.secondary { border-color: #111a22; background: #fffdf3; color: #111a22; box-shadow: 2px 2px 0 #111a22; }
 
 .offline-strip { padding: 6px 16px; background: var(--sun); color: #111a22; text-align: center; font: 700 12px/1.4 ui-monospace, monospace; letter-spacing: .08em; }
 main { width: min(1600px, 100%); margin-inline: auto; padding: 32px clamp(16px, 3vw, 48px) 20px; }

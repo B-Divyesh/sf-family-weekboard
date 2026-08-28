@@ -20,7 +20,7 @@ describe('ICS interoperability', () => {
     expect(ics).toContain('DTSTART:20260824T073000Z');
     expect(ics).toContain('SUMMARY:School run\\, then library');
     expect(ics).toContain('LOCATION:North\\; gate');
-    expect(ics).toContain('RRULE:FREQ=WEEKLY;UNTIL=20261214T235959Z');
+    expect(ics).toContain('RRULE:FREQ=WEEKLY;UNTIL=20261214T073000Z');
     expect(ics).toContain('Weekboard lane: Mum\\, Dad & kids');
   });
 
@@ -28,7 +28,7 @@ describe('ICS interoperability', () => {
     const imported = importIcs(exportIcs([event], [person], 'Our week'), person.id);
     expect(imported).toHaveLength(1);
     expect(imported[0]).toMatchObject({
-      title: event.title, location: event.location, recurrence: 'weekly', recurrenceUntil: '2026-12-14T23:59:59.000Z'
+      title: event.title, location: event.location, recurrence: 'weekly', recurrenceUntil: '2026-12-14T07:30:00.000Z'
     });
     expect(imported[0].start).toBe(event.start);
   });
@@ -70,5 +70,36 @@ describe('ICS interoperability', () => {
       '2026-08-24T18:00:00.000Z', '2026-08-25T18:00:00.000Z'
     ]);
     expect(exportIcs([imported], [person], 'Our week')).toContain('UNTIL=20260826T120000Z');
+  });
+
+  it('round-trips a local timed repeat through its selected final civil day', () => {
+    process.env.TZ = 'America/New_York';
+    const lateMedicine: BoardEvent = {
+      ...event, id: 'late-medicine', title: 'Late medicine', start: '2026-08-25T00:00:00.000Z', end: '2026-08-25T00:30:00.000Z',
+      recurrence: 'daily', recurrenceUntil: '2026-08-26'
+    };
+    const ics = exportIcs([lateMedicine], [person], 'Our week');
+    expect(ics).toContain('DTSTART:20260825T000000Z');
+    expect(ics).toContain('RRULE:FREQ=DAILY;UNTIL=20260827T000000Z');
+    const imported = importIcs(ics, person.id);
+    expect(occurrencesInRange(imported, new Date(2026, 7, 24), new Date(2026, 7, 28)).map((item) => item.occurrenceStart.toISOString())).toEqual([
+      '2026-08-25T00:00:00.000Z', '2026-08-26T00:00:00.000Z', '2026-08-27T00:00:00.000Z'
+    ]);
+  });
+
+  it('uses a DATE UNTIL for an all-day recurrence and preserves its final day', () => {
+    process.env.TZ = 'America/New_York';
+    const schoolBreak: BoardEvent = {
+      ...event, id: 'school-break', title: 'School break', allDay: true,
+      start: '2026-08-24T04:00:00.000Z', end: '2026-08-25T04:00:00.000Z', recurrence: 'daily', recurrenceUntil: '2026-08-26'
+    };
+    const ics = exportIcs([schoolBreak], [person], 'Our week');
+    expect(ics).toContain('DTSTART;VALUE=DATE:20260824');
+    expect(ics).toContain('RRULE:FREQ=DAILY;UNTIL=20260826');
+    expect(ics).not.toContain('UNTIL=20260826T');
+    const imported = importIcs(ics, person.id);
+    expect(occurrencesInRange(imported, new Date(2026, 7, 24), new Date(2026, 7, 28)).flatMap(eventDays)).toEqual([
+      '2026-08-24', '2026-08-25', '2026-08-26'
+    ]);
   });
 });

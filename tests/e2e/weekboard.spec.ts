@@ -32,6 +32,19 @@ test('dialog closes with Escape and returns focus', async ({ page }) => {
   await expect(trigger).toBeFocused();
 });
 
+test('@regression:dark-demo-actions retain accessible contrast', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/demo/');
+  const actions = page.locator('.demo-banner .button');
+  await expect(actions).toHaveCount(2);
+  for (const action of await actions.all()) {
+    await expect(action).toHaveCSS('background-color', 'rgb(255, 253, 243)');
+    await expect(action).toHaveCSS('color', 'rgb(17, 26, 34)');
+  }
+  const results = await new AxeBuilder({ page: page as never }).analyze();
+  expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
+});
+
 test('@regression:manifest-mime serves the install manifest as JSON', async ({ page }) => {
   const response = await page.goto('/manifest.json');
   expect(response?.headers()['content-type']).toContain('application/json');

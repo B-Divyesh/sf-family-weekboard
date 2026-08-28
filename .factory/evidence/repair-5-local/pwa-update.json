@@ -1,0 +1,8 @@
+{
+  "updateToast": true,
+  "reloaded": true,
+  "workerRequests": 2,
+  "caches": [
+    "weekboard-shell-qa-update-8deef49354d6a9f4"
+  ]
+}

@@ -59,8 +59,28 @@ test('@claim:local-privacy sends no sample schedule off-origin', async ({ page }
   expect(crossOrigin).toEqual([]);
 });
 
-test('@claim:ics-export downloads a standard calendar containing every sample plan', async ({ page }) => {
+test('@claim:ics-export downloads a standard calendar and round-trips final recurring occurrences', async ({ browser }) => {
+  const senderContext = await browser.newContext({ timezoneId: 'America/New_York' });
+  const page = await senderContext.newPage();
+  await page.clock.install({ time: new Date('2026-08-24T12:00:00-04:00') });
   await page.goto('/demo/');
+  await page.getByRole('button', { name: 'Add plan' }).click();
+  await page.getByLabel('What’s happening?').fill('Late medicine');
+  await page.getByLabel('Starts').fill('2026-08-24');
+  await page.getByLabel('Start time').fill('20:00');
+  await page.getByLabel('Ends').fill('2026-08-24');
+  await page.getByLabel('End time').fill('20:30');
+  await page.getByLabel('Repeats').selectOption('daily');
+  await page.getByLabel('Repeat until').fill('2026-08-26');
+  await page.getByRole('button', { name: 'Save plan' }).click();
+  await page.getByRole('button', { name: 'Add plan' }).click();
+  await page.getByLabel('What’s happening?').fill('School break');
+  await page.getByLabel('All day').check();
+  await page.getByLabel('Starts').fill('2026-08-24');
+  await page.getByLabel('Ends').fill('2026-08-24');
+  await page.getByLabel('Repeats').selectOption('daily');
+  await page.getByLabel('Repeat until').fill('2026-08-26');
+  await page.getByRole('button', { name: 'Save plan' }).click();
   await page.getByRole('button', { name: 'Move / share' }).click();
   const download = await Promise.all([
     page.waitForEvent('download'),
@@ -71,10 +91,28 @@ test('@claim:ics-export downloads a standard calendar containing every sample pl
   for await (const chunk of stream!) text += chunk.toString();
   expect(text).toContain('BEGIN:VCALENDAR');
   for (const title of ['School drop-off', 'Dentist', 'Football practice', 'Groceries and meal prep']) expect(text).toContain(`SUMMARY:${title}`);
-  expect((text.match(/BEGIN:VEVENT/g) ?? [])).toHaveLength(4);
+  // The four shipped sample plans plus both boundary-regression plans export.
+  expect((text.match(/BEGIN:VEVENT/g) ?? [])).toHaveLength(6);
   expect(text).toMatch(/DTSTART:\d{8}T\d{6}Z/);
   expect(text).toContain('RRULE:FREQ=DAILY');
   expect(text).toContain('RRULE:FREQ=WEEKLY');
+  expect(text).toContain('DTSTART:20260825T000000Z');
+  expect(text).toContain('RRULE:FREQ=DAILY;UNTIL=20260827T000000Z');
+  expect(text).toContain('DTSTART;VALUE=DATE:20260824');
+  expect(text).toContain('RRULE:FREQ=DAILY;UNTIL=20260826');
+
+  const receiverContext = await browser.newContext({ timezoneId: 'America/New_York' });
+  const receiver = await receiverContext.newPage();
+  await receiver.clock.install({ time: new Date('2026-08-24T12:00:00-04:00') });
+  await receiver.goto('/');
+  await receiver.getByRole('button', { name: 'Move / share' }).click();
+  await receiver.locator('#importIcs').setInputFiles({ name: 'weekboard.ics', mimeType: 'text/calendar', buffer: Buffer.from(text) });
+  // On phones only the selected day is visible, so inspect the board's three
+  // rendered recurrence cards rather than its visible accessibility tree.
+  await expect(receiver.locator('.event-card').filter({ hasText: 'Late medicine' })).toHaveCount(3);
+  await expect(receiver.locator('.event-card').filter({ hasText: 'School break' })).toHaveCount(3);
+  await senderContext.close();
+  await receiverContext.close();
 });
 
 test('@claim:encrypted-handoff encrypts the complete sample snapshot', async ({ page }) => {

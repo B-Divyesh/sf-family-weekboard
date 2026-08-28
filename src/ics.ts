@@ -19,6 +19,27 @@ function dateOnly(date: Date): string {
   return `${y}${m}${d}`;
 }
 
+function isCivilDate(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+/**
+ * An editor recurrence end is a civil day. For timed events, RFC 5545 needs
+ * the UTC instant of the final occurrence's start, not 23:59:59 UTC on that
+ * civil day. For all-day DTSTART values, UNTIL must remain a DATE value.
+ */
+function recurrenceUntil(event: BoardEvent): string | undefined {
+  const limit = event.recurrenceUntil;
+  if (!limit) return undefined;
+  if (event.allDay) return isCivilDate(limit) ? limit.replace(/-/g, '') : dateOnly(new Date(limit));
+  if (!isCivilDate(limit)) return stamp(new Date(limit));
+
+  const [year, month, day] = limit.split('-').map(Number);
+  const start = new Date(event.start);
+  const finalOccurrence = new Date(year, month - 1, day, start.getHours(), start.getMinutes(), start.getSeconds());
+  return stamp(finalOccurrence);
+}
+
 function fold(line: string): string {
   const chunks: string[] = [];
   let rest = line;
@@ -49,9 +70,8 @@ export function exportIcs(events: BoardEvent[], people: Person[], boardName: str
     if (description) lines.push(`DESCRIPTION:${escapeIcs(description)}`);
     if (event.recurrence !== 'none') {
       const frequency = event.recurrence.toUpperCase();
-      const until = event.recurrenceUntil
-        ? `;UNTIL=${/^\d{4}-\d{2}-\d{2}$/.test(event.recurrenceUntil) ? `${event.recurrenceUntil.replace(/-/g, '')}T235959Z` : stamp(new Date(event.recurrenceUntil))}`
-        : '';
+      const recurrenceEnd = recurrenceUntil(event);
+      const until = recurrenceEnd ? `;UNTIL=${recurrenceEnd}` : '';
       lines.push(`RRULE:FREQ=${frequency}${until}`);
     }
     lines.push('END:VEVENT');
