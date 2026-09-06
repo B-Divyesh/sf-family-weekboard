@@ -1,5 +1,18 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+async function expectSchoolDropOffOnMonday(page: Page): Promise<void> {
+  // Desktop renders the whole week. On a phone, deliberately navigate to
+  // Monday before checking the daily sample plan rather than assuming today
+  // is Monday.
+  const mobileDays = page.locator('.mobile-days');
+  if (await mobileDays.isVisible()) {
+    const monday = page.getByRole('tab', { name: /^Mon \d+$/ });
+    await monday.click();
+    await expect(monday).toHaveAttribute('aria-selected', 'true');
+  }
+  await expect(page.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+}
 
 test('@claim:demo-sandbox keeps sample changes separate from the real board', async ({ page }) => {
   await page.goto('/');
@@ -11,7 +24,7 @@ test('@claim:demo-sandbox keeps sample changes separate from the real board', as
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
   await expect(page).toHaveURL(/\?demo=1$/);
   await expect(page.getByLabel('Demo mode')).toContainText('nothing is saved');
-  await expect(page.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+  await expectSchoolDropOffOnMonday(page);
   await expect(page.getByRole('button', { name: /Edit Real family plan/ })).toHaveCount(0);
   const databases = await page.evaluate(async () => (await indexedDB.databases()).map((item) => item.name));
   expect(databases).toContain('demo:weekboard-local-v1');
@@ -38,7 +51,7 @@ test('@claim:offline-reload reloads the sample board without a network', async (
   await page.reload();
   await expect(page.getByLabel('Demo mode')).toBeVisible();
   await expect(page.getByText(/OFFLINE/)).toBeVisible();
-  await expect(page.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+  await expectSchoolDropOffOnMonday(page);
   await context.setOffline(false);
 });
 
@@ -197,7 +210,7 @@ test('@claim:copy-not-sync keeps an opened copy separate from later sender chang
   await receiver.getByLabel('Or paste a copy code').fill(copy);
   receiver.once('dialog', (dialog) => dialog.accept());
   await receiver.getByRole('button', { name: 'Open pasted copy' }).click();
-  await expect(receiver.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+  await expectSchoolDropOffOnMonday(receiver);
 
   await sender.getByRole('button', { name: 'Close sharing and export' }).click();
   await sender.getByRole('button', { name: 'Add plan' }).click();
@@ -206,7 +219,7 @@ test('@claim:copy-not-sync keeps an opened copy separate from later sender chang
   await expect(sender.getByRole('button', { name: /Edit Later sender change/ })).toBeVisible();
   await receiver.reload();
   await expect(receiver.getByRole('button', { name: /Edit Later sender change/ })).toHaveCount(0);
-  await expect(receiver.getByRole('button', { name: /Edit School drop-off/ }).first()).toBeVisible();
+  await expectSchoolDropOffOnMonday(receiver);
   await senderContext.close();
   await receiverContext.close();
 });
