@@ -125,7 +125,7 @@ test('@regression:mobile-demo-shows-a-sample-plan-before-scrolling', async ({ pa
   expect(box).not.toBeNull();
   expect(box!.y).toBeLessThan(844);
   expect(box!.y + box!.height).toBeGreaterThan(0);
-  await page.screenshot({ path: '.factory/evidence/polish-2/demo-390.png' });
+  await page.screenshot({ path: testInfo.outputPath('demo-390.png') });
 });
 
 test('@regression:license-network-failure never trusts an unverified token', async ({ page }) => {
