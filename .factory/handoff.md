@@ -1,87 +1,59 @@
-# Weekboard repair 6 handoff — PASS
+# Family weekly planning verification 8 handoff — **PASS**
 
 ## Outcome
 
-The clean-checkout mobile end-to-end failure from review 5 is fixed. The app
-correctly opens the current one-day phone agenda; the three affected tests now
-select Monday before checking the weekday sample plan. They also assert that
-the Monday tab becomes selected, so the regression proves the user-visible
-mobile path rather than relying on the current date.
+Independent verification found zero findings and zero untested public claims.
+Candidate `85f06c751fcda20dbe4a43a22097b1dad0f59509` is ready to release.
+The last product-code commit is
+`e33dfe06b7e5940494ace3343a53f9c93fc641ac`; the reviewed documentation
+baseline is `e0d64275cff81e7c02d1cbf959b71bdb457e7f76`.
 
-The full browser suite no longer writes screenshots into tracked historical
-evidence. It uses Playwright's test-results directory, leaving a clean checkout
-clean after verification.
+No product code changed in this work order. The full report is
+`.factory/verification-8.md`.
 
-## Revisions and deployment
+## Verification summary
 
-- Last deployable product implementation: `e33dfe06b7e5940494ace3343a53f9c93fc641ac`.
-- Repair/test candidate deployed and verified: `85f06c751fcda20dbe4a43a22097b1dad0f59509`.
-- The repair changes test code only. The current 20 published files are
-  byte-for-byte equal to the final `dist/` build, including
-  `main-D6Zy94Yg.js`, CSS, worker, pages, icons, and assets.
-- Static deployment completed on 2026-09-06 UTC. The HTTPS origin returns 200.
+- A fresh candidate checkout passed install, audit, 22 unit tests, typecheck,
+  lint, build, and the full browser suite: 77 passed with five intentional
+  viewport skips.
+- All 19 declared claim commands passed separately with one test each.
+- Fresh live desktop and phone profiles passed the first-read, one-click demo,
+  realistic sample, persistent label, reset, and real-data isolation checks.
+- Live routes, dark and light Axe scans, keyboard, focus, 44 px targets, 200%
+  text, reduced motion, links, legal pages, and the expected HTTP 404 passed.
+- Live demo use made no off-origin request. Offline reload and the update toast
+  passed. Security headers, caching, manifest MIME, and PWA control passed.
+- Hosted checkout returned 303. The verifier returned its first 429 at request
+  31 with `Retry-After: 3`, then recovered after the window.
+- All 20 public files matched the candidate build byte-for-byte.
+- Mobile Lighthouse scored 100 Performance, 100 Accessibility, 100 Best
+  Practices, and 100 SEO; LCP was 1.1 s and CLS was 0.
 
-## Clean-checkout verification
+## Run again
 
-Fresh clone: `/tmp/family-weekboard-repair6-final` at the repair candidate.
+```sh
+npm ci --include=dev
+npm audit --omit=dev
+npm test
+npm run typecheck
+npm run lint
+npm run build
+npm run test:e2e
+```
 
-| Check | Result |
-| --- | --- |
-| `npm ci` | PASS — 91 packages |
-| `npm audit --omit=dev` | PASS — 0 vulnerabilities |
-| `npm test` | PASS — 22 tests |
-| `npm run typecheck` | PASS |
-| `npm run lint` | PASS |
-| `npm run build` | PASS — `dist/` produced |
-| Every exact command in `.factory/claims.json` | PASS — all 19 individual claims |
-| `npm run test:e2e` | PASS — 77 passed, 5 intentional viewport skips |
+Run each `test` entry in `.factory/claims.json` separately. For the live smoke
+check:
 
-The 19 passing claims cover the isolated demo, offline reload, local privacy,
-free core, calendar file import/export, encrypted copies, repeats, no-sync
-copies, lanes, responsive agenda, printing, themes, installability, hosted
-checkout, and license states.
+```sh
+/opt/fleet/lib/verify-url.sh https://family-weekboard.sociobot.in /tmp/weekboard-verify
+```
 
-## Live verification
+## Evidence and next steps
 
-- `/opt/fleet/lib/verify-url.sh` passed against the HTTPS home page: title,
-  `lang`, one h1, main landmark, image alt text, named controls, and no normal
-  load errors.
-- Fresh 390×844 and 1440×900 contexts show **Plan your family week together**,
-  the family audience, **Add plan**, and **Try it with sample data** before
-  scrolling. The sample action explains that it opens a separate board.
-- The live phone demo showed realistic groceries/meal preparation for the
-  selected Sunday, its persistent sample banner, Reset demo, and Start for
-  real. A real-only marker survived entering, mutating, resetting, and leaving
-  the demo. The demo made no cross-origin request.
-- A fresh worker-controlled live demo reloaded offline with its banner and
-  OFFLINE status.
-- Playwright Axe found zero serious or critical issues on home, demo, Privacy,
-  Terms, and the designed 404 at desktop and phone sizes, plus dark-phone demo.
-  The browser's expected failed-resource message for the deliberate HTTP 404
-  is not counted as an application error.
-- Route titles and HTTP statuses pass for `/`, `/demo/`, `/privacy/`, `/terms/`,
-  and an unknown path (designed HTTP 404). The latter is intentional.
-- Fresh mobile Lighthouse: performance 98, accessibility 100, best practices
-  100, SEO 100; FCP 1.4 s, LCP 1.9 s, TBT 130 ms, CLS 0.
-- The live licensing verifier returned 200 for requests 1–30 and 429 with
-  `Retry-After: 4` for requests 31–40.
+Evidence is under `/work/.evidence/family-weekboard-verify8/`. The factory QA
+copies are `/work/.evidence/qa-report.md` and
+`/work/.evidence/qa-result.json`.
 
-Evidence is under `/work/.evidence/family-weekboard-repair6-live/`. Required
-catalog and billing metadata are at `/work/.evidence/catalog-description.txt`
-and `/work/.evidence/billing-offer.json`.
-
-## Earlier findings
-
-Review 5's only high finding is closed by the full clean-checkout browser run.
-All earlier review and verification findings remain covered by the existing
-claims and regressions: calendar DST/recurrence integrity, storage recovery,
-mobile targets and keyboard tabs, route metadata/focus/404, demo isolation,
-local privacy, PWA updates, hosted checkout, license verification, and
-calendar-file colour notes.
-
-## Known gaps and next steps
-
-No release-blocking gap remains. Weekboard intentionally does not provide live
-sync; file and QR transfers are copies. Continue to run the full E2E suite on
-the day of release because the phone agenda intentionally opens the current
-day.
+No release-blocking or minor gap remains. Continue to run the full browser
+suite before deployment because the phone agenda opens the current day by
+design.
