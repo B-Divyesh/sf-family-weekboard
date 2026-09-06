@@ -327,7 +327,7 @@ test('@claim:responsive-agenda shows seven desktop days and one phone day', asyn
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/demo/');
   await expect(page.locator('.day-column:visible')).toHaveCount(7);
-  if (testInfo.project.name === 'chromium') await page.screenshot({ path: '.factory/evidence/polish-2/demo-1440.png' });
+  if (testInfo.project.name === 'chromium') await page.screenshot({ path: testInfo.outputPath('demo-1440.png') });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('.day-column:visible')).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
